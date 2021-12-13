@@ -379,15 +379,14 @@ export default {
               .showMessageBox(win, {
                 message: '连接机台失败',
                 type: 'error',
-                buttons: ['更换机台', '继续连接', '忽略'],
+                buttons: ['更换机台', '忽略'],
                 defaultId: 2,
                 title: '错误',
                 detail: '继续连接将在3秒后尝试重连机台',
                 cancelId: -1,
               })
               .then(({ response }) => {
-                console.log(response);
-                if (response === -1 || response === 2) {
+                if (response === -1 || response === 1) {
                   this.ignoreLoopConnect = true;
                 } else if (response === 0) {
                   clearInterval(this.heartbeatTimer);
@@ -629,18 +628,17 @@ export default {
             });
         } else {
           console.log(`${moment().format('YYYY/M/D H:mm:ss')}，发送出币指令成功，${JSON.stringify(hexData)}`);
-
-          // 设置定时器，等待时间内如果没有回应，则机台出现异常
-          this.responseTimer = setTimeout(() => {
-            if (this.isPause) return;
-            if (this.coinType === 1) {
-              this.responseError = true;
-              this.sendError();
-            }
-            this.callBack();
-          }, 3000);
         }
       });
+      // 设置定时器，等待时间内如果没有回应，则机台出现异常
+      this.responseTimer = setTimeout(() => {
+        if (this.isPause) return;
+        if (this.coinType === 1) {
+          this.responseError = true;
+          this.sendError();
+        }
+        this.callBack();
+      }, 1000);
     },
     // 改变出币状态  ：   暂停/继续出币
     toggleSendCoinState() {
