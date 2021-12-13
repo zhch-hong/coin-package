@@ -275,6 +275,8 @@ export default {
 
             // 机台报错
             if (res[11] === 1) {
+              console.log(`机台报错${res[11]}`);
+
               if (Number(this.coinType) === 1) {
                 this.responseError = true;
                 this.$nextTick(() => {
@@ -302,7 +304,17 @@ export default {
       });
 
       serialPort.on('error', (error) => {
-        this.$alert(`打开串口${port.path}失败[${error.message}]`, '提示', { type: 'error' })
+        this.$alert(`打开串口${port.path}失败，请连接机台后重启软件`, '连接失败', { type: 'error' })
+          .then(() => {
+            //
+          })
+          .catch(() => {
+            //
+          });
+      });
+
+      serialPort.on('close', (error) => {
+        this.$alert(`打开串口${port.path}失败，请连接机台后重启软件`, '连接失败', { type: 'error' })
           .then(() => {
             //
           })
@@ -348,49 +360,50 @@ export default {
             console.error(`心跳检测链接失败${err.message}`);
           } else {
             console.log(`${moment().format('YYYY/M/D H:mm:ss')}，发送指令，${hexData}`);
-
-            // ignoreLoopConnect 忽略心跳指令检测状态
-            if (this.ignoreLoopConnect === true) {
-              return;
-            }
-
-            setTimeout(() => {
-              if (this.prevHeartbeatNum === this.heartbeatNum) {
-                if (typeof this.loopConnectFaild !== 'undefined') return;
-
-                const win = getCurrentWindow();
-                win.focus();
-                this.loopConnectFaild = dialog
-                  .showMessageBox(win, {
-                    message: '连接机台失败',
-                    type: 'error',
-                    buttons: ['更换机台', '继续连接', '忽略'],
-                    defaultId: 2,
-                    title: '错误',
-                    detail: '继续连接将在3秒后尝试重连机台',
-                    cancelId: -1,
-                  })
-                  .then(({ response }) => {
-                    console.log(response);
-                    if (response === -1 || response === 2) {
-                      this.ignoreLoopConnect = true;
-                    } else if (response === 0) {
-                      clearInterval(this.heartbeatTimer);
-                      this.showSelectPortModal = true;
-                    } else {
-                      // 继续连接，不做处理，3s后继续发送心跳检测指令
-                    }
-                  })
-                  .catch((error) => {
-                    console.log(error.message);
-                  })
-                  .finally(() => {
-                    this.loopConnectFaild = undefined;
-                  });
-              }
-            }, 1000);
           }
         });
+
+        // ignoreLoopConnect 忽略心跳指令检测状态
+        if (this.ignoreLoopConnect === true) {
+          return;
+        }
+
+        setTimeout(() => {
+          console.log(this.prevHeartbeatNum, this.heartbeatNum, this.loopConnectFaild);
+          if (this.prevHeartbeatNum === this.heartbeatNum) {
+            if (typeof this.loopConnectFaild !== 'undefined') return;
+
+            const win = getCurrentWindow();
+            win.focus();
+            this.loopConnectFaild = dialog
+              .showMessageBox(win, {
+                message: '连接机台失败',
+                type: 'error',
+                buttons: ['更换机台', '继续连接', '忽略'],
+                defaultId: 2,
+                title: '错误',
+                detail: '继续连接将在3秒后尝试重连机台',
+                cancelId: -1,
+              })
+              .then(({ response }) => {
+                console.log(response);
+                if (response === -1 || response === 2) {
+                  this.ignoreLoopConnect = true;
+                } else if (response === 0) {
+                  clearInterval(this.heartbeatTimer);
+                  this.showSelectPortModal = true;
+                } else {
+                  // 继续连接，不做处理，3s后继续发送心跳检测指令
+                }
+              })
+              .catch((error) => {
+                console.log(error.message);
+              })
+              .finally(() => {
+                this.loopConnectFaild = undefined;
+              });
+          }
+        }, 1000);
       }, 3000);
     },
 
@@ -438,10 +451,13 @@ export default {
         totalCode += Number(resData[i].toString(10));
       }
       resData[12] = this.getNumber(totalCode)[0];
-      // log.info('response send coins data:')
-      // log.info(resData)
-      console.log('回复指令16进制：', resData);
-      console.log('已出币数：', this.hasSendCoins, '应出币数:', this.needSendCoins);
+
+      console.log(
+        `${moment().format('YYYY/M/D H:mm:ss')}，已出币${this.hasSendCoins}，应出币${
+          this.needSendCoins
+        }，发送指令，${JSON.stringify(resData)}`
+      );
+
       // 开始答复
       this.coinsPort.write(resData, (err) => {
         if (err) {
@@ -591,13 +607,12 @@ export default {
         this.showSendCoinsModal = true;
         this.isSendCoins = true;
       }
-      console.log('出币指令16进制：', hexData);
-      // log.info('start send coin:')
-      // log.info(hexData)
+
       // 开始出币
       this.coinsPort.write(hexData, (err) => {
         if (err) {
-          console.log(err);
+          console.log(`${moment().format('YYYY/M/D H:mm:ss')}，发送出币指令错误，${JSON.stringify(hexData)}`);
+
           log.error(`调用出币指令方法错误[App.sendCoin][SerialPort#write]，${JSON.stringify(err)}`);
           this.$alert('机台出币发生错误，请重启软件', '出币错误', { type: 'error' })
             .then(() => {
@@ -613,8 +628,10 @@ export default {
               this.resetPort();
             });
         } else {
+          console.log(`${moment().format('YYYY/M/D H:mm:ss')}，发送出币指令成功，${JSON.stringify(hexData)}`);
+
           // 设置定时器，等待时间内如果没有回应，则机台出现异常
-          this.responseTimer = setTimeout((_) => {
+          this.responseTimer = setTimeout(() => {
             if (this.isPause) return;
             if (this.coinType === 1) {
               this.responseError = true;
@@ -622,7 +639,6 @@ export default {
             }
             this.callBack();
           }, 3000);
-          console.log('== 出币成功 == ');
         }
       });
     },
