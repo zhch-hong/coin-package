@@ -31,10 +31,13 @@ export default {
     },
   },
   computed: {
-    tabList() {
-      return ['清币加币', '异常处理', '离线模式'];
-    },
-  },
+    tabList() {
+      if (this.$store.state.offline) {
+        return ['离线模式'];
+      }
+      return ['清币加币', '异常处理', '离线模式'];
+    },
+  },
   created() {
     if (this.$store.state.offline) {
       this.activeName = '离线模式';
