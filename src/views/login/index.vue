@@ -399,7 +399,7 @@ export default {
 
           this.loading = false;
 
-          await this.getMachineCoinNum();
+          // await this.getMachineCoinNum();
 
           await this.$router.push({ path: '/' });
         }
