@@ -258,10 +258,7 @@ export default {
             this.$alert('机台回复发生了错误', '提示', { type: 'error' });
             this.isSendCoins = false;
           } else {
-            console.log(
-              '下机台指令',
-              this.buffer2Array(res).map((item) => this.getNumber(item)[0])
-            );
+            console.log(`${moment().format('YYYY/M/D H:mm:ss')}，指令回复，${JSON.stringify(res)}`);
 
             // log.info('machine response data')
             // log.info(this.buffer2Array(res).map((item) => this.getNumber(item)[0]))
@@ -291,7 +288,6 @@ export default {
               this.callBack();
               return;
             }
-            console.log(`${moment().format('YYYY/M/D H:mm:ss')}，回复心跳指令成功，${res[2]}`);
             // 209 向机台发出出币指令，机台出币时的回复，160 向机台发出心跳检测指令时的回复
             if (res[2] === 209) {
               // 出币D1指令回复
@@ -351,7 +347,7 @@ export default {
           if (err) {
             console.error(`心跳检测链接失败${err.message}`);
           } else {
-            console.log(`${moment().format('YYYY/M/D H:mm:ss')},发送心跳指令成功，${hexData}`);
+            console.log(`${moment().format('YYYY/M/D H:mm:ss')}，发送指令，${hexData}`);
 
             // ignoreLoopConnect 忽略心跳指令检测状态
             if (this.ignoreLoopConnect === true) {
@@ -359,7 +355,6 @@ export default {
             }
 
             setTimeout(() => {
-              console.log(this.prevHeartbeatNum, this.heartbeatNum);
               if (this.prevHeartbeatNum === this.heartbeatNum) {
                 if (typeof this.loopConnectFaild !== 'undefined') return;
 
@@ -375,7 +370,8 @@ export default {
                     detail: '继续连接将在3秒后尝试重连机台',
                     cancelId: -1,
                   })
-                  .then((response) => {
+                  .then(({ response }) => {
+                    console.log(response);
                     if (response === -1 || response === 2) {
                       this.ignoreLoopConnect = true;
                     } else if (response === 0) {
