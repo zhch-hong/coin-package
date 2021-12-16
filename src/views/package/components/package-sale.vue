@@ -240,6 +240,7 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie';
 import { to } from '@/utils/tools';
 
 import staffAuth from '../../../components/StaffAuth';
@@ -291,6 +292,12 @@ export default {
 
       isScanPay: false, // 仅扫码购买
     };
+  },
+
+  watch: {
+    currentType(value) {
+      Cookies.set('currentType', JSON.stringify(value));
+    },
   },
 
   methods: {
@@ -621,7 +628,8 @@ export default {
             return { label: item, value: item };
           });
           if (this.currentType === null) {
-            this.currentType = this.giftTypeList[0];
+            this.setDefaultCurrentType();
+            this.changeType();
           }
         })
         .finally(() => {
@@ -634,6 +642,18 @@ export default {
 
       this.isScanPay = true;
     },
+
+    setDefaultCurrentType() {
+      if (this.currentType === null) {
+        const type = Cookies.get('currentType');
+        console.log(type, typeof type);
+        if (typeof type === 'undefined') {
+          this.currentType = this.giftTypeList[0];
+        } else {
+          this.currentType = JSON.parse(type);
+        }
+      }
+    },
   },
 
   // 有线模式下同步套餐数据到本地数据库，用于离线模式
@@ -643,8 +663,6 @@ export default {
       const [err, res] = await to(this.$api.getAllGift());
 
       if (res) {
-        console.log(res);
-
         let giftList = [];
 
         Object.values(res.body.giftJson).forEach((item) => {
@@ -683,8 +701,6 @@ export default {
       });
 
       this.offlineGiftData = giftData;
-
-      this.currentType = this.giftTypeList[0];
 
       this.changeType();
     }

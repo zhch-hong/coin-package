@@ -160,6 +160,7 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie';
 import { to } from '@/utils/tools';
 
 import { isPositiveInt } from '../../../utils/validate';
@@ -229,12 +230,16 @@ export default {
     },
   },
 
+  watch: {
+    currentIndex(value) {
+      Cookies.set('currentIndex', JSON.stringify(value));
+    },
+  },
+
   methods: {
     // 条形码下单
 
     handleAddGoodsByCode() {
-      console.log(this.searchForm.prizeCode);
-
       if (this.$store.state.offline) {
         if (this.searchForm.prizeCode) {
           const prizeList = this.offlinePrizeData.filter((item) => item.prizeCode === this.searchForm.prizeCode);
@@ -539,15 +544,13 @@ export default {
       this.orderList.splice(prize.$index, 1);
     },
 
-    clickType(type) {
-      this.currentIndex = type;
-
+    clickType({ value }) {
       if (this.$store.state.offline) {
         this.prizeList = this.offlinePrizeData.filter((item) => {
-          return item.prizeType === this.currentIndex.value;
+          return item.prizeType === value;
         });
       } else {
-        this.getInfo({ prizeType: type.value });
+        this.getInfo({ prizeType: value });
       }
     },
 
@@ -607,8 +610,6 @@ export default {
         .getUserInfo({ uid: this.searchUser })
 
         .then((res) => {
-          console.log(res);
-
           this.uid = res.body.uid;
 
           this.searchNickName = res.body.nickName;
@@ -622,33 +623,32 @@ export default {
     // 查询物品数据
 
     getInfo(params) {
-      this.loading = true;
+      return new Promise((resolve) => {
+        this.loading = true;
 
-      if (this.isSearch) {
-        params.prizeName = this.searchPrizeName;
+        if (this.isSearch) {
+          params.prizeName = this.searchPrizeName;
 
-        params.prizeId = this.searchForm.prizeId;
-      }
+          params.prizeId = this.searchForm.prizeId;
+        }
 
-      this.$api
+        this.$api
 
-        .getPrize(params)
+          .getPrize(params)
 
-        .then((res) => {
-          this.prizeList = res.body.prizeList;
+          .then((res) => {
+            this.prizeList = res.body.prizeList;
 
-          this.prizeTypeList = res.body.prizeTypeList.map((item) => {
-            return { label: item, value: item };
+            this.prizeTypeList = res.body.prizeTypeList.map((item) => {
+              return { label: item, value: item };
+            });
+            resolve();
+          })
+
+          .finally(() => {
+            this.loading = false;
           });
-
-          if (this.prizeTypeList[0] && !this.currentIndex.value) {
-            this.currentIndex = this.prizeTypeList[0];
-          }
-        })
-
-        .finally(() => {
-          this.loading = false;
-        });
+      });
     },
 
     async initOfflinePrize() {
@@ -666,6 +666,17 @@ export default {
 
       this.clickType(this.prizeTypeList[0]);
     },
+
+    setDefaultCurrentType() {
+      if (typeof this.currentIndex.value === 'undefined') {
+        const type = Cookies.get('currentIndex');
+        if (typeof type === 'undefined') {
+          this.currentIndex = this.prizeTypeList[0];
+        } else {
+          this.currentIndex = JSON.parse(type);
+        }
+      }
+    },
   },
 
   async created() {
@@ -678,8 +689,6 @@ export default {
         Object.values(res.body.prizeJson).forEach((item) => {
           giftList = giftList.concat(item);
         });
-
-        console.log(giftList);
 
         const db = await this.$db.openDB('offlineDB');
 
@@ -710,7 +719,9 @@ export default {
     };
 
     if (!this.$store.state.offline) {
-      this.getInfo({});
+      await this.getInfo({});
+      this.setDefaultCurrentType();
+      this.getInfo({ prizeType: this.currentIndex.value });
     } else {
       await this.initOfflinePrize();
     }
