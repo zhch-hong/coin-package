@@ -357,4 +357,21 @@ export default {
   readCoinTicketHouseList(data) {
     return request({ url: '/cash/machine/getWarehouse', method: 'get', data });
   },
+
+  /**
+   * 其他收支 - 类型列表
+   * @param {Object} data
+   * @returns
+   */
+  readOtherIOTypeList(data) {
+    return new Promise((resolve) => {
+      resolve({
+        errCode: 0,
+        body: {
+          items: ['水电费', '燃气费', '物业费'],
+        },
+      });
+    });
+    // return request({ url: '', method: 'get', data });
+  },
 };

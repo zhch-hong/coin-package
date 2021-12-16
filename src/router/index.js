@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 
 /* Layout */
-import Layout from '@/layout'
+import Layout from '@/layout';
 
-Vue.use(Router)
+Vue.use(Router);
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -33,7 +33,7 @@ Vue.use(Router)
 export const constantRoutes = [
   {
     path: '/',
-    redirect: '/package/package-sales'
+    redirect: '/package/package-sales',
   },
   {
     path: '/package',
@@ -45,29 +45,29 @@ export const constantRoutes = [
         path: 'package-sales',
         name: 'package-sales',
         component: () => import('../views/package/index'),
-        meta: { title: '套餐销售', icon: 'smile' }
+        meta: { title: '套餐销售', icon: 'smile' },
       },
       {
         path: 'package-confirm-order',
         name: 'package-confirm-order',
         component: () => import('../views/package/components/package-confirm-order'),
-        meta: { title: '确认订单', icon: 'smile' }
+        meta: { title: '确认订单', icon: 'smile' },
       },
       {
         path: 'package-settle',
         name: 'package-settle',
         hidden: true,
         component: () => import('../views/package/components/package-settle'),
-        meta: { title: '订单结算', icon: 'smile' }
+        meta: { title: '订单结算', icon: 'smile' },
       },
       {
         path: 'renewal-settle',
         name: 'renewal-settle',
         hidden: true,
         component: () => import('../views/package/components/renewal-settle'),
-        meta: { title: '订单结算', icon: 'smile' }
-      }
-    ]
+        meta: { title: '订单结算', icon: 'smile' },
+      },
+    ],
   },
   {
     path: '/gifts',
@@ -79,22 +79,22 @@ export const constantRoutes = [
         path: '/gifts/index',
         name: 'gifts',
         component: () => import('../views/gifts/index'),
-        meta: { title: '物品销售', icon: 'smile' }
+        meta: { title: '物品销售', icon: 'smile' },
       },
       {
         path: '/gifts/gifts-confirm-order',
         name: 'giftsConfirmOrder',
         component: () => import('../views/gifts/components/gifts-confirm-order'),
-        meta: { title: '确认订单', icon: 'smile' }
+        meta: { title: '确认订单', icon: 'smile' },
       },
       {
         path: '/gifts/settle',
         name: 'giftSettle',
         hidden: true,
         component: () => import('../views/gifts/components/settle'),
-        meta: { title: '订单结算', icon: 'smile' }
-      }
-    ]
+        meta: { title: '订单结算', icon: 'smile' },
+      },
+    ],
   },
   {
     path: '/userInfo',
@@ -106,9 +106,9 @@ export const constantRoutes = [
         path: '/userInfo/index',
         name: 'userInfo',
         component: () => import('../views/userInfo/index'),
-        meta: { title: '会员查询', icon: 'smile' }
-      }
-    ]
+        meta: { title: '会员查询', icon: 'smile' },
+      },
+    ],
   },
   {
     path: '/user',
@@ -120,9 +120,9 @@ export const constantRoutes = [
         path: '/user/index',
         name: 'user',
         component: () => import('../views/user/index'),
-        meta: { title: '会员操作', icon: 'smile' }
-      }
-    ]
+        meta: { title: '会员操作', icon: 'smile' },
+      },
+    ],
   },
   {
     path: '/coupons',
@@ -134,9 +134,9 @@ export const constantRoutes = [
         path: '/coupons/index',
         name: 'useCoupons',
         component: () => import('../views/coupons/index'),
-        meta: { title: '优惠券核销', icon: 'smile' }
-      }
-    ]
+        meta: { title: '优惠券核销', icon: 'smile' },
+      },
+    ],
   },
   {
     path: '/exchange',
@@ -148,9 +148,9 @@ export const constantRoutes = [
         path: '/exchange/index',
         name: 'exchange',
         component: () => import('../views/exchange/index'),
-        meta: { title: '物品兑换', icon: 'smile' }
-      }
-    ]
+        meta: { title: '物品兑换', icon: 'smile' },
+      },
+    ],
   },
   {
     path: '/coin',
@@ -162,9 +162,23 @@ export const constantRoutes = [
         path: '/coin/index',
         name: 'coin',
         component: () => import('../views/coin/index'),
-        meta: { title: '其他操作', icon: 'message center' }
-      }
-    ]
+        meta: { title: '其他操作', icon: 'message center' },
+      },
+    ],
+  },
+  {
+    path: '/other-io',
+    component: Layout,
+    redirect: '/other-io/index',
+    meta: { title: '其他收支', icon: 'otherActions', offline: true },
+    children: [
+      {
+        path: 'index',
+        name: 'coin',
+        component: () => import('../views/other-io/index'),
+        meta: { title: '其他收支', icon: 'message center' },
+      },
+    ],
   },
   {
     path: '/settle',
@@ -176,9 +190,9 @@ export const constantRoutes = [
         path: '/settle/settle',
         name: 'settle',
         component: () => import('@/views/settle/settle'),
-        meta: { title: '班结', icon: 'Household appliances' }
-      }
-    ]
+        meta: { title: '班结', icon: 'Household appliances' },
+      },
+    ],
   },
   {
     path: '/HBSales',
@@ -190,37 +204,37 @@ export const constantRoutes = [
         path: '/HBSales/HBSales',
         name: 'HBSales',
         component: () => import('@/views/HBSales/index'),
-        meta: { title: '嗨呗专销', icon: 'Household appliances' }
-      }
-    ]
+        meta: { title: '嗨呗专销', icon: 'Household appliances' },
+      },
+    ],
   },
   {
     path: '/login',
     component: () => import('@/views/login/'),
-    hidden: true
+    hidden: true,
   },
   {
     path: '/404',
     component: () => import('@/views/404/404'),
-    hidden: true
+    hidden: true,
   },
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
-]
+  { path: '*', redirect: '/404', hidden: true },
+];
 
 const createRouter = () =>
   new Router({
     // mode: 'history', // require service support
     scrollBehavior: () => ({ y: 0 }),
-    routes: constantRoutes
-  })
+    routes: constantRoutes,
+  });
 
-const router = createRouter()
+const router = createRouter();
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
-  const newRouter = createRouter()
-  router.matcher = newRouter.matcher // reset router
+  const newRouter = createRouter();
+  router.matcher = newRouter.matcher; // reset router
 }
 
-export default router
+export default router;
