@@ -90,8 +90,8 @@
       :loading="loading"
       :data="tableData"
       style="width: 100%; flex: 1"
-      :header-cell-style="{ backgroundColor: '#ffffff' }"
-      :cell-style="{ backgroundColor: '#F0F2F5' }"
+      highlight-current-row
+      @row-dblclick="onRowDblclick"
     >
       <el-table-column type="expand">
         <template slot-scope="props">
@@ -197,6 +197,20 @@
       </el-button>
     </div>
     <StaffAuth :show.sync="showAuthModal" @success="authSuccess"></StaffAuth>
+    <el-dialog :visible.sync="discardVisible" width="75%" title="套餐作废规则">
+      <ol class="discard-rule">
+        <li>购买电子币套餐：扣除此套餐对应的电子游戏币数，若账户币数不足，则扣此账户所剩全部电子游戏币数</li>
+        <li>购买时间票套餐：直接作废</li>
+        <li>购买次票套餐：扣除此套餐对应的次数，若此账户次数不足，则扣除此套餐剩余所有次数</li>
+        <li>
+          购买组合套餐：扣除该组合套餐对应的币和次票或时间票。若此账户余额不足，则扣除此组合套餐对应的剩余次票或时间票或剩余电子游戏币数
+        </li>
+      </ol>
+      <template #footer>
+        <el-button size="small" @click="discardVisible = false">取消</el-button>
+        <el-button size="small" type="primary" @click="handleConfirmDiscard">确定</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -214,7 +228,9 @@ export default {
   },
   data() {
     return {
+      discardVisible: false,
       loading: false,
+      dblclickRow: null,
       statusList: [
         { label: '待支付', value: 0 },
         { label: '已支付', value: 1 },
@@ -319,6 +335,26 @@ export default {
       this.ticketHeight += value || 25;
       return this.ticketHeight;
     },
+
+    onRowDblclick(row) {
+      this.discardVisible = true;
+      this.dblclickRow = row;
+    },
+
+    handleConfirmDiscard() {
+      this.$confirm('确定作废此套餐？', {
+        type: 'warning',
+        title: '提示',
+      })
+        .then(() => {
+          console.log(`套餐作废, ${JSON.stringify(this.dblclickRow)}`);
+          this.discardVisible = false;
+        })
+        .catch(() => {
+          //
+        });
+    },
+
     authSuccess(data) {
       this.backPrize(data);
     },
@@ -626,6 +662,14 @@ export default {
 
     .qrcode {
     }
+  }
+}
+
+.discard-rule {
+  font-size: 18px;
+
+  li {
+    margin: 20px 0;
   }
 }
 </style>
