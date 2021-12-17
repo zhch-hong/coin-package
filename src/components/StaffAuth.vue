@@ -1,6 +1,13 @@
 <template>
   <div class="staff-auth-component">
-    <el-dialog :visible.sync="show" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false" center width="740px">
+    <el-dialog
+      :visible.sync="show"
+      :show-close="false"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      center
+      width="740px"
+    >
       <div class="flex-center">
         <img style="width: 143px" src="@/assets/components-img/staff-auth-title.png" alt="title" />
       </div>
@@ -41,26 +48,29 @@
 </template>
 
 <script>
-import { isPhone } from '../utils/validate'
+import { isPhone } from '../utils/validate';
 
 export default {
   name: 'StaffAuth',
   props: {
     show: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   watch: {
-    show(val) {
-      if (val) {
-        if (this.hasCreateWebview) {
-          this.refreshWebview()
-        } else {
-          this.initWxLogin()
+    show: {
+      immediate: true,
+      handler(val) {
+        if (val) {
+          if (this.hasCreateWebview) {
+            this.refreshWebview();
+          } else {
+            this.initWxLogin();
+          }
         }
-      }
-    }
+      },
+    },
   },
   data() {
     return {
@@ -71,91 +81,107 @@ export default {
       loading: false,
       authForm: {
         phone: '',
-        code: ''
+        code: '',
       },
       openId: '',
       authRules: {
         phone: [{ required: true, trigger: 'blur', message: '手机号错误', pattern: isPhone }],
-        code: [{ required: true, trigger: 'blur', message: '验证码错误' }]
+        code: [{ required: true, trigger: 'blur', message: '验证码错误' }],
       },
       verCodeText: '获取验证码',
       timer: null,
-      coolDown: 60
-    }
+      coolDown: 60,
+    };
   },
   methods: {
     refreshWebview() {
-      this.refreshFlag = false
+      this.refreshFlag = false;
       if (!this.refreshFlag) {
-        this.refreshFlag = true
-        this.webview.reload()
+        this.refreshFlag = true;
+        this.webview.reload();
       }
     },
     // 初始化微信扫码
     initWxLogin() {
       this.$nextTick((_) => {
-        this.webview = document.getElementById('staffAuth')
-        this.hasCreateWebview = true
+        this.webview = document.getElementById('staffAuth');
+        this.hasCreateWebview = true;
         this.webview.addEventListener('ipc-message', (event) => {
-          this.openId = event.args[0].openId
-          this.confirmByScan()
-        })
-      })
+          console.log('ipc-message', event);
+          this.openId = event.args[0].openId;
+          this.confirmByScan();
+        });
+      });
     },
     getCode(type) {
       if (!isPhone.test(this.authForm.phone)) {
-        this.$message.error('请输入正确的手机号')
-        return
+        this.$message.error('请输入正确的手机号');
+        return;
       }
       if (type == 1) {
-        if (this.verCodeText !== '获取验证码' && this.verCodeText !== '重新发送') return
-        this.verCodeText = '60s后重发'
+        if (this.verCodeText !== '获取验证码' && this.verCodeText !== '重新发送') return;
+        this.verCodeText = '60s后重发';
         this.timer = setInterval(() => {
           if (this.coolDown === 0) {
-            clearInterval(this.timer)
-            this.verCodeText = '重新发送'
-            this.coolDown = 60
+            clearInterval(this.timer);
+            this.verCodeText = '重新发送';
+            this.coolDown = 60;
           } else {
-            this.coolDown--
-            this.verCodeText = `${this.coolDown}s后重发`
+            this.coolDown--;
+            this.verCodeText = `${this.coolDown}s后重发`;
           }
-        }, 1000)
+        }, 1000);
       }
       this.$api.sendAdminPhoneCode({ codeType: type, phone: this.authForm.phone }).then((res) => {
-        this.$message.success('发送成功')
-      })
+        this.$message.success('发送成功');
+      });
     },
     initGetCode() {
-      clearInterval(this.timer)
-      this.verCodeText = '获取验证码'
-      this.coolDown = 60
+      clearInterval(this.timer);
+      this.verCodeText = '获取验证码';
+      this.coolDown = 60;
     },
     closeAuthModal() {
-      this.$refs.authForm.resetFields()
-      this.$emit('update:show', false)
+      try {
+        this.$refs.authForm.resetFields();
+      } catch (error) {
+        //
+      }
+      this.$emit('update:show', false);
+      this.$emit('cancel');
     },
     confirmByScan() {
-      console.log('start init ver code')
-      this.initGetCode()
-      console.log('start refresh webview')
-      this.refreshWebview()
-      console.log('confirm authorization by scan success')
-      this.$emit('success', { type: 3, openId: this.openId })
-      this.closeAuthModal()
+      console.log('start init ver code');
+      this.initGetCode();
+      console.log('start refresh webview');
+      this.refreshWebview();
+      console.log('confirm authorization by scan success');
+      this.$emit('success', { type: 3, openId: this.openId });
+      try {
+        this.$refs.authForm.resetFields();
+      } catch (error) {
+        //
+      }
+      this.$emit('update:show', false);
     },
     confirm() {
       this.$refs.authForm.validate((v) => {
         if (v) {
-          console.log('start init ver code')
-          this.initGetCode()
-          console.log('confirm authorization validate success')
-          this.$emit('success', { type: 1, ...this.authForm })
-          this.closeAuthModal()
+          console.log('start init ver code');
+          this.initGetCode();
+          console.log('confirm authorization validate success');
+          this.$emit('success', { type: 1, ...this.authForm });
+          try {
+            this.$refs.authForm.resetFields();
+          } catch (error) {
+            //
+          }
+          this.$emit('update:show', false);
         }
-      })
-    }
-  }
-}
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

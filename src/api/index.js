@@ -357,4 +357,68 @@ export default {
   readCoinTicketHouseList(data) {
     return request({ url: '/cash/machine/getWarehouse', method: 'get', data });
   },
+
+  /**
+   * 其他收支 - 收支类型列表
+   * @param {Object} data
+   * @param {string} [data.balanceName] - 类别名称
+   * @param {number} [data.balanceType] - 1 收入，2 支出
+   * @param {string} [data.startTime] - 开始时间
+   * @param {string} [data.endTime] - 截止时间
+   * @param {string} [data.sort] - 排序字段
+   * @param {string} [data.sortType] - 排序方式，asc 正序，desc 倒序
+   * @param {number} data.pageNum - 第几页
+   * @param {number} data.showNum - 每页数据条数
+   * @returns
+   */
+  readOtherIOTypeList(data) {
+    return request({ url: '/cash/balance/getOtherBalance', method: 'get', data });
+  },
+
+  /**
+   * 其他收支 - 创建订单
+   * @param {Object} data
+   * @param {number} data.payValue - 金额，单位：分
+   * @param {string} data.backup - 备注
+   * @param {number} data.type - 授权方式，1 验证码，3 扫码
+   * @param {string} [data.openId] - openid，type为3时必传
+   * @param {string} [data.phone] - 手机号，type为1时必传
+   * @param {string} [data.code] - 验证码，type为1时必传
+   * @param {number} data.balanceId - 类别id
+   * @returns
+   */
+  createOtherIOOrder(data) {
+    return request({ url: '/cash/balance/incomeAndExpend', method: 'post', data });
+  },
+
+  /**
+   * 其他收支 - 创建记录
+   * @param {Object} data
+   * @param {number} data.orderId - 订单id
+   * @param {number} data.type - 支付类型，1 现金，2 扫码
+   * @param {string} [data.authNo] - 支付码，type为2时必传
+   * @returns
+   */
+  createOtherIORecord(data) {
+    return request({ url: '/cash/balance/incomeAndExpendPay', method: 'post', data });
+  },
+
+  /**
+   * 其他收支 - 收支明细
+   * @param {Object} data
+   * @param {string} [data.balanceName=""] - 类别名称
+   * @param {string} [data.adminName=""] - 授权员工姓名
+   * @param {number} [data.balanceType=""] - 收支类型，1 收入，2 支出
+   * @param {string} [data.staffName=""] - 收银员姓名
+   * @param {string} [data.startTime=""] - 开始时间
+   * @param {string} [data.endTime=""] - 截止时间
+   * @param {string} [data.sort=""] - 排序字段
+   * @param {string} [data.orderBy=""] - 排序方式，asc 正序，desc 倒序
+   * @param {number} data.pageNum - 第几页
+   * @param {number} data.showNum - 每页数据条数
+   * @returns
+   */
+  readOtherIORecord(data) {
+    return request({ url: '/cash/balance/getIncomeAndExpendDetail', method: 'get', data });
+  },
 };
