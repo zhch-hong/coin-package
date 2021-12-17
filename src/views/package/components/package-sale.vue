@@ -286,7 +286,7 @@ export default {
 
       count: 1,
 
-      isVirtual: false,
+      isVirtual: true,
 
       isManual: false,
 
