@@ -9,23 +9,51 @@
         label-width="120px"
       >
         <el-form-item label="玩家ID:" prop="uid">
-          <el-input v-model.number="searchForm.uid" clearable size="mini" style="width: 240px" placeholder="请输入"></el-input>
+          <el-input
+            v-model.number="searchForm.uid"
+            clearable
+            size="mini"
+            style="width: 240px"
+            placeholder="请输入"
+          ></el-input>
         </el-form-item>
         <el-form-item label="套餐名称:" prop="giftName">
-          <el-input v-model="searchForm.giftName" clearable size="mini" style="width: 240px" placeholder="请输入"></el-input>
+          <el-input
+            v-model="searchForm.giftName"
+            clearable
+            size="mini"
+            style="width: 240px"
+            placeholder="请输入"
+          ></el-input>
         </el-form-item>
         <el-form-item label="人民币支付方式:" prop="valuePayType">
           <el-select v-model="searchForm.valuePayType" clearable size="mini" style="width: 240px" placeholder="请选择">
-            <el-option v-for="item in payTypeList" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            <el-option
+              v-for="item in payTypeList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="取币类型:" prop="coinType">
           <el-select v-model="searchForm.coinType" clearable size="mini" style="width: 240px" placeholder="请选择">
-            <el-option v-for="item in coinTypeList" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            <el-option
+              v-for="item in coinTypeList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="收银员姓名:" prop="name">
-          <el-input v-model="searchForm.name" clearable size="mini" style="width: 240px" placeholder="请输入"></el-input>
+          <el-input
+            v-model="searchForm.name"
+            clearable
+            size="mini"
+            style="width: 240px"
+            placeholder="请输入"
+          ></el-input>
         </el-form-item>
         <el-form-item label="订单状态:" prop="status">
           <el-select v-model="searchForm.status" style="width: 240px" clearable size="mini" placeholder="请选择">
@@ -51,7 +79,9 @@
         </el-form-item>
         <el-form-item label=" ">
           <el-button type="primary" size="mini" style="width: 120px" @click="search">查 询</el-button>
-          <el-button size="mini" style="width: 120px; border-color: #4194fe; color: #4194fe" @click="reset">重 置 </el-button>
+          <el-button size="mini" style="width: 120px; border-color: #4194fe; color: #4194fe" @click="reset"
+            >重 置
+          </el-button>
         </el-form-item>
       </el-form>
     </template>
@@ -65,7 +95,11 @@
     >
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-table :data="props.row.orderGift" style="width: 100%" :header-cell-style="{ backgroundColor: 'rgb(242,242,242)' }">
+          <el-table
+            :data="props.row.orderGift"
+            style="width: 100%"
+            :header-cell-style="{ backgroundColor: 'rgb(242,242,242)' }"
+          >
             <el-table-column label="商品名称" prop="name" align="center" min-width="120"></el-table-column>
             <el-table-column label="市场价" prop="offValue" align="center" min-width="120">
               <template slot-scope="scope">
@@ -158,23 +192,25 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="count"
       ></el-pagination>
-      <el-button type="primary" size="mini" icon="el-icon-document" :loading="loading" @click="exportXlSX">导出数据 </el-button>
+      <el-button type="primary" size="mini" icon="el-icon-document" :loading="loading" @click="exportXlSX"
+        >导出数据
+      </el-button>
     </div>
     <StaffAuth :show.sync="showAuthModal" @success="authSuccess"></StaffAuth>
   </div>
 </template>
 
 <script>
-import exportTable from '@/utils/outputExcel'
-import moment from 'moment'
-import { to } from '@/utils/tools'
-import StaffAuth from '../../../components/StaffAuth'
-import { getToken } from '../../../utils/auth'
+import exportTable from '@/utils/outputExcel';
+import moment from 'moment';
+import { to } from '@/utils/tools';
+import StaffAuth from '../../../components/StaffAuth';
+import { getToken } from '../../../utils/auth';
 
 export default {
   name: 'store',
   components: {
-    StaffAuth
+    StaffAuth,
   },
   data() {
     return {
@@ -182,19 +218,19 @@ export default {
       statusList: [
         { label: '待支付', value: 0 },
         { label: '已支付', value: 1 },
-        { label: '已退单', value: 2 }
+        { label: '已退单', value: 2 },
       ],
       payTypeList: [
         { label: '未支付', value: 0 },
         { label: '微信', value: 1 },
         { label: '支付宝', value: 2 },
         { label: '现金', value: 3 },
-        { label: '其他', value: 4 }
+        { label: '其他', value: 4 },
       ],
       coinTypeList: [
         { label: '实物币', value: 1 },
         { label: '电子币', value: 2 },
-        { label: '人工取币', value: 3 }
+        { label: '人工取币', value: 3 },
       ],
       // 查询、翻页
       searchForm: {
@@ -204,17 +240,17 @@ export default {
         name: '',
         status: '',
         coinType: '',
-        times: []
+        times: [],
       },
       options: [
         {
           value: '1',
-          label: '是'
+          label: '是',
         },
         {
           value: '0',
-          label: '否'
-        }
+          label: '否',
+        },
       ],
       pageNum: 1,
       showNum: 10,
@@ -224,269 +260,281 @@ export default {
       tableData: [],
       // 退单\授权
       currentOrder: {},
-      showAuthModal: false
-    }
+      showAuthModal: false,
+    };
   },
   filters: {
     toFixed2(val) {
-      return val.toFixed(2)
+      return val.toFixed(2);
     },
     formatStatus(val) {
       switch (val) {
         case 0:
-          return '待支付'
+          return '待支付';
         case 1:
-          return '已支付'
+          return '已支付';
         case 2:
-          return '已退单'
+          return '已退单';
         default:
-          return '其他'
+          return '其他';
       }
     },
     formatValuePayType(type) {
       switch (type) {
         case 0:
-          return '未支付'
+          return '未支付';
         case 1:
-          return '微信'
+          return '微信';
         case 2:
-          return '支付宝'
+          return '支付宝';
         case 3:
-          return '现金'
+          return '现金';
         default:
-          return '其他'
+          return '其他';
       }
-    }
+    },
   },
   async created() {
     if (this.$store.state.offline) {
-      const db = await this.$db.openDB('offlineDB')
-      this.tableData = await this.$db.cursorGetData(db, 'giftRecord')
+      const db = await this.$db.openDB('offlineDB');
+      this.tableData = await this.$db.cursorGetData(db, 'giftRecord');
     } else {
-      this.getInfo()
+      this.getInfo();
     }
   },
   methods: {
     formatCoinType(val) {
       switch (val) {
         case 1:
-          return '实物币'
+          return '实物币';
         case 2:
-          return '电子币'
+          return '电子币';
         case 3:
-          return '人工取币'
+          return '人工取币';
         default:
-          return '-'
+          return '-';
       }
     },
     getHeight(value) {
-      this.ticketHeight += value || 25
-      return this.ticketHeight
+      this.ticketHeight += value || 25;
+      return this.ticketHeight;
     },
     authSuccess(data) {
-      this.backPrize(data)
+      this.backPrize(data);
     },
     openAuthModal(order) {
-      this.currentOrder = order
-      console.log(order)
-      this.showAuthModal = true
+      this.currentOrder = order;
+      console.log(order);
+      this.showAuthModal = true;
     },
     backPrize(data) {
-      this.loading = true
+      this.loading = true;
       this.$api
         .backCoinGift({ orderId: this.currentOrder.orderId, ...data })
         .then((res) => {
-          this.printBackTicket()
-          this.$message.success('退单成功')
-          this.getInfo()
+          this.printBackTicket();
+          this.$message.success('退单成功');
+          this.getInfo();
         })
         .finally(() => {
-          this.loading = false
-        })
+          this.loading = false;
+        });
     },
     // 打印小票
     async printTicket(data) {
-      console.log(data)
+      console.log(data);
       if (!LODOP) {
-        this.$message.error('未安装打印控件，请先安装控件后重新启动系统')
-        return
+        this.$message.error('未安装打印控件，请先安装控件后重新启动系统');
+        return;
       }
-      const printFlag = Number(sessionStorage.getItem('printFlag'))
+      const printFlag = Number(sessionStorage.getItem('printFlag'));
       if (printFlag) {
-        let p
+        let p;
         if (this.$store.state.offline) {
-          const db = await this.$db.openDB('offlineDB')
-          const printInfo = await this.$db.getDataByIndex(db, 'printFormat', 'code', 'GIFT_SALE')
+          const db = await this.$db.openDB('offlineDB');
+          const printInfo = await this.$db.getDataByIndex(db, 'printFormat', 'code', 'GIFT_SALE');
           if (printInfo) {
-            p = printInfo
+            p = printInfo;
           }
         } else {
-          const [err, res] = await to(this.$api.getStorePrint({ code: 'GIFT_SALE' }))
+          const [err, res] = await to(this.$api.getStorePrint({ code: 'GIFT_SALE' }));
           if (res) {
-            p = res.body.printInfo
+            p = res.body.printInfo;
           }
         }
         if (p.printFlag) {
-          LODOP.PRINT_INIT('')
+          LODOP.PRINT_INIT('');
           // LODOP.ADD_PRINT_RECT(0, 0, 180, 240, 3, 1);
-          LODOP.SET_PRINT_STYLE('FontSize', 8)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.title)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.theme)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `订单编号：${data.orderId}`)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `交易分店：${p.storeName}`)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `========== 商品信息 =========`)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `商品：${data.orderGift[0].name}`)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `数量：${data.orderGift[0].count}`)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `单价：￥${this.MIXIN_Points2Yuan(data.orderGift[0].price)}`)
+          LODOP.SET_PRINT_STYLE('FontSize', 8);
+          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.title);
+          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.theme);
+          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `订单编号：${data.orderId}`);
+          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `交易分店：${p.storeName}`);
+          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `========== 商品信息 =========`);
+          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `商品：${data.orderGift[0].name}`);
+          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `数量：${data.orderGift[0].count}`);
+          LODOP.ADD_PRINT_TEXT(
+            this.getHeight(),
+            0,
+            180,
+            25,
+            `单价：￥${this.MIXIN_Points2Yuan(data.orderGift[0].price)}`
+          );
           LODOP.ADD_PRINT_TEXT(
             this.getHeight(),
             0,
             180,
             25,
             `小计：￥${this.MIXIN_Points2Yuan(this.$calc.accMul(data.orderGift[0].price, data.orderGift[0].count))}`
-          )
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `----------------------------`)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `已优惠金额：￥${this.MIXIN_Points2Yuan(data.cutRMB)}`)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `总计：￥${this.MIXIN_Points2Yuan(data.offValueSum)}`)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `操作用户：${getToken()}`)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `操作时间：${moment().format('YYYY-MM-DD HH:mm:ss')}`)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.endTheme)
-          let codeInfoList = []
+          );
+          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `----------------------------`);
+          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `已优惠金额：￥${this.MIXIN_Points2Yuan(data.cutRMB)}`);
+          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `总计：￥${this.MIXIN_Points2Yuan(data.offValueSum)}`);
+          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `操作用户：${getToken()}`);
+          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `操作时间：${moment().format('YYYY-MM-DD HH:mm:ss')}`);
+          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.endTheme);
+          let codeInfoList = [];
           if (data.codeInfoList) {
-            codeInfoList = JSON.parse(data.codeInfoList)
+            codeInfoList = JSON.parse(data.codeInfoList);
           }
           if (codeInfoList.length && (data.orderGift[0].type === 2 || data.orderGift[0].type === 3)) {
             codeInfoList.forEach((item, index) => {
-              const h = index === 0 ? 0 : 150
-              const qrcode = `${process.env.VUE_APP_CASHPAGEJUMP}?codeType=${item.codeType}&uid=${item.uid}&couponsCode=${item.code}&pageType=verification`
-              LODOP.ADD_PRINT_BARCODE(this.getHeight(h), 25, 170, 170, 'QRCode', qrcode)
-              LODOP.SET_PRINT_STYLEA(0, 'QRCodeVersion', 7)
-            })
+              const h = index === 0 ? 0 : 150;
+              const qrcode = `${process.env.VUE_APP_CASHPAGEJUMP}?codeType=${item.codeType}&uid=${item.uid}&couponsCode=${item.code}&pageType=verification`;
+              LODOP.ADD_PRINT_BARCODE(this.getHeight(h), 25, 170, 170, 'QRCode', qrcode);
+              LODOP.SET_PRINT_STYLEA(0, 'QRCodeVersion', 7);
+            });
           }
           // LODOP.PRINT_DESIGN()
           // LODOP.PREVIEW()
-          LODOP.PRINT()
-          this.ticketHeight = 0
+          LODOP.PRINT();
+          this.ticketHeight = 0;
         } else {
-          this.$message.error('小票格式未定义，无法打印')
+          this.$message.error('小票格式未定义，无法打印');
         }
       }
     },
     // 退单打印小票
     printBackTicket(callback) {
       if (!LODOP) {
-        this.$message.error('未安装打印控件，请先安装控件后重新启动系统')
-        return
+        this.$message.error('未安装打印控件，请先安装控件后重新启动系统');
+        return;
       }
-      const printFlag = +sessionStorage.getItem('printFlag')
+      const printFlag = +sessionStorage.getItem('printFlag');
       if (printFlag) {
         this.$api.getStorePrint({ code: 'GIFT_BACK' }).then(async (res) => {
-          const p = res.body.printInfo
+          const p = res.body.printInfo;
           if (p.printFlag) {
-            LODOP.PRINT_INIT('')
+            LODOP.PRINT_INIT('');
             // LODOP.ADD_PRINT_RECT(0, 0, 180, 240, 3, 1);
-            LODOP.SET_PRINT_STYLE('FontSize', 8)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.title)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.theme)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `交易分店：${p.storeName}`)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `========== 商品信息 =========`)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `订单号：${this.currentOrder.orderId}`)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `退单名称：${this.currentOrder.giftName}`)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `数量：${this.currentOrder.orderGift[0].count}`)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `小计：￥${this.MIXIN_Points2Yuan(this.currentOrder.offValueSum)}`)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `操作用户：${getToken()}`)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `操作时间：${moment().format('YYYY-MM-DD HH:mm:ss')}`)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.endTheme)
-            LODOP.PRINT()
-            this.ticketHeight = 0
-            callback && callback()
+            LODOP.SET_PRINT_STYLE('FontSize', 8);
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.title);
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.theme);
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `交易分店：${p.storeName}`);
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `========== 商品信息 =========`);
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `订单号：${this.currentOrder.orderId}`);
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `退单名称：${this.currentOrder.giftName}`);
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `数量：${this.currentOrder.orderGift[0].count}`);
+            LODOP.ADD_PRINT_TEXT(
+              this.getHeight(),
+              0,
+              180,
+              25,
+              `小计：￥${this.MIXIN_Points2Yuan(this.currentOrder.offValueSum)}`
+            );
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `操作用户：${getToken()}`);
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `操作时间：${moment().format('YYYY-MM-DD HH:mm:ss')}`);
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.endTheme);
+            LODOP.PRINT();
+            this.ticketHeight = 0;
+            callback && callback();
           } else {
-            callback && callback()
+            callback && callback();
           }
-        })
+        });
       }
     },
     reset() {
-      this.$refs.searchForm.resetFields()
-      this.pageNum = 1
-      this.getInfo()
+      this.$refs.searchForm.resetFields();
+      this.pageNum = 1;
+      this.getInfo();
     },
     search() {
-      this.pageNum = 1
-      this.getInfo()
+      this.pageNum = 1;
+      this.getInfo();
     },
     // 翻页
     changePage(val) {
-      this.getInfo()
+      this.getInfo();
     },
     getInfo() {
       // 默认参数
-      const params = { ...this.searchForm }
+      const params = { ...this.searchForm };
       if (params.times && params.times.length) {
-        params.startTime = params.times[0]
-        params.endTime = params.times[1]
+        params.startTime = params.times[0];
+        params.endTime = params.times[1];
       } else {
-        params.startTime = ''
-        params.endTime = ''
+        params.startTime = '';
+        params.endTime = '';
       }
-      delete params.times
-      params.pageNum = this.pageNum
-      params.showNum = this.showNum
-      this.loading = true
+      delete params.times;
+      params.pageNum = this.pageNum;
+      params.showNum = this.showNum;
+      this.loading = true;
       this.$api
         .getGiftOrder(params)
         .then((res) => {
-          this.tableData = res.body.items
-          this.count = res.body.count
+          this.tableData = res.body.items;
+          this.count = res.body.count;
         })
         .finally((result) => {
-          this.loading = false
-        })
+          this.loading = false;
+        });
     },
     getOrderStatus(status) {
       switch (status) {
         case 0:
-          return '待支付'
+          return '待支付';
         case 1:
-          return '已支付'
+          return '已支付';
         case 2:
-          return '已退单'
+          return '已退单';
         default:
-          return '其他支付'
+          return '其他支付';
       }
     },
     getValuePayType(type) {
       switch (type) {
         case 0:
-          return '未支付'
+          return '未支付';
         case 1:
-          return '微信'
+          return '微信';
         case 2:
-          return '支付宝'
+          return '支付宝';
         case 3:
-          return '现金'
+          return '现金';
         default:
-          return '其他'
+          return '其他';
       }
     },
     // 导出表格
     exportXlSX() {
-      this.loading = true
-      const params = { ...this.searchForm }
+      this.loading = true;
+      const params = { ...this.searchForm };
       if (params.times && params.times.length) {
-        params.startTime = params.times[0]
-        params.endTime = params.times[1]
+        params.startTime = params.times[0];
+        params.endTime = params.times[1];
       } else {
-        params.startTime = ''
-        params.endTime = ''
+        params.startTime = '';
+        params.endTime = '';
       }
-      delete params.times
-      params.pageNum = 1
-      params.showNum = this.count
+      delete params.times;
+      params.pageNum = 1;
+      params.showNum = this.count;
       this.$api.getGiftOrder(params).then(
         (res) => {
-          const valuePayTypeList = ['未支付', '微信', '支付宝', '现金', '其他']
-          const orderPayType = ['-', '积分', '人民币', '游戏币']
+          const valuePayTypeList = ['未支付', '微信', '支付宝', '现金', '其他'];
+          const orderPayType = ['-', '积分', '人民币', '游戏币'];
           const data = res.body.items.map((val) => {
             return [
               val.orderId.toString(),
@@ -506,9 +554,9 @@ export default {
               val.payGameCoin,
               this.formatCoinType(val.coinType),
               val.name,
-              val.auditor
-            ]
-          })
+              val.auditor,
+            ];
+          });
           const tHeader = [
             '订单号',
             '玩家ID',
@@ -527,19 +575,19 @@ export default {
             '支付游戏币',
             '取币类型',
             '收银员姓名',
-            '退单审核员'
-          ]
+            '退单审核员',
+          ];
           exportTable(tHeader, data, '套餐销售记录').then(() => {
-            this.loading = false
-          })
+            this.loading = false;
+          });
         },
         (err) => {
-          this.loading = false
+          this.loading = false;
         }
-      )
-    }
-  }
-}
+      );
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
