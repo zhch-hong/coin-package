@@ -402,4 +402,23 @@ export default {
   createOtherIORecord(data) {
     return request({ url: '/cash/balance/incomeAndExpendPay', method: 'post', data });
   },
+
+  /**
+   * 其他收支 - 收支明细
+   * @param {Object} data
+   * @param {string} [data.balanceName=""] - 类别名称
+   * @param {string} [data.adminName=""] - 授权员工姓名
+   * @param {number} [data.balanceType=""] - 收支类型，1 收入，2 支出
+   * @param {string} [data.staffName=""] - 收银员姓名
+   * @param {string} [data.startTime=""] - 开始时间
+   * @param {string} [data.endTime=""] - 截止时间
+   * @param {string} [data.sort=""] - 排序字段
+   * @param {string} [data.orderBy=""] - 排序方式，asc 正序，desc 倒序
+   * @param {number} data.pageNum - 第几页
+   * @param {number} data.showNum - 每页数据条数
+   * @returns
+   */
+  readOtherIORecord(data) {
+    return request({ url: '/cash/balance/getIncomeAndExpendDetail', method: 'get', data });
+  },
 };
