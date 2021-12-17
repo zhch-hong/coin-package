@@ -137,19 +137,39 @@
           <div>
             <h3 style="color: #7a7a7a">单价：{{ currentPkg.price | MIXIN_Points2Yuan }}元</h3>
 
-            <div style="margin: 16px 0; color: #1890ff" v-for="(item, index) in currentPkg.detail" :key="index">
-              {{ item.giftName }}
+            <div class="package-list">
+              <el-carousel
+                trigger="click"
+                height="100px"
+                indicator-position="none"
+                arrow="always"
+                :autoplay="false"
+                :loop="false"
+              >
+                <el-carousel-item v-for="(array, index) in packageList" :key="index">
+                  <div class="carousel-package">
+                    <el-row v-for="indexⅡ in 4" :key="'c_' + indexⅡ">
+                      <el-col :span="12">
+                        <span>{{ array[indexⅡ * 2 - 2] ? array[indexⅡ * 2 - 2]['giftName'] : '' }}</span>
+                      </el-col>
+                      <el-col :span="12">
+                        <span>{{ array[indexⅡ * 2 - 1] ? array[indexⅡ * 2 - 1]['giftName'] : '' }}</span>
+                      </el-col>
+                    </el-row>
+                  </div>
+                </el-carousel-item>
+              </el-carousel>
             </div>
           </div>
 
-          <div style="display: flex; align-items: center; margin: 40px 0">
+          <div style="display: flex; align-items: center; margin: 30px 0">
             <span>购买数量：</span>
 
             <el-input-number v-model="count" size="large" :precision="0" :step="1" :min="1"></el-input-number>
           </div>
 
           <div
-            style="display: flex; align-items: center; margin: 40px 0"
+            style="display: flex; align-items: center; margin: 30px 0"
             v-if="!$store.state.offline && currentPkg.coinNum"
           >
             <span>电子币：</span>
@@ -240,6 +260,8 @@
 </template>
 
 <script>
+/* eslint-disable object-shorthand */
+
 import Cookies from 'js-cookie';
 import { to } from '@/utils/tools';
 
@@ -283,6 +305,7 @@ export default {
       buyDiscount: 1, // 会员的打折率，通过查询会员的信息得到，默认是1，不打折
 
       currentPkg: {},
+      packageList: [],
 
       count: 1,
 
@@ -295,8 +318,31 @@ export default {
   },
 
   watch: {
-    currentType(value) {
+    'currentType'(value) {
       Cookies.set('currentType', JSON.stringify(value));
+    },
+
+    'currentPkg.detail': {
+      deep: true,
+      immediate: true,
+      handler(array) {
+        if (array instanceof Array) {
+          const temp = array.concat(array).concat(array).concat(array).concat(array).concat(array).concat(array);
+          // temp.splice(0, 10);
+          const packageList = [];
+          const split = (value) => {
+            if (value.length > 8) {
+              const s = value.splice(0, 8);
+              packageList.push(s);
+              split(value);
+            } else {
+              packageList.push(value);
+            }
+          };
+          split(temp);
+          this.packageList = packageList;
+        }
+      },
     },
   },
 
@@ -731,6 +777,18 @@ export default {
   padding: 0 32px;
 
   border-bottom: 1px solid #cccccc;
+}
+
+.package-list {
+  height: 100px;
+  color: #1890ff;
+
+  .carousel-package {
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 }
 
 .package-sale {
