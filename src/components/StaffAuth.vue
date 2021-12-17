@@ -63,11 +63,13 @@ export default {
       immediate: true,
       handler(val) {
         if (val) {
-          if (this.hasCreateWebview) {
-            this.refreshWebview();
-          } else {
-            this.initWxLogin();
-          }
+          setTimeout(() => {
+            if (this.hasCreateWebview) {
+              this.refreshWebview();
+            } else {
+              this.initWxLogin();
+            }
+          }, 1000);
         }
       },
     },

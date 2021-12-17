@@ -197,7 +197,8 @@
       </el-button>
     </div>
     <StaffAuth :show.sync="showAuthModal" @success="authSuccess"></StaffAuth>
-    <el-dialog :visible.sync="discardVisible" width="75%" title="套餐作废规则">
+    <el-dialog :visible.sync="discardVisible" width="75%" title="确定作废此套餐">
+      <h3>套餐作废规则</h3>
       <ol class="discard-rule">
         <li>购买电子币套餐：扣除此套餐对应的电子游戏币数，若账户币数不足，则扣此账户所剩全部电子游戏币数</li>
         <li>购买时间票套餐：直接作废</li>
@@ -215,11 +216,50 @@
 </template>
 
 <script>
+import Vue from 'vue';
+import $api from '@/api';
 import exportTable from '@/utils/outputExcel';
 import moment from 'moment';
-import { to } from '@/utils/tools';
-import StaffAuth from '../../../components/StaffAuth';
-import { getToken } from '../../../utils/auth';
+import { to } from '@utils/tools';
+import { getToken } from '@utils/auth';
+
+import StaffAuth from '@/components/StaffAuth.vue';
+
+function mountDOM(instance) {
+  const div = document.createElement('div');
+  document.body.append(div);
+  instance.$mount(div);
+}
+
+function unmountDOM(instance) {
+  instance.$el.remove();
+  instance.$destroy();
+}
+
+function staffAuth() {
+  return new Promise((resolve) => {
+    const instance = new Vue({
+      render(h) {
+        return h(StaffAuth, {
+          props: {
+            show: true,
+          },
+          on: {
+            cancel() {
+              resolve();
+              unmountDOM(instance);
+            },
+            success(type) {
+              resolve(type);
+              unmountDOM(instance);
+            },
+          },
+        });
+      },
+    });
+    mountDOM(instance);
+  });
+}
 
 export default {
   name: 'store',
@@ -341,18 +381,27 @@ export default {
       this.dblclickRow = row;
     },
 
-    handleConfirmDiscard() {
-      this.$confirm('确定作废此套餐？', {
-        type: 'warning',
-        title: '提示',
-      })
-        .then(() => {
-          console.log(`套餐作废, ${JSON.stringify(this.dblclickRow)}`);
-          this.discardVisible = false;
-        })
-        .catch(() => {
-          //
-        });
+    async handleConfirmDiscard() {
+      const auth = await staffAuth();
+      if (typeof auth === 'undefined') {
+        return;
+      }
+      const { type, openId, phone, code } = auth;
+      const { orderId } = this.dblclickRow;
+      const data = { orderId, type };
+      if (type === 1) {
+        Object.assign(data, { phone, code });
+      }
+      if (type === 3) {
+        Object.assign(data, { openId });
+      }
+      const { errCode, errMsg } = await $api.updateDiscardPackage(data);
+      if (errCode === 0) {
+        this.$message.success({ message: '操作成功', duration: 1500 });
+      } else {
+        this.$message.error({ message: errMsg, duration: 1500 });
+      }
+      this.discardVisible = false;
     },
 
     authSuccess(data) {
