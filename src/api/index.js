@@ -421,4 +421,17 @@ export default {
   readOtherIORecord(data) {
     return request({ url: '/cash/balance/getIncomeAndExpendDetail', method: 'get', data });
   },
+
+  /** 套餐销售 - 作废销售记录
+   * @param {Object} data
+   * @param {number} data.orderId - 订单id
+   * @param {number} data.type - 授权方式，1 验证码，3 扫码
+   * @param {string} [data.phone=""] - 手机号，type为1时必传
+   * @param {string} [data.code=""] - 验证码，type为1时必传
+   * @param {string} [data.openId=""] - 验证码，type为3时必传
+   * @returns
+   */
+  updateDiscardPackage(data) {
+    return request({ url: '/cash/gift/invalidCoinGift', method: 'put', data });
+  },
 };
