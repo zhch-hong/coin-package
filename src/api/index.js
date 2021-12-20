@@ -166,10 +166,16 @@ export default {
   packsSureGetRMB(data) {
     return request({ url: '/cash/gift/userPayRMB', method: 'post', data });
   },
-  // 套餐销售记录
+
+  /**
+   * 套餐销售 - 销售记录 - 表格数据
+   * @param {Object} data
+   * @returns
+   */
   getGiftOrder(data) {
-    return request({ url: '/cash/gift/getGiftOrder', method: 'post', data });
+    return request({ url: '/cash/gift/getGiftOrder', method: 'get', data });
   },
+
   // 套餐销售记录
   backCoinGift(data) {
     return request({ url: '/cash/gift/backCoinGift', method: 'post', data });

@@ -172,6 +172,8 @@
       </el-table-column>
       <el-table-column label="收银员姓名" prop="name" align="center" min-width="120"></el-table-column>
       <el-table-column label="退单审核员" prop="auditor" align="center" min-width="120"></el-table-column>
+      <el-table-column label="是否作废" prop="invalidFlag" :formatter="invalidFormat"></el-table-column>
+      <el-table-column label="作废审核员" prop="invalidAuditor"></el-table-column>
       <el-table-column label="操作" v-if="!this.$store.state.offline" align="center" min-width="120">
         <template slot-scope="scope">
           <el-button type="text" @click="openAuthModal(scope.row)">退单</el-button>
@@ -355,10 +357,35 @@ export default {
       const db = await this.$db.openDB('offlineDB');
       this.tableData = await this.$db.cursorGetData(db, 'giftRecord');
     } else {
-      this.getInfo();
+      this.fetchTableData();
     }
   },
   methods: {
+    fetchTableData() {
+      // 默认参数
+      const params = { ...this.searchForm };
+      if (params.times && params.times.length) {
+        params.startTime = params.times[0];
+        params.endTime = params.times[1];
+      } else {
+        params.startTime = '';
+        params.endTime = '';
+      }
+      delete params.times;
+      params.pageNum = this.pageNum;
+      params.showNum = this.showNum;
+      this.loading = true;
+      this.$api
+        .getGiftOrder(params)
+        .then((res) => {
+          this.tableData = res.body.items;
+          this.count = res.body.count;
+        })
+        .finally((result) => {
+          this.loading = false;
+        });
+    },
+
     formatCoinType(val) {
       switch (val) {
         case 1:
@@ -401,7 +428,7 @@ export default {
       } else {
         this.$message.error({ message: errMsg, duration: 1500 });
       }
-      this.discardVisible = false;
+      // this.discardVisible = false;
     },
 
     authSuccess(data) {
@@ -419,7 +446,7 @@ export default {
         .then((res) => {
           this.printBackTicket();
           this.$message.success('退单成功');
-          this.getInfo();
+          this.fetchTableData();
         })
         .finally(() => {
           this.loading = false;
@@ -542,40 +569,17 @@ export default {
     reset() {
       this.$refs.searchForm.resetFields();
       this.pageNum = 1;
-      this.getInfo();
+      this.fetchTableData();
     },
     search() {
       this.pageNum = 1;
-      this.getInfo();
+      this.fetchTableData();
     },
     // 翻页
     changePage(val) {
-      this.getInfo();
+      this.fetchTableData();
     },
-    getInfo() {
-      // 默认参数
-      const params = { ...this.searchForm };
-      if (params.times && params.times.length) {
-        params.startTime = params.times[0];
-        params.endTime = params.times[1];
-      } else {
-        params.startTime = '';
-        params.endTime = '';
-      }
-      delete params.times;
-      params.pageNum = this.pageNum;
-      params.showNum = this.showNum;
-      this.loading = true;
-      this.$api
-        .getGiftOrder(params)
-        .then((res) => {
-          this.tableData = res.body.items;
-          this.count = res.body.count;
-        })
-        .finally((result) => {
-          this.loading = false;
-        });
-    },
+
     getOrderStatus(status) {
       switch (status) {
         case 0:
@@ -602,6 +606,12 @@ export default {
           return '其他';
       }
     },
+
+    invalidFormat(row, col, value) {
+      if (value === 1) return '是';
+      return '否';
+    },
+
     // 导出表格
     exportXlSX() {
       this.loading = true;
