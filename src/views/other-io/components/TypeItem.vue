@@ -1,6 +1,8 @@
 <template>
   <div class="type-item" @click="$emit('click')">
-    <span>{{ value }}</span>
+    <div class="layout">
+      <p class="content">{{ value }}</p>
+    </div>
   </div>
 </template>
 <script>
@@ -12,15 +14,25 @@ export default {
 </script>
 <style lang="scss" scoped>
 .type-item {
-  cursor: pointer;
   display: inline-block;
-  width: 240px;
-  height: 109px;
   margin: 20px;
-  line-height: 109px;
-  text-align: center;
-  color: #fff;
-  font-size: 23px;
-  background: url('../../../assets/other-io.png') center/contain;
+
+  .layout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 240px;
+    height: 109px;
+    padding: 10px;
+    color: #fff;
+    font-size: 23px;
+    background: url('../../../assets/other-io.png') center/contain;
+
+    .content {
+      // position: relative;
+      margin: 0;
+    }
+  }
 }
 </style>
