@@ -7,7 +7,7 @@
     @closed="$emit('closed')"
   >
     <el-form ref="submitFrom" :model="submitFrom" :rules="rules">
-      <el-form-item label="收入金额" prop="payValue">
+      <el-form-item label="金额" prop="payValue">
         <el-input v-model.trim="submitFrom.payValue" @input="onPayInput"></el-input>
       </el-form-item>
       <el-form-item label="备注" prop="backup">

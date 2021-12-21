@@ -46,7 +46,7 @@ export default {
       const form = await ioFrom();
       if (typeof form !== 'undefined') {
         const data = {
-          payValue: Number(this.MIXIN_Integral2Points(form.payValue)),
+          payValue: form.payValue * 100,
           backup: form.backup,
           balanceId: id,
         };
