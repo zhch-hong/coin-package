@@ -77,6 +77,21 @@
             clearable
           ></el-date-picker>
         </el-form-item>
+        <el-form-item label="是否作废:" prop="invalidFlag">
+          <el-select v-model="searchForm.invalidFlag" clearable size="mini" style="width: 240px" placeholder="请选择">
+            <el-option label="已作废" :value="1"></el-option>
+            <el-option label="未作废" :value="0"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="作废审核员:" prop="invalidAuditor">
+          <el-input
+            v-model="searchForm.invalidAuditor"
+            clearable
+            size="mini"
+            style="width: 240px"
+            placeholder="请输入"
+          ></el-input>
+        </el-form-item>
         <el-form-item label=" ">
           <el-button type="primary" size="mini" style="width: 120px" @click="search">查 询</el-button>
           <el-button size="mini" style="width: 120px; border-color: #4194fe; color: #4194fe" @click="reset"
@@ -299,6 +314,8 @@ export default {
         status: '',
         coinType: '',
         times: [],
+        invalidFlag: '',
+        invalidAuditor: '',
       },
       options: [
         {
@@ -425,10 +442,11 @@ export default {
       const { errCode, errMsg } = await $api.updateDiscardPackage(data);
       if (errCode === 0) {
         this.$message.success({ message: '操作成功', duration: 1500 });
+        this.discardVisible = false;
+        this.fetchTableData();
       } else {
         this.$message.error({ message: errMsg, duration: 1500 });
       }
-      // this.discardVisible = false;
     },
 
     authSuccess(data) {
