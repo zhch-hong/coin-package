@@ -277,7 +277,7 @@ export default {
 
       loading: false,
 
-      currentType: null,
+      currentType: '',
 
       giftList: [],
 
@@ -670,10 +670,7 @@ export default {
           this.giftTypeList = res.body.giftTypeList.map((item) => {
             return { label: item, value: item };
           });
-          if (this.currentType === null) {
-            this.setDefaultCurrentType();
-            this.changeType();
-          }
+          this.setDefaultCurrentType();
         })
         .finally(() => {
           this.loading = false;
@@ -687,11 +684,12 @@ export default {
     },
 
     setDefaultCurrentType() {
-      if (this.currentType === null) {
+      if (this.currentType === '') {
         const type = Cookies.get('currentType');
-        console.log(type, typeof type);
         if (typeof type === 'undefined') {
-          this.currentType = this.giftTypeList[0];
+          if (this.giftTypeList.length > 0) {
+            this.currentType = this.giftTypeList[0];
+          }
         } else {
           this.currentType = JSON.parse(type);
         }
@@ -730,8 +728,9 @@ export default {
   },
 
   async mounted() {
+    this.setDefaultCurrentType();
     if (!this.$store.state.offline) {
-      this.getInfo({ giftType: '' });
+      this.getInfo({ giftType: this.currentType ? this.currentType.value : '' });
     } else {
       const db = await this.$db.openDB('offlineDB');
 

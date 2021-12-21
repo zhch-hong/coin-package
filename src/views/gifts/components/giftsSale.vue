@@ -642,6 +642,7 @@ export default {
             this.prizeTypeList = res.body.prizeTypeList.map((item) => {
               return { label: item, value: item };
             });
+            this.setDefaultCurrentType();
             resolve();
           })
 
@@ -671,7 +672,7 @@ export default {
       if (typeof this.currentIndex.value === 'undefined') {
         const type = Cookies.get('currentIndex');
         if (typeof type === 'undefined') {
-          this.currentIndex = this.prizeTypeList[0];
+          if (this.prizeTypeList.length > 0) this.currentIndex = this.prizeTypeList[0];
         } else {
           this.currentIndex = JSON.parse(type);
         }
@@ -718,10 +719,10 @@ export default {
       }
     };
 
+    this.setDefaultCurrentType();
+
     if (!this.$store.state.offline) {
-      await this.getInfo({});
-      this.setDefaultCurrentType();
-      this.getInfo({ prizeType: this.currentIndex.value });
+      this.getInfo({ prizeType: this.currentIndex.value || '' });
     } else {
       await this.initOfflinePrize();
     }
