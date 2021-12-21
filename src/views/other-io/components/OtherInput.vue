@@ -53,14 +53,14 @@ export default {
         // 1 需要授权
         if (authFlag === 1) {
           const auth = await staffAuth();
-          if (typeof auth !== 'undefined') {
-            const { type, openId, phone, code } = auth;
-            if (type === 1) {
-              Object.assign(data, { type, phone, code });
-            }
-            if (type === 3) {
-              Object.assign(data, { type, openId });
-            }
+          if (typeof auth === 'undefined') return;
+
+          const { type, openId, phone, code } = auth;
+          if (type === 1) {
+            Object.assign(data, { type, phone, code });
+          }
+          if (type === 3) {
+            Object.assign(data, { type, openId });
           }
         }
         const { body, errCode } = await $api.createOtherIOOrder(data);
