@@ -188,7 +188,7 @@ export default {
             return [
               val.time,
               val.balanceName,
-              val.balanceType,
+              this.typeFormat('', '', val.balanceType),
               this.MIXIN_Points2Yuan(val.payValue),
               val.staffName,
               val.adminName,
@@ -199,7 +199,7 @@ export default {
           data.push(['合计', '-', '-', this.MIXIN_Points2Yuan(totalFee), '-', '-', '-']);
 
           const tHeader = ['操作时间', '类别', '类型', '金额', '收银员', '授权员工', '备注'];
-          exportTable(tHeader, data, '加币流水').then(() => {
+          exportTable(tHeader, data, '其他收支').then(() => {
             this.exportLoading = false;
           });
         },
