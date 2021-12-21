@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TypeItem v-for="{ balanceName, id } in typeList" :key="id" :value="balanceName" @click="handleIOFrom(id)" />
+    <TypeItem v-for="type in typeList" :key="type.id" :value="type.balanceName" @click="handleIOFrom(type)" />
   </div>
 </template>
 <script>
@@ -13,12 +13,7 @@ export default {
 
   data() {
     return {
-      typeList: [
-        {
-          balanceName: '税费',
-          id: 1,
-        },
-      ],
+      typeList: [],
       searchForm: {
         balanceName: '',
         balanceType: 1,
@@ -33,7 +28,7 @@ export default {
   },
 
   mounted() {
-    // this.fetchTypeList();
+    this.fetchTypeList();
   },
 
   methods: {
@@ -45,31 +40,34 @@ export default {
       }
     },
 
-    async handleIOFrom(balanceId) {
+    async handleIOFrom(object) {
+      const { authFlag, id } = object;
       // 表单
-      const from = await ioFrom();
-      if (typeof from !== 'undefined') {
-        // 授权
-        const auth = await staffAuth();
-        if (typeof auth !== 'undefined') {
-          const { type, openId, phone, code } = auth;
-          const data = { ...from, type, balanceId };
-          if (type === 1) {
-            Object.assign(data, { phone, code });
-          }
-          if (type === 3) {
-            Object.assign(data, { openId });
-          }
-          const { body, errCode } = await $api.createOtherIOOrder(data);
-          if (errCode === 0) {
-            const { needPayValue, orderId } = body;
-            // 支付方式
-            const isSuccess = await receivePanel(needPayValue, orderId);
-            if (isSuccess) {
-              this.$message.success({ message: '操作成功', duration: 1500 });
-            } else {
-              this.$message.warning({ message: '操作失败', duration: 1500 });
+      const form = await ioFrom();
+      if (typeof form !== 'undefined') {
+        const data = { payValue: this.MIXIN_Integral2Points(form.payValue), backup: form.backup, balanceId: id };
+        // 1 需要授权
+        if (authFlag === 1) {
+          const auth = await staffAuth();
+          if (typeof auth !== 'undefined') {
+            const { type, openId, phone, code } = auth;
+            if (type === 1) {
+              Object.assign(data, { type, phone, code });
             }
+            if (type === 3) {
+              Object.assign(data, { type, openId });
+            }
+          }
+        }
+        const { body, errCode } = await $api.createOtherIOOrder(data);
+        if (errCode === 0) {
+          const { needPayValue, orderId } = body;
+          // 支付方式
+          const isSuccess = await receivePanel(parseFloat(needPayValue), orderId);
+          if (isSuccess) {
+            this.$message.success({ message: '操作成功', duration: 1500 });
+          } else {
+            this.$message.warning({ message: '操作失败', duration: 1500 });
           }
         }
       }

@@ -14,13 +14,13 @@ export default {
 .type-item {
   cursor: pointer;
   display: inline-block;
-  width: 200px;
-  height: 200px;
+  width: 240px;
+  height: 109px;
   margin: 20px;
-  line-height: 200px;
+  line-height: 109px;
   text-align: center;
-  background-color: #fff;
-  border-radius: 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+  color: #fff;
+  font-size: 23px;
+  background: url('../../../assets/other-io.png') center/contain;
 }
 </style>

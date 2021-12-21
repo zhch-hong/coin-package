@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin: 16px">
     <div>
       <el-form ref="searchForm" :model="searchForm" inline>
         <el-form-item label="操作时间">
@@ -22,7 +22,7 @@
           <el-input v-model.trim="searchForm.adminName"></el-input>
         </el-form-item>
         <el-form-item label="收支类型" prop="balanceType">
-          <el-select v-model="searchForm.balanceType">
+          <el-select v-model="searchForm.balanceType" clearable>
             <el-option label="收入" :value="1"></el-option>
             <el-option label="支出" :value="2"></el-option>
           </el-select>
@@ -31,12 +31,12 @@
           <el-input v-model.trim="searchForm.staffName"></el-input>
         </el-form-item>
       </el-form>
-      <div>
+      <div style="margin: 0 0 16px 0; text-align: right">
         <el-button size="small" type="primary" @click="handleSearch">查询</el-button>
         <el-button size="small" @click="handleReset">重置</el-button>
       </div>
     </div>
-    <el-table :data="tableData" height="50vh">
+    <el-table :data="tableData" height="60vh">
       <el-table-column label="操作时间" prop="time"></el-table-column>
       <el-table-column label="类别" prop="balanceName"></el-table-column>
       <el-table-column label="类型" prop="balanceType" :formatter="typeFormat"></el-table-column>

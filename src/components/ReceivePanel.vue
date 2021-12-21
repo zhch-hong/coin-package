@@ -5,7 +5,7 @@
       <div class="left-total flex-center">
         <div style="font-size: 18px; color: #333333; font-weight: 500">待支付金额:</div>
         <div style="color: #f32525; font-size: 35px; font-weight: bold; margin-top: 6px">
-          ￥{{ count | MIXIN_Points2Yuan }}元
+          ￥{{ needPayValue | MIXIN_Points2Yuan }}元
         </div>
       </div>
       <div class="bc-title">支付方式</div>

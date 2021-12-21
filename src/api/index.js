@@ -23,7 +23,7 @@ export default {
   },
   // 查询班结信息
   getInvoicingInfo(data) {
-    return request({ url: '/cash/invoicing/getInvoicingInfo', method: 'post', data });
+    return request({ url: '/cash/invoicing/getInvoicingInfo', method: 'get', data });
   },
   // 确认班结
   cashInvoicing(data) {
