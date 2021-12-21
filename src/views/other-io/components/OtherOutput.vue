@@ -50,7 +50,11 @@ export default {
       // 表单
       const form = await ioFrom();
       if (typeof form !== 'undefined') {
-        const data = { payValue: this.MIXIN_Integral2Points(form.payValue), backup: form.backup, balanceId: id };
+        const data = {
+          payValue: Number(this.MIXIN_Integral2Points(form.payValue)),
+          backup: form.backup,
+          balanceId: id,
+        };
         // 1 需要授权
         if (authFlag === 1) {
           const auth = await staffAuth();
