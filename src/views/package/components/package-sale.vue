@@ -149,11 +149,8 @@
                 <el-carousel-item v-for="(array, index) in packageList" :key="index">
                   <div class="carousel-package">
                     <el-row v-for="indexⅡ in 4" :key="'c_' + indexⅡ">
-                      <el-col :span="12">
-                        <span>{{ array[indexⅡ * 2 - 2] ? array[indexⅡ * 2 - 2]['giftName'] : '' }}</span>
-                      </el-col>
-                      <el-col :span="12">
-                        <span>{{ array[indexⅡ * 2 - 1] ? array[indexⅡ * 2 - 1]['giftName'] : '' }}</span>
+                      <el-col :span="24">
+                        <span>{{ array[indexⅡ - 1] ? array[indexⅡ - 1]['giftName'] : '' }}</span>
                       </el-col>
                     </el-row>
                   </div>
@@ -331,8 +328,8 @@ export default {
           // temp.splice(0, 10);
           const packageList = [];
           const split = (value) => {
-            if (value.length > 8) {
-              const s = value.splice(0, 8);
+            if (value.length > 4) {
+              const s = value.splice(0, 4);
               packageList.push(s);
               split(value);
             } else {
@@ -788,6 +785,9 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background-color: #f2f2f2;
+    padding: 8px 16px;
+    border-radius: 10px;
   }
 }
 
