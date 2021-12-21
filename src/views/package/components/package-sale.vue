@@ -361,7 +361,7 @@ export default {
 
       this.getUserResult = false;
 
-      this.isVirtual = false;
+      this.isVirtual = true;
     },
 
     handleOnGetCoinManual() {
@@ -390,7 +390,7 @@ export default {
 
             gift: this.currentPkg,
 
-            isVirtual: false,
+            isVirtual: true,
 
             isManual: true,
 
