@@ -176,7 +176,7 @@
           <el-col :span="8">
             <div class="item-list">
               <div class="xian"></div>
-              <div>其他支付</div>
+              <div>游戏币</div>
             </div>
             <div class="item-input"></div>
           </el-col>
