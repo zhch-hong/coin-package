@@ -13,12 +13,7 @@ export default {
 
   data() {
     return {
-      typeList: [
-        {
-          balanceName: '税费',
-          id: 1,
-        },
-      ],
+      typeList: [],
       searchForm: {
         balanceName: '',
         balanceType: 2,
