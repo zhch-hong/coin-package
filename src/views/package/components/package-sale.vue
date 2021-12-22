@@ -306,7 +306,7 @@ export default {
 
       count: 1,
 
-      isVirtual: true,
+      isVirtual: false,
 
       isManual: false,
 
@@ -361,7 +361,7 @@ export default {
 
       this.getUserResult = false;
 
-      this.isVirtual = true;
+      this.isVirtual = false;
     },
 
     handleOnGetCoinManual() {
@@ -390,7 +390,7 @@ export default {
 
             gift: this.currentPkg,
 
-            isVirtual: true,
+            isVirtual: false,
 
             isManual: true,
 
@@ -585,11 +585,9 @@ export default {
 
         .then((res) => {
           this.uid = res.body.uid;
-
           this.userStarCoin = res.body.starCoinNum;
-
           this.buyDiscount = res.body.buyGiftDiscount;
-
+          this.isVirtual = true;
           this.getUserResult = true;
         })
 
