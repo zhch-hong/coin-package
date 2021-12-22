@@ -324,8 +324,6 @@ export default {
       immediate: true,
       handler(array) {
         if (array instanceof Array) {
-          const temp = array.concat(array).concat(array).concat(array).concat(array).concat(array).concat(array);
-          // temp.splice(0, 10);
           const packageList = [];
           const split = (value) => {
             if (value.length > 4) {
@@ -336,7 +334,7 @@ export default {
               packageList.push(value);
             }
           };
-          split(temp);
+          split(array);
           this.packageList = packageList;
         }
       },
