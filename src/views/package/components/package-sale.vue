@@ -336,6 +336,8 @@ export default {
           };
           split(array);
           this.packageList = packageList;
+        } else {
+          this.packageList = [];
         }
       },
     },
