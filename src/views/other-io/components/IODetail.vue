@@ -69,6 +69,7 @@
 <script>
 import $api from '@/api';
 import exportTable from '@utils/outputExcel';
+import calc from '@utils/calc';
 
 export default {
   data() {
@@ -156,7 +157,7 @@ export default {
     summaryColumn(data) {
       let feePage = 0;
       data.forEach(({ payValue }) => {
-        feePage += Number(payValue);
+        feePage = calc.accAdd(feePage, payValue);
       });
       return {
         feePage,
