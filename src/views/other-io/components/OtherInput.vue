@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="other-input">
     <TypeItem v-for="type in typeList" :key="type.id" :value="type.balanceName" @click="handleIOFrom(type)" />
   </div>
 </template>
@@ -79,3 +79,9 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.other-input {
+  display: flex;
+  flex-wrap: wrap;
+}
+</style>

@@ -43,7 +43,7 @@
       <el-table-column label="金额" prop="payValue" :formatter="pointFormat"></el-table-column>
       <el-table-column label="收银员" prop="staffName"></el-table-column>
       <el-table-column label="授权员工" prop="adminName"></el-table-column>
-      <el-table-column label="备注" prop="backup" width="320"> </el-table-column>
+      <el-table-column label="备注" prop="backup" width="310"> </el-table-column>
     </el-table>
     <el-row style="margin-top: 16px">
       <el-col :span="6">
@@ -170,9 +170,7 @@ export default {
     },
 
     pointFormat(row, col, value) {
-      if (row.balanceType === 1) return this.MIXIN_Points2Yuan(value);
-      if (row.balanceType === 2) return `-${this.MIXIN_Points2Yuan(value)}`;
-      return value;
+      return this.MIXIN_Points2Yuan(value);
     },
 
     exportExcel() {
@@ -199,7 +197,7 @@ export default {
           data.push(['合计', '-', '-', this.MIXIN_Points2Yuan(totalFee), '-', '-', '-']);
 
           const tHeader = ['操作时间', '类别', '类型', '金额', '收银员', '授权员工', '备注'];
-          exportTable(tHeader, data, '其他收支').then(() => {
+          exportTable(tHeader, data, '收支明细').then(() => {
             this.exportLoading = false;
           });
         },
