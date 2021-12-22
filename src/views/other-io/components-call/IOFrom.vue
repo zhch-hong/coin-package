@@ -88,8 +88,9 @@ export default {
             validator(rule, value, callback) {
               if (value === undefined || value === '' || value === null) {
                 callback(new Error('无效字段'));
-              } else if (value.split('.')?.[1].length > 2 || value.split('.')?.[1].length === 0) {
-                callback(new Error('无效字段'));
+              } else if (value.split('.')[1] !== undefined) {
+                if (value.split('.')[1].length > 2 || value.split('.')[1].length === 0) callback(new Error('无效字段'));
+                else callback();
               } else {
                 callback();
               }
