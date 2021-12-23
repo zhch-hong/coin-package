@@ -46,12 +46,10 @@
       <el-table-column label="备注" prop="backup" width="310"> </el-table-column>
     </el-table>
     <el-row style="margin-top: 16px">
-      <el-col :span="6">
-        <el-button size="mini" icon="el-icon-document" :loading="exportLoading" @click="exportExcel"
-          >导出数据</el-button
-        >
+      <el-col :span="2">
+        <span style="visibility: hidden">xxx</span>
       </el-col>
-      <el-col :span="18" style="text-align: right">
+      <el-col :span="20" style="text-align: center">
         <el-pagination
           background
           layout="total, sizes, prev, pager, next, jumper"
@@ -62,6 +60,11 @@
           @current-change="fetchTableData"
           @size-change="fetchTableData"
         ></el-pagination>
+      </el-col>
+      <el-col :span="2" style="text-align: center">
+        <el-button size="mini" type="primary" icon="el-icon-document" :loading="exportLoading" @click="exportExcel"
+          >导出数据</el-button
+        >
       </el-col>
     </el-row>
   </div>
