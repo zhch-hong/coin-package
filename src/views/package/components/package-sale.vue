@@ -373,6 +373,7 @@ export default {
 
       if (!this.$store.state.offline) {
         this.isManual = true;
+        this.isVirtual = false;
 
         this.confirmBuy();
       } else {
