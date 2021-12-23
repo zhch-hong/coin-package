@@ -137,7 +137,7 @@
           <div>
             <h3 style="color: #7a7a7a">单价：{{ currentPkg.price | MIXIN_Points2Yuan }}元</h3>
 
-            <div class="package-list">
+            <div v-show="packageList.length > 0" class="package-list">
               <el-carousel
                 trigger="click"
                 height="100px"
