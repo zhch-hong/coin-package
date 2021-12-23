@@ -1,11 +1,17 @@
 <template>
   <div class="other-output">
-    <TypeItem v-for="type in typeList" :key="type.id" :value="type.balanceName" @click="handleIOFrom(type)" />
+    <TypeItem
+      v-for="type in typeList"
+      :key="type.id"
+      :value="type.balanceName"
+      :is-input="false"
+      @click="handleIOFrom(type)"
+    />
   </div>
 </template>
 <script>
 import $api from '@/api';
-import { ioFrom, receivePanel, staffAuth } from '../components-call';
+import { ioFrom, staffAuth } from '../components-call';
 import TypeItem from './TypeItem.vue';
 
 export default {

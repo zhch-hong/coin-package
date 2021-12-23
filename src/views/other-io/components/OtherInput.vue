@@ -1,6 +1,12 @@
 <template>
   <div class="other-input">
-    <TypeItem v-for="type in typeList" :key="type.id" :value="type.balanceName" @click="handleIOFrom(type)" />
+    <TypeItem
+      v-for="type in typeList"
+      :key="type.id"
+      :value="type.balanceName"
+      :is-input="true"
+      @click="handleIOFrom(type)"
+    />
   </div>
 </template>
 <script>

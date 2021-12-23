@@ -1,6 +1,13 @@
 <template>
   <div class="type-item" @click="$emit('click')">
-    <div class="layout">
+    <div
+      class="layout"
+      :style="{
+        'background-image': isInput
+          ? `url(${require('@/assets/other-io.png')})`
+          : `url(${require('@/assets/other-out.png')})`,
+      }"
+    >
       <p class="content">{{ value }}</p>
     </div>
   </div>
@@ -9,6 +16,7 @@
 export default {
   props: {
     value: String,
+    isInput: Boolean,
   },
 };
 </script>
@@ -27,7 +35,8 @@ export default {
     padding: 10px;
     color: #fff;
     font-size: 23px;
-    background: url('../../../assets/other-io.png') center/contain;
+    background-position: center;
+    background-size: contain;
 
     .content {
       // position: relative;

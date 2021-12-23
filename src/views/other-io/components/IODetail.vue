@@ -1,7 +1,7 @@
 <template>
   <div style="margin: 16px">
     <div>
-      <el-form ref="searchForm" :model="searchForm" inline>
+      <el-form ref="searchForm" size="mini" :model="searchForm" inline>
         <el-form-item label="操作时间">
           <el-date-picker
             v-model="datetimerange"
@@ -36,7 +36,7 @@
         <el-button size="small" @click="handleReset">重置</el-button>
       </div>
     </div>
-    <el-table :data="tableData" height="60vh">
+    <el-table :data="tableData" height="70vh">
       <el-table-column label="操作时间" prop="time"></el-table-column>
       <el-table-column label="类别" prop="balanceName"></el-table-column>
       <el-table-column label="类型" prop="balanceType" :formatter="typeFormat"></el-table-column>
