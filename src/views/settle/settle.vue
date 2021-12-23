@@ -281,6 +281,13 @@ export default {
     },
     // 班结
     async cashInvoicing() {
+      const [err, res] = await to(this.$api.cashInvoicing(this.authData));
+      if (err) {
+        this.disabledSettle = false;
+        this.loading = false;
+        return;
+      }
+
       const db = await this.$db.openDB('offlineDB');
       const offlineGiftRecord = await this.$db.cursorGetData(db, 'giftRecord');
       const offlinePrizeRecord = await this.$db.cursorGetData(db, 'prizeRecord');
@@ -320,12 +327,7 @@ export default {
         this.loading = false;
         return;
       }
-      const [err, res] = await to(this.$api.cashInvoicing(this.authData));
-      if (err) {
-        this.disabledSettle = false;
-        this.loading = false;
-        return;
-      }
+
       // 更新indexedDB里班结状态
       const staffInfo = await this.$db.getDataByIndex(db, 'staffInfo', 'phone', sessionStorage.getItem('phone'));
       await this.$db.updateDB(db, 'staffInfo', {
@@ -340,6 +342,13 @@ export default {
     },
     // 导出表格
     async exportXlSX() {
+      const [error] = await to(this.$api.cashInvoicing(this.authData));
+      if (error) {
+        this.disabledSettle = false;
+        this.loading = false;
+        return;
+      }
+
       const [err, res] = await to(this.getInfo());
       if (err) {
         this.loading = false;
@@ -401,6 +410,13 @@ export default {
     },
     // 打印
     async printTicket() {
+      const [error] = await to(this.$api.cashInvoicing(this.authData));
+      if (error) {
+        this.disabledSettle = false;
+        this.loading = false;
+        return;
+      }
+
       if (!window.LODOP) {
         this.$message.error('未安装打印控件，请先安装控件后重新启动系统');
         return;
