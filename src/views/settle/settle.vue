@@ -478,11 +478,19 @@ export default {
   }
 
   .item-input {
+    position: relative;
     width: 226px;
     height: 33px;
     background: #ffffff;
-    border: 1px solid #e3e5ec;
+    border: 1px solid transparent;
     border-radius: 4px;
+    &::after {
+      position: absolute;
+      content: '******';
+      left: 0;
+      top: 0;
+      font-size: 30px;
+    }
   }
 }
 
