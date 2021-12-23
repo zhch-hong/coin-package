@@ -6,6 +6,7 @@ import Vue from 'vue';
 import StaffAuth from '@/components/StaffAuth.vue';
 import ReceivePanel from '@/components/ReceivePanel.vue';
 import IOFrom from './IOFrom.vue';
+import InputSuccess from './InputSuccess.vue';
 
 function mountDOM(instance) {
   const div = document.createElement('div');
@@ -69,6 +70,21 @@ export function staffAuth() {
   });
 }
 
+export function inputSuccess() {
+  const instance = new Vue({
+    render(h) {
+      return h(InputSuccess, {
+        on: {
+          closed() {
+            unmountDOM(instance);
+          },
+        },
+      });
+    },
+  });
+  mountDOM(instance);
+}
+
 /**
  * 支付
  * @param {number} needPayValue
@@ -77,42 +93,25 @@ export function staffAuth() {
  */
 export function receivePanel(needPayValue, orderId) {
   return new Promise((resolve) => {
-    const observable = Vue.observable({ visible: true });
     const instance = new Vue({
       render(h) {
-        return h(
-          'el-dialog',
-          {
-            props: {
-              'visible': observable.visible,
-              'close-on-click-modal': false,
-              'close-on-press-escape': false,
+        return h(ReceivePanel, {
+          props: {
+            needPayValue,
+            orderId,
+          },
+          on: {
+            success() {
+              resolve(true);
             },
-            on: {
-              'update:visible'(value) {
-                observable.visible = value;
-                resolve();
-              },
-              'closed'() {
-                unmountDOM(instance);
-              },
+            cancel() {
+              resolve();
+            },
+            closed() {
+              unmountDOM(instance);
             },
           },
-          [
-            h(ReceivePanel, {
-              props: {
-                needPayValue,
-                orderId,
-              },
-              on: {
-                success() {
-                  resolve(true);
-                  observable.visible = false;
-                },
-              },
-            }),
-          ]
-        );
+        });
       },
     });
     mountDOM(instance);

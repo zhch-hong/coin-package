@@ -11,7 +11,7 @@
 </template>
 <script>
 import $api from '@/api';
-import { ioFrom, receivePanel, staffAuth } from '../components-call';
+import { ioFrom, inputSuccess, receivePanel, staffAuth } from '../components-call';
 import TypeItem from './TypeItem.vue';
 
 export default {
@@ -75,7 +75,7 @@ export default {
           // 支付方式
           const isSuccess = await receivePanel(parseFloat(needPayValue), orderId);
           if (isSuccess) {
-            this.$message.success({ message: '操作成功', duration: 1500 });
+            inputSuccess();
           } else {
             this.$message.warning({ message: '操作失败', duration: 1500 });
           }
