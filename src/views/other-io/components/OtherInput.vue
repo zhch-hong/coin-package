@@ -49,7 +49,7 @@ export default {
     async handleIOFrom(object) {
       const { authFlag, id } = object;
       // 表单
-      const form = await ioFrom();
+      const form = await ioFrom(true);
       if (typeof form !== 'undefined') {
         const data = {
           payValue: form.payValue * 100,

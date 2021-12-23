@@ -18,13 +18,13 @@ function unmountDOM(instance) {
   instance.$destroy();
 }
 
-export function ioFrom(params) {
+export function ioFrom(isInput) {
   return new Promise((resolve) => {
     const instance = new Vue({
       render(h) {
         return h(IOFrom, {
           props: {
-            params,
+            isInput,
           },
           on: {
             cancel() {

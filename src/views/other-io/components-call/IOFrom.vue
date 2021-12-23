@@ -1,22 +1,43 @@
 <template>
   <el-dialog
-    :visible.sync="visible"
+    :visible="visible"
     :show-close="false"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
+    width="30%"
     @closed="$emit('closed')"
   >
-    <el-form ref="submitFrom" :model="submitFrom" :rules="rules">
-      <el-form-item label="金额" prop="payValue">
-        <el-input v-model.trim="submitFrom.payValue" @input="onPayInput"></el-input>
-      </el-form-item>
-      <el-form-item label="备注" prop="backup">
-        <el-input v-model.trim="submitFrom.backup" type="textarea" :maxlength="60" :rows="4" show-word-limit></el-input>
-      </el-form-item>
-    </el-form>
+    <template #title>
+      <div class="dialog-title">
+        <img class="log" src="@/assets/logo_small.png" alt="百川之星" />
+        <img class="close" src="@/assets/close-windows-icon.png" alt="关闭" @click="handleCancel" />
+      </div>
+    </template>
+    <div style="margin: 0 80px">
+      <div class="io-type">
+        <img class="io-icon" src="@/assets/gold-icon.png" alt="金额" />
+        <span class="io-text">{{ ioText }}</span>
+      </div>
+      <el-form ref="submitFrom" :model="submitFrom" :rules="rules" label-width="60px">
+        <el-form-item label="金额" prop="payValue">
+          <el-input v-model.trim="submitFrom.payValue" @input="onPayInput"></el-input>
+        </el-form-item>
+        <el-form-item label="备注" prop="backup">
+          <el-input
+            v-model.trim="submitFrom.backup"
+            type="textarea"
+            :maxlength="60"
+            :rows="4"
+            show-word-limit
+          ></el-input>
+        </el-form-item>
+      </el-form>
+    </div>
     <template #footer>
-      <el-button size="small" @click="handleCancel">取消</el-button>
-      <el-button size="small" type="primary" @click="handleSubmit">确定</el-button>
+      <div class="dialog-footer">
+        <el-button size="small" type="primary" @click="handleSubmit">确定</el-button>
+        <el-button size="small" type="info" @click="handleCancel">取消</el-button>
+      </div>
     </template>
   </el-dialog>
 </template>
@@ -73,6 +94,10 @@ function formatNumber(value, allowDot = true, allowMinus = true) {
 }
 
 export default {
+  props: {
+    isInput: Boolean,
+  },
+
   data() {
     return {
       visible: false,
@@ -100,6 +125,12 @@ export default {
         backup: [{ required: true, message: '无效字段', trigger: 'none' }],
       },
     };
+  },
+
+  computed: {
+    ioText() {
+      return this.isInput ? '收入' : '支出';
+    },
   },
 
   mounted() {
@@ -138,3 +169,57 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+/deep/ .el-dialog__header {
+  background-color: #f5f7fa;
+}
+
+/deep/ .el-button--small {
+  padding: 9px 30px;
+}
+
+.dialog-title {
+  position: relative;
+  height: 30px;
+
+  .log {
+    max-height: 100%;
+    font-size: 0;
+  }
+
+  .close {
+    position: absolute;
+    cursor: pointer;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.io-type {
+  padding-bottom: 20px;
+  margin: 0 120px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+
+  .io-icon {
+    font-size: 0;
+    max-width: 40px;
+  }
+
+  .io-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4194fe;
+  }
+}
+
+.dialog-footer {
+  margin: 0 150px;
+  display: flex;
+  justify-content: space-between;
+}
+</style>
