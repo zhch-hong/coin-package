@@ -4,7 +4,7 @@
 
     <div class="gifts-list" v-loading="loading">
       <div class="item" v-for="(item, i) in giftList" :key="i">
-        <div class="item-name flex-center" :style="{ 'background-color': item.type === 3 ? '#7D74F6' : '#4194FE' }">
+        <div class="item-name flex-center" :style="styleFormat(item)">
           {{ item.giftName }}
         </div>
 
@@ -693,6 +693,21 @@ export default {
           this.currentType = JSON.parse(type);
         }
       }
+    },
+
+    styleFormat(object) {
+      const { bgColor, textColor, type } = object;
+      const style = {};
+      if (bgColor !== '') {
+        style['background-color'] = bgColor;
+      } else {
+        style['background-color'] = type === 3 ? '#7D74F6' : '#4194FE';
+      }
+
+      if (textColor !== '') {
+        style.color = textColor;
+      }
+      return style;
     },
   },
 
