@@ -281,7 +281,7 @@ export default {
     },
     // 班结
     async cashInvoicing() {
-      const data = { type: 2, ...this.authData };
+      const data = { cashType: 2, ...this.authData };
       const [err, res] = await to(this.$api.cashInvoicing(data));
       if (err) {
         this.disabledSettle = false;
@@ -343,7 +343,7 @@ export default {
     },
     // 导出表格
     async exportXlSX() {
-      const data = { type: 1, ...this.authData };
+      const data = { cashType: 1, ...this.authData };
       const [error] = await to(this.$api.cashInvoicing(data));
       if (error) {
         this.disabledSettle = false;
@@ -412,7 +412,7 @@ export default {
     },
     // 打印
     async printTicket() {
-      const data = { type: 1, ...this.authData };
+      const data = { cashType: 1, ...this.authData };
       const [error] = await to(this.$api.cashInvoicing(data));
       if (error) {
         this.disabledSettle = false;
