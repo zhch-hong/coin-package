@@ -281,7 +281,8 @@ export default {
     },
     // 班结
     async cashInvoicing() {
-      const [err, res] = await to(this.$api.cashInvoicing(this.authData));
+      const data = { type: 2, ...this.authData };
+      const [err, res] = await to(this.$api.cashInvoicing(data));
       if (err) {
         this.disabledSettle = false;
         this.loading = false;
@@ -342,7 +343,8 @@ export default {
     },
     // 导出表格
     async exportXlSX() {
-      const [error] = await to(this.$api.cashInvoicing(this.authData));
+      const data = { type: 1, ...this.authData };
+      const [error] = await to(this.$api.cashInvoicing(data));
       if (error) {
         this.disabledSettle = false;
         this.loading = false;
@@ -354,7 +356,7 @@ export default {
         this.loading = false;
         return;
       }
-      const data = [
+      const excelData = [
         [
           this.settleData.moduleName,
           this.settleData.staffName,
@@ -392,7 +394,7 @@ export default {
         '其他收支-收入',
         '其他收支-支出',
       ];
-      exportTable(tHeader, data, '班结信息').then(() => {
+      exportTable(tHeader, excelData, '班结信息').then(() => {
         this.loading = false;
       });
     },
@@ -410,7 +412,8 @@ export default {
     },
     // 打印
     async printTicket() {
-      const [error] = await to(this.$api.cashInvoicing(this.authData));
+      const data = { type: 1, ...this.authData };
+      const [error] = await to(this.$api.cashInvoicing(data));
       if (error) {
         this.disabledSettle = false;
         this.loading = false;
