@@ -119,6 +119,8 @@ export default {
 
         if (status === 1) {
           this.$emit('success');
+          this.visible = false;
+          this.outvisible = false;
         }
       } else {
         this.$message.error({ message: errMsg, duration: 1500 });
