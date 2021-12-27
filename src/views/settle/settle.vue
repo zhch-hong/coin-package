@@ -281,9 +281,9 @@ export default {
     },
     // 班结
     async cashInvoicing() {
-      const data = { cashType: 2, ...this.authData };
-      const [err, res] = await to(this.$api.cashInvoicing(data));
-      if (err) {
+      const authData = { cashType: 1, ...this.authData };
+      const [authErr] = await to(this.$api.cashInvoicing(authData));
+      if (authErr) {
         this.disabledSettle = false;
         this.loading = false;
         return;
@@ -308,6 +308,15 @@ export default {
         })
       );
       if (confirmErr) return;
+
+      const data = { cashType: 2, ...this.authData };
+      const [err, res] = await to(this.$api.cashInvoicing(data));
+      if (err) {
+        this.disabledSettle = false;
+        this.loading = false;
+        return;
+      }
+
       this.disabledSettle = true;
       this.loading = true;
       const [printErr, printRes] = await to(this.printTicket());
