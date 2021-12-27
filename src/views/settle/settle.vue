@@ -309,14 +309,6 @@ export default {
       );
       if (confirmErr) return;
 
-      const data = { cashType: 2, ...this.authData };
-      const [err, res] = await to(this.$api.cashInvoicing(data));
-      if (err) {
-        this.disabledSettle = false;
-        this.loading = false;
-        return;
-      }
-
       this.disabledSettle = true;
       this.loading = true;
       const [printErr, printRes] = await to(this.printTicket());
@@ -333,6 +325,14 @@ export default {
         })
       );
       if (printedErr) {
+        this.disabledSettle = false;
+        this.loading = false;
+        return;
+      }
+
+      const data = { cashType: 2, ...this.authData };
+      const [err, res] = await to(this.$api.cashInvoicing(data));
+      if (err) {
         this.disabledSettle = false;
         this.loading = false;
         return;
