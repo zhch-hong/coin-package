@@ -214,7 +214,10 @@
       </el-button>
     </div>
     <StaffAuth :show.sync="showAuthModal" @success="authSuccess"></StaffAuth>
-    <el-dialog :visible.sync="discardVisible" width="75%" title="确定作废此套餐">
+    <el-dialog :visible.sync="discardVisible" width="75%">
+      <template #title>
+        <h2 style="text-align: center; position: relative; top: 30px">确定作废此套餐</h2>
+      </template>
       <h3>套餐作废规则</h3>
       <ol class="discard-rule">
         <li>购买电子币套餐：扣除此套餐对应的电子游戏币数，若账户币数不足，则扣此账户所剩全部电子游戏币数</li>
