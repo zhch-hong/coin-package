@@ -23,19 +23,19 @@
 </template>
 
 <script>
-import commonRecords from './components/common-records'
-import recordsConsumption from './components/records-consumption'
+import commonRecords from './components/common-records';
+import recordsConsumption from './components/records-consumption';
 
 export default {
   name: 'UserRecords',
   components: {
     commonRecords,
-    recordsConsumption
+    recordsConsumption,
   },
   data() {
     return {
-      selectedPage: 1
-    }
-  }
-}
+      selectedPage: 1,
+    };
+  },
+};
 </script>

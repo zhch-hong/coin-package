@@ -10,18 +10,35 @@
       <el-row justify="space-between" align="center">
         <el-col :span="8" :gutter="20">
           <el-form-item label="会员ID:" prop="uid">
-            <el-input v-model="searchForm.uid" size="mini" clearable style="width: 200px" placeholder="请输入"></el-input>
+            <el-input
+              v-model="searchForm.uid"
+              size="mini"
+              clearable
+              style="width: 200px"
+              placeholder="请输入"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="套餐名称:" prop="giftName">
-            <el-input v-model="searchForm.giftName" size="mini" clearable style="width: 200px" placeholder="请输入"></el-input>
+            <el-input
+              v-model="searchForm.giftName"
+              size="mini"
+              clearable
+              style="width: 200px"
+              placeholder="请输入"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8" class="flex-end">
           <el-form-item label="类型" prop="type">
             <el-select v-model="searchForm.type">
-              <el-option v-for="item in statusList" :label="item.label" :value="item.value" :key="item.value"></el-option>
+              <el-option
+                v-for="item in statusList"
+                :label="item.label"
+                :value="item.value"
+                :key="item.value"
+              ></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -49,7 +66,9 @@
         <el-col :span="8" class="flex-end">
           <el-form-item>
             <el-button type="primary" size="mini" style="width: 120px" @click="search">查 询</el-button>
-            <el-button size="mini" style="width: 120px; border-color: #4194fe; color: #4194fe" @click="reset">重 置 </el-button>
+            <el-button size="mini" style="width: 120px; border-color: #4194fe; color: #4194fe" @click="reset"
+              >重 置
+            </el-button>
           </el-form-item>
         </el-col>
       </el-row>
@@ -101,73 +120,73 @@ export default {
       loading: false,
       statusList: [
         { label: '时间票', value: 1 },
-        { label: '次票', value: 2 }
+        { label: '次票', value: 2 },
       ],
       // 查询、翻页
       searchForm: {
         uid: '',
         giftName: '',
         type: 1,
-        time: []
+        time: [],
       },
       pageNum: 1,
       showNum: 10,
       count: 0,
       // 表格数据
-      tableData: []
-    }
+      tableData: [],
+    };
   },
   mounted() {
-    this.search()
+    this.search();
   },
   methods: {
     reset() {
-      this.pageNum = 1
-      this.$refs.searchForm.resetFields()
-      this.getInfo()
+      this.pageNum = 1;
+      this.$refs.searchForm.resetFields();
+      this.getInfo();
     },
     search() {
-      this.pageNum = 1
-      this.getInfo()
+      this.pageNum = 1;
+      this.getInfo();
     },
     getInfo() {
       // 默认参数
       const params = {
-        ...this.searchForm
-      }
+        ...this.searchForm,
+      };
       if (params.time && params.time.length) {
-        params.startTime = params.time[0]
-        params.endTime = params.time[1]
+        params.startTime = params.time[0];
+        params.endTime = params.time[1];
       } else {
-        params.startTime = ''
-        params.endTime = ''
+        params.startTime = '';
+        params.endTime = '';
       }
-      delete params.time
-      params.pageNum = this.pageNum
-      params.showNum = this.showNum
-      this.loading = true
+      delete params.time;
+      params.pageNum = this.pageNum;
+      params.showNum = this.showNum;
+      this.loading = true;
       this.$api
         .getUserNumAndTimeGiftDetail(params)
         .then((res) => {
           this.tableData = res.body.items.map((item) => {
-            item.price = this.$calc.accDiv(item.price, 100).toFixed(2)
+            item.price = this.$calc.accDiv(item.price, 100).toFixed(2);
             if (this.searchForm.type === 1) {
-              item.num = 1
-              item.cutNum = '-'
+              item.num = 1;
+              item.cutNum = '-';
             }
             if (!item.endTime) {
-              item.endTime = '无限期'
+              item.endTime = '无限期';
             }
-            return item
-          })
-          this.count = res.body.count
+            return item;
+          });
+          this.count = res.body.count;
         })
         .finally(() => {
-          this.loading = false
-        })
-    }
-  }
-}
+          this.loading = false;
+        });
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 @import '@/styles/mixin.scss';

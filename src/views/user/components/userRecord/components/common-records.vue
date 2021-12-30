@@ -10,13 +10,24 @@
       <el-row justify="space-between" align="center">
         <el-col :span="8">
           <el-form-item label="玩家ID:" prop="uid">
-            <el-input v-model="searchForm.uid" size="mini" clearable style="width: 200px" placeholder="请输入"></el-input>
+            <el-input
+              v-model="searchForm.uid"
+              size="mini"
+              clearable
+              style="width: 200px"
+              placeholder="请输入"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="操作类型:" prop="type">
             <el-select v-model="searchForm.type" style="width: 200px" clearable size="mini" placeholder="请选择">
-              <el-option v-for="item in statusList" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              <el-option
+                v-for="item in statusList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -43,7 +54,9 @@
       <div class="flex-end">
         <el-form-item>
           <el-button type="primary" size="mini" style="width: 120px" @click="search">查 询</el-button>
-          <el-button size="mini" style="width: 120px; border-color: #4194fe; color: #4194fe" @click="reset">重 置 </el-button>
+          <el-button size="mini" style="width: 120px; border-color: #4194fe; color: #4194fe" @click="reset"
+            >重 置
+          </el-button>
         </el-form-item>
       </div>
     </el-form>
@@ -57,16 +70,37 @@
     >
       <el-table-column label="操作时间" prop="time" align="center" min-width="140"></el-table-column>
       <el-table-column label="玩家ID" prop="uid" align="center" min-width="140"></el-table-column>
-      <el-table-column label="变动前游戏币数" prop="beforeCoinNum" align="center" min-width="160"></el-table-column>
-      <el-table-column label="变动前积分数" prop="beforeStarCoin" align="center" min-width="120"></el-table-column>
-      <el-table-column label="操作类型" prop="type" align="center" min-width="120">
-        <template slot-scope="scope">
-          <span>{{ scope.row.type | formatType }}</span>
-        </template>
+      <el-table-column
+        label="变动前游戏币数"
+        prop="beforeCoinNum"
+        align="center"
+        min-width="160"
+        :formatter="startCoinFormat"
+      ></el-table-column>
+      <el-table-column
+        label="变动前积分数"
+        prop="beforeNum"
+        align="center"
+        min-width="120"
+        :formatter="startScoreFormat"
+      ></el-table-column>
+      <el-table-column label="操作类型" prop="type" align="center" min-width="120" :formatter="actionFormat">
       </el-table-column>
       <el-table-column label="操作数量" prop="changeNum" align="center" min-width="120"></el-table-column>
-      <el-table-column label="变动后游戏币数" prop="afterCoinNum" align="center" min-width="120"></el-table-column>
-      <el-table-column label="变动后积分数" prop="afterStarCoin" align="center" min-width="120"></el-table-column>
+      <el-table-column
+        label="变动后游戏币数"
+        prop="afterCoinNum"
+        align="center"
+        min-width="120"
+        :formatter="endCoinFormat"
+      ></el-table-column>
+      <el-table-column
+        label="变动后积分数"
+        prop="afterNum"
+        align="center"
+        min-width="120"
+        :formatter="endScoreFormat"
+      ></el-table-column>
       <el-table-column label="收银员" prop="staffName" align="center" min-width="120"></el-table-column>
       <el-table-column label="授权员工" prop="auditor" align="center" min-width="120"></el-table-column>
       <el-table-column label="备注" prop="backup" align="center" min-width="120"></el-table-column>
@@ -89,7 +123,7 @@
 </template>
 
 <script>
-import { paramsFilter, clearObject } from '@/utils/tools'
+import { paramsFilter, clearObject } from '@/utils/tools';
 
 export default {
   name: 'CommonRecords',
@@ -100,114 +134,117 @@ export default {
       statusList: [
         { label: '提币', value: 1 },
         { label: '补游戏币', value: 2 },
-        { label: '补积分', value: 3 }
+        { label: '补积分', value: 3 },
+        { label: '补彩票', value: 4 },
       ],
       // 查询、翻页
       searchForm: {
         uid: '',
         type: '',
-        time: []
+        time: [],
       },
       pageNum: 1,
       showNum: 10,
       count: 0,
       // 表格数据
-      tableData: []
-    }
+      tableData: [],
+    };
   },
-  filters: {
-    formatType(val) {
-      switch (val) {
-        case 1:
-          return '提币'
-        case 2:
-          return '补游戏币'
-        case 3:
-          return '补积分'
-        default:
-          return '其他'
-      }
-    }
-  },
+
   mounted() {
-    this.getInfo()
+    this.getInfo();
   },
   methods: {
     reset() {
-      this.pageNum = 1
-      this.$refs.searchForm.resetFields()
-      this.getInfo()
+      this.pageNum = 1;
+      this.$refs.searchForm.resetFields();
+      this.getInfo();
     },
     search() {
-      this.pageNum = 1
-      this.getInfo()
+      this.pageNum = 1;
+      this.getInfo();
     },
     getInfo() {
       // 默认参数
       const params = {
-        ...this.searchForm
-      }
-      console.log(params)
+        ...this.searchForm,
+      };
+      console.log(params);
       if (params.time && params.time.length) {
-        params.startTime = params.time[0]
-        params.endTime = params.time[1]
+        params.startTime = params.time[0];
+        params.endTime = params.time[1];
       } else {
-        params.startTime = ''
-        params.endTime = ''
+        params.startTime = '';
+        params.endTime = '';
       }
-      delete params.time
-      params.pageNum = this.pageNum
-      params.showNum = this.showNum
-      this.loading = true
+      delete params.time;
+      params.pageNum = this.pageNum;
+      params.showNum = this.showNum;
+      this.loading = true;
       this.$api
         .getUserLog(params)
         .then((res) => {
-          this.tableData = res.body.items.map((item) => {
-            return {
-              uid: item.uid,
-              time: item.time,
-              beforeCoinNum: item.type === 1 || item.type === 2 ? item.beforeNum : 0,
-              afterCoinNum: item.type === 1 || item.type === 2 ? item.afterNum : 0,
-              beforeStarCoin: item.type === 3 ? item.beforeNum : 0,
-              afterStarCoin: item.type === 3 ? item.afterNum : 0,
-              staffName: item.staffName,
-              auditor: item.auditor,
-              type: item.type,
-              changeNum: item.changeNum,
-              backup: item.backup
-            }
-          })
-          this.count = res.body.count
+          this.tableData = res.body.items;
+          this.count = res.body.count;
         })
         .finally((result) => {
-          this.loading = false
-        })
+          this.loading = false;
+        });
     },
+
+    actionFormat(row, col, value) {
+      if (value === 1) return '提币';
+      if (value === 2) return '补游戏币';
+      if (value === 3) return '补积分';
+      if (value === 4) return '补彩票';
+      return value;
+    },
+
+    startCoinFormat({ beforeNum, type }) {
+      if (type === 1 || type === 2 || type === 4) return beforeNum;
+      return 0;
+    },
+
+    startScoreFormat({ beforeNum, type }) {
+      if (type === 1 || type === 2 || type === 4) return beforeNum;
+      return 0;
+    },
+
+    endCoinFormat({ afterNum, type }) {
+      if (type === 1 || type === 2 || type === 4) return afterNum;
+      return 0;
+    },
+
+    endScoreFormat({ afterNum, type }) {
+      if (type === 1 || type === 2 || type === 4) return afterNum;
+      return 0;
+    },
+
     // 导出表格
     exportXlSX() {
-      this.loading = true
+      this.loading = true;
       const obj = {
         pageNum: 1,
         showNum: this.count,
-        ...paramsFilter(this.searchForm)
-      }
+        ...paramsFilter(this.searchForm),
+      };
       this.$api.redCoinDetail.getRedCoinDetail(obj).then(
         (res) => {
           const data = res.body.items.map((val) => {
-            return [val.playerInPut, val.playerOutPut, val.date]
-          })
-          const tHeader = ['用户投入(红包币)', '用户产出(红包币)', '变动日期']
+            return [val.playerInPut, val.playerOutPut, val.date];
+          });
+          const tHeader = ['用户投入(红包币)', '用户产出(红包币)', '变动日期'];
           exportTable(tHeader, data, '集团列表').then(() => {
-            this.loading = false
-          })
+            this.loading = false;
+          });
         },
         (err) => {
-          this.loading = false
+          this.loading = false;
         }
-      )
-    }
-  }
-}
+      );
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
