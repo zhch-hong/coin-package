@@ -300,6 +300,8 @@ export default {
             .then(async (res) => {
               setToken(res.body.staffName);
 
+              this.$store.commit('SET_TICKETSCALE', res.body.saveTicketRate);
+
               sessionStorage.setItem('storeName', res.body.storeName);
 
               sessionStorage.setItem('phone', res.body.phone);
@@ -439,6 +441,8 @@ export default {
 
         .then(async (res) => {
           setToken(res.body.staffName);
+
+          this.$store.commit('SET_TICKETSCALE', res.body.saveTicketRate);
 
           sessionStorage.setItem('storeName', res.body.storeName);
 

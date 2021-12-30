@@ -134,6 +134,16 @@ export default {
   addStarCoin(data) {
     return request({ url: '/cash/user/addStarCoin', method: 'post', data });
   },
+
+  /**
+   * 会员补彩票
+   * @param {*} data
+   * @returns
+   */
+  addGameTicket(data) {
+    return request({ url: '/cash/user/addGameTicket', method: 'post', data });
+  },
+
   // 查询兑换码
   getExchangeInfo(data) {
     return request({ url: '/cash/exchange/getExchangeInfo', method: 'post', data });
