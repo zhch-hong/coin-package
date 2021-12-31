@@ -38,7 +38,12 @@
             <el-form ref="putCoin" style="padding: 40px 20px 0 60px" @submit.native.prevent label-position="top">
               <div class="bc-title">手动补游戏币/积分/彩票：</div>
               <el-form-item label="补游戏币" style="margin-top: 40px">
-                <el-input v-model="putCoin" style="width: 210px" placeholder="请输入补游戏币数量"></el-input>
+                <el-input
+                  v-model="putCoin"
+                  style="width: 210px"
+                  placeholder="请输入补游戏币数量"
+                  @input="supInteger('putCoin', $event)"
+                ></el-input>
               </el-form-item>
               <el-form-item label="备注" :rules="{ required: true, message: '请输入备注' }">
                 <el-input
@@ -110,6 +115,7 @@
                   style="width: 210px"
                   placeholder="请输入补彩票数量"
                   :maxlength="6"
+                  @input="supInteger('putTicket', $event)"
                 ></el-input>
                 <p>
                   需扣除门店积分<span style="color: red; margin-left: 6px">{{ deductScore }}</span>
@@ -148,6 +154,7 @@ import { isPositiveInt, isNumber, isPositiveFloat, isPhone } from '../../../util
 
 import { to } from '../../../utils/tools';
 import StaffAuth from '../../../components/StaffAuth';
+import calc from '@/utils/calc';
 
 export default {
   name: 'store',
@@ -170,13 +177,14 @@ export default {
       putTicketRemark: '',
       type: 1, // 1补游戏币，2补积分，3补彩票
       showAuthModal: false,
+      /** 补彩票需要扣除的门店积分 */
+      deductScore: 0,
     };
   },
 
-  computed: {
-    /** 补彩票需要扣除的门店积分 */
-    deductScore() {
-      return this.putTicket * this.$store.state.ticketScale;
+  watch: {
+    putTicket(value) {
+      this.deductScore = calc.accMul(this.$store.state.ticketScale, Number(value));
     },
   },
 
@@ -245,6 +253,17 @@ export default {
       this.type = type;
       this.showAuthModal = true;
     },
+
+    supInteger(key, value) {
+      const { indexOf, replace } = String.prototype;
+      value = value.toString();
+      value = replace.call(value, /\D/g, '');
+      if (indexOf.call(value, '0') === 0) {
+        value = replace.call(value, '0', '');
+      }
+      this[key] = value;
+    },
+
     // 开始加币
     addCoin(data) {
       if (this.type === 1) {

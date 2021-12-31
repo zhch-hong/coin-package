@@ -19,7 +19,7 @@ const store = new Vuex.Store({
     device: 'desktop',
     isMaintenance: false, // 是否维护中
     /** 门店存票比率 */
-    ticketScale: 0.1,
+    ticketScale: 0,
   },
   mutations: {
     SET_TICKETSCALE(state, value) {
