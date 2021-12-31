@@ -72,7 +72,7 @@
       <el-table-column label="玩家ID" prop="uid" align="center" min-width="140"></el-table-column>
       <el-table-column
         label="变动前游戏币数"
-        prop="beforeCoinNum"
+        prop="beforeNum"
         align="center"
         min-width="160"
         :formatter="startCoinFormat"
@@ -89,7 +89,7 @@
       <el-table-column label="操作数量" prop="changeNum" align="center" min-width="120"></el-table-column>
       <el-table-column
         label="变动后游戏币数"
-        prop="afterCoinNum"
+        prop="afterNum"
         align="center"
         min-width="120"
         :formatter="endCoinFormat"
@@ -201,22 +201,22 @@ export default {
     },
 
     startCoinFormat({ beforeNum, type }) {
-      if (type === 1 || type === 2 || type === 4) return beforeNum;
+      if (type === 1 || type === 2) return beforeNum;
       return 0;
     },
 
     startScoreFormat({ beforeNum, type }) {
-      if (type === 1 || type === 2 || type === 4) return beforeNum;
+      if (type === 3 || type === 4) return beforeNum;
       return 0;
     },
 
     endCoinFormat({ afterNum, type }) {
-      if (type === 1 || type === 2 || type === 4) return afterNum;
+      if (type === 1 || type === 2) return afterNum;
       return 0;
     },
 
     endScoreFormat({ afterNum, type }) {
-      if (type === 1 || type === 2 || type === 4) return afterNum;
+      if (type === 3 || type === 4) return afterNum;
       return 0;
     },
 

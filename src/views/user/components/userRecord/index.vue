@@ -6,7 +6,7 @@
         :style="{ color: selectedPage === 1 ? '#4194FE' : '#898989' }"
         @click="selectedPage = 1"
       >
-        提币/补游戏币/补积分
+        补资产记录
       </div>
       <el-divider direction="vertical" />
       <div
