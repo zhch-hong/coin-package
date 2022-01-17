@@ -450,4 +450,8 @@ export default {
   updateDiscardPackage(data) {
     return request({ url: '/cash/gift/invalidCoinGift', method: 'put', data });
   },
+  // 获取支付和套餐限额
+  getStorePayLimit(data) {
+    return request({ url: '/cash/gift/getStorePayLimit', method: 'get', data });
+  },
 };

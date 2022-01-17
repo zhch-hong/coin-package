@@ -390,6 +390,7 @@ export default {
             starPayFlag: 0,
 
             gift: this.currentPkg,
+            uid: this.uid,
 
             isVirtual: false,
 
@@ -438,7 +439,6 @@ export default {
         packageInfo: this.currentPkg,
 
         count: this.count,
-
         isVirtual: this.isVirtual,
 
         isManual: this.isManual,
@@ -552,6 +552,7 @@ export default {
               count: orderInfo.count,
 
               useCoupons: '',
+              uid: this.uid,
 
               discountMoney: 0,
             },
