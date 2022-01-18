@@ -216,6 +216,7 @@ export default {
       // 次票二维码信息
       codeInfoList: [],
       giftLimit: '', // 套餐限额
+      payLimit: '', // 会员今日已用
       uid1: '', // 从上个页面来的uid
       isScanCode: false, // 显示扫码
     };
@@ -625,22 +626,23 @@ export default {
     // 套餐限额查询
     async getinfo() {
       // 普通人
-      if (this.uid1 == '') {
-        await this.$api
-          .getStorePayLimit({})
-          .then((res) => {
-            this.showScanModal = false;
-            this.loading = false;
-            clearInterval(this.timer);
-            this.giftLimit = res.body.giftLimit == '' ? 0 : res.body.giftLimit;
-            this.setScanCode();
-          })
-          .catch((e) => {
-            this.showScanModal = false;
-            this.loading = false;
-            clearInterval(this.timer);
-          });
-      } else {
+      await this.$api
+        .getStorePayLimit({})
+        .then((res) => {
+          this.showScanModal = false;
+          this.loading = false;
+          clearInterval(this.timer);
+          this.giftLimit = res.body.giftLimit == '' ? 0 : res.body.giftLimit;
+          if (this.uid1 == '') {
+            this.setScanCode(1);
+          }
+        })
+        .catch((e) => {
+          this.showScanModal = false;
+          this.loading = false;
+          clearInterval(this.timer);
+        });
+      if (this.uid1 !== '' && this.giftLimit !== 0) {
         // 有身份的会员
         await this.$api
           .getUserInfo({ uid: this.uid1 })
@@ -648,8 +650,8 @@ export default {
             this.showScanModal = false;
             this.loading = false;
             clearInterval(this.timer);
-            this.giftLimit = res.body.payLimit == '' ? 0 : res.body.payLimit;
-            this.setScanCode();
+            this.payLimit = res.body.payLimit == '' ? 0 : res.body.payLimit;
+            this.setScanCode(2);
           })
           .catch((e) => {
             this.showScanModal = false;
@@ -658,15 +660,23 @@ export default {
           });
       }
     },
-    setScanCode() {
+    setScanCode(n) {
       // 是否显示扫码按钮
-      console.log(this.giftLimit);
-      console.log(this.orderInfo.offValueSum);
-      if (this.giftLimit < this.orderInfo.offValueSum && this.giftLimit !== 0) {
-        // 已超出今日限额
-        this.isScanCode = false;
-      } else {
-        this.isScanCode = true;
+      if (n == 1) {
+        if (this.giftLimit < this.orderInfo.offValueSum && this.giftLimit !== 0) {
+          // 已超出今日限额
+          this.isScanCode = false;
+        } else {
+          this.isScanCode = true;
+        }
+      }
+      if (n == 2) {
+        const giftLimit = this.$calc.accAdd(this.payLimit, this.orderInfo.offValueSum);
+        if (giftLimit > this.giftLimit) {
+          this.isScanCode = false;
+        } else {
+          this.isScanCode = true;
+        }
       }
     },
   },
@@ -675,6 +685,7 @@ export default {
     this.uid1 = params.uid;
     delete params.uid;
     console.log(params);
+    this.isScanCode = true;
     if (params.orderId) {
       this.orderInfo = params;
       this.leftTotalFee = params.offValueSum;
@@ -689,8 +700,6 @@ export default {
       console.log(params.gift.type, 'params.gift.type');
       if (params.gift.type == 1) {
         this.getinfo();
-      } else {
-        this.isScanCode = true;
       }
     } else {
       this.$message.error('获取订单信息异常，请重新下单');
