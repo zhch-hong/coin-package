@@ -662,7 +662,7 @@ export default {
       // 是否显示扫码按钮
       console.log(this.giftLimit);
       console.log(this.orderInfo.offValueSum);
-      if (this.giftLimit < this.orderInfo.offValueSum) {
+      if (this.giftLimit < this.orderInfo.offValueSum && this.giftLimit !== 0) {
         // 已超出今日限额
         this.isScanCode = false;
       } else {
@@ -685,8 +685,13 @@ export default {
       if (!this.orderInfo.starPayFlag) {
         this.payIndex = '2';
       }
-      // 查
-      this.getinfo();
+      // 币套餐
+      console.log(params.gift.type, 'params.gift.type');
+      if (params.gift.type == 1) {
+        this.getinfo();
+      } else {
+        this.isScanCode = true;
+      }
     } else {
       this.$message.error('获取订单信息异常，请重新下单');
       this.$router.replace('/package/package-sales');
