@@ -661,6 +661,8 @@ export default {
             this.showScanModal = false;
             clearInterval(this.timer);
           });
+      } else {
+        this.loading = false;
       }
     },
     setScanCode(n) {
