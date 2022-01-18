@@ -639,6 +639,8 @@ export default {
           this.giftLimit = res.body.giftLimit == '' ? 0 : res.body.giftLimit;
           if (this.uid1 == '') {
             this.setScanCode(1);
+          } else {
+            this.giftLimit = res.body.payLimit == '' ? 0 : res.body.payLimit; // 支付限额
           }
         })
         .catch((e) => {
