@@ -52,15 +52,19 @@
           </div>
           <div class="bc-title">
             支付方式
-            <el-tag type="warning" v-if="!isScanCode && uid1 == ''"
+            <el-tag type="warning" v-if="!isScanCode && uid1 == '' && !loading"
               >本套餐单价已超过套餐限额时，非会员仅支持现金支付；会员线上支付金额已超过门店线上支付限额，仅支持现金支付</el-tag
             >
-            <el-tag type="warning" v-if="!isScanCode && uid1 !== ''"
+            <el-tag type="warning" v-if="!isScanCode && uid1 !== '' && !loading"
               >会员线上支付金额已超过门店线上支付限额，仅支持现金支付</el-tag
             >
           </div>
           <div class="pay-way">
-            <div v-if="!$store.state.offline && isScanCode" class="item flex-center" @click="openUserPayByScanModal">
+            <div
+              v-if="!$store.state.offline && isScanCode && !loading"
+              class="item flex-center"
+              @click="openUserPayByScanModal"
+            >
               <img src="@/assets/open-public-relation-card/scan-pay.png" style="width: 50px; margin-right: 20px" />
               <div>扫码支付</div>
             </div>
@@ -625,12 +629,12 @@ export default {
     },
     // 套餐限额查询
     async getinfo() {
+      this.loading = true;
       // 普通人
       await this.$api
         .getStorePayLimit({})
         .then((res) => {
           this.showScanModal = false;
-          this.loading = false;
           clearInterval(this.timer);
           this.giftLimit = res.body.giftLimit == '' ? 0 : res.body.giftLimit;
           if (this.uid1 == '') {
@@ -639,7 +643,6 @@ export default {
         })
         .catch((e) => {
           this.showScanModal = false;
-          this.loading = false;
           clearInterval(this.timer);
         });
       if (this.uid1 !== '' && this.giftLimit !== 0) {
@@ -648,14 +651,12 @@ export default {
           .getUserInfo({ uid: this.uid1 })
           .then((res) => {
             this.showScanModal = false;
-            this.loading = false;
             clearInterval(this.timer);
             this.payLimit = res.body.payLimit == '' ? 0 : res.body.payLimit;
             this.setScanCode(2);
           })
           .catch((e) => {
             this.showScanModal = false;
-            this.loading = false;
             clearInterval(this.timer);
           });
       }
@@ -663,7 +664,7 @@ export default {
     setScanCode(n) {
       // 是否显示扫码按钮
       if (n == 1) {
-        if (this.giftLimit < this.orderInfo.offValueSum && this.giftLimit !== 0) {
+        if (this.giftLimit <= this.orderInfo.offValueSum && this.giftLimit !== 0) {
           // 已超出今日限额
           this.isScanCode = false;
         } else {
@@ -678,6 +679,7 @@ export default {
           this.isScanCode = true;
         }
       }
+      this.loading = false;
     },
   },
   created() {
@@ -685,7 +687,7 @@ export default {
     this.uid1 = params.uid;
     delete params.uid;
     console.log(params);
-    this.isScanCode = true;
+    this.isScanCode = false;
     if (params.orderId) {
       this.orderInfo = params;
       this.leftTotalFee = params.offValueSum;
