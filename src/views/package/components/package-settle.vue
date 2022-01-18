@@ -687,7 +687,7 @@ export default {
     this.uid1 = params.uid;
     delete params.uid;
     console.log(params);
-    this.isScanCode = false;
+    this.isScanCode = true;
     if (params.orderId) {
       this.orderInfo = params;
       this.leftTotalFee = params.offValueSum;
