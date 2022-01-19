@@ -668,7 +668,8 @@ export default {
     setScanCode(n) {
       // 是否显示扫码按钮
       if (n == 1) {
-        if (this.giftLimit <= this.orderInfo.offValueSum && this.giftLimit !== 0) {
+        const unitPrice = this.$$calc.accDiv(this.orderInfo.offValueSum, this.orderInfo.count);
+        if (this.giftLimit <= unitPrice && this.giftLimit !== 0) {
           // 已超出今日限额
           this.isScanCode = false;
         } else {
