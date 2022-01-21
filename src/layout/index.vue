@@ -17,22 +17,22 @@
 </template>
 
 <script>
-import { Navbar, Sidebar, AppMain } from './components'
+import { Navbar, Sidebar, AppMain } from './components';
 
 export default {
   name: 'Layout',
   components: {
     Navbar,
     Sidebar,
-    AppMain
+    AppMain,
   },
   computed: {},
   methods: {
     handleClickOutside() {
-      this.$store.dispatch('closeSideBar', { withoutAnimation: false })
-    }
-  }
-}
+      this.$store.dispatch('closeSideBar', { withoutAnimation: false });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -77,5 +77,11 @@ export default {
 
 .mobile .fixed-header {
   width: 100%;
+}
+.sidebar-container {
+  background-image: url('./../assets/layout/leftBg.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
 }
 </style>

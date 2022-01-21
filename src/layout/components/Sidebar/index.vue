@@ -19,41 +19,41 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import variables from '@/styles/variables.scss'
-import Logo from './Logo'
+import { mapGetters } from 'vuex';
+import variables from '@/styles/variables.scss';
+import Logo from './Logo';
 
 export default {
   components: { Logo },
   data() {
     return {
       currentRoute: {
-        path: '/package'
+        path: '/package',
       },
-      version: ''
-    }
+      version: '',
+    };
   },
   methods: {
     clickMenu(route) {
-      console.log(route)
-      if (route.path === this.$route.path || route.redirect === this.$route.path) return
-      this.currentRoute = route
+      console.log(route);
+      if (route.path === this.$route.path || route.redirect === this.$route.path) return;
+      this.currentRoute = route;
       this.$router.push({
-        path: route.path
-      })
-    }
+        path: route.path,
+      });
+    },
   },
   created() {
-    this.version = localStorage.getItem('version')
+    this.version = localStorage.getItem('version');
   },
   computed: {
     ...mapGetters(['sidebar']),
     routes() {
-      const routes = this.$router.options.routes
+      const routes = this.$router.options.routes;
       if (this.$store.state.offline) {
-        return routes.filter((route) => route.meta && route.meta.offline)
+        return routes.filter((route) => route.meta && route.meta.offline);
       }
-      return routes
+      return routes;
     },
     activeMenu() {
       // const route = this.$route
@@ -63,19 +63,19 @@ export default {
       //     return meta.activeMenu
       // }
       // return path
-      return '/'
+      return '/';
     },
     showLogo() {
-      return true
+      return true;
     },
     variables() {
-      return variables
+      return variables;
     },
     isCollapse() {
-      return !this.sidebar.opened
-    }
-  }
-}
+      return !this.sidebar.opened;
+    },
+  },
+};
 </script>
 <style lang="scss">
 .app-name {
@@ -108,7 +108,9 @@ export default {
 }
 
 .item-active {
-  background-color: #174cb7;
-  box-shadow: 0 4px 9px 0 rgba(0, 0, 0, 0.35) inset;
+  background-color: #528eff;
+  // box-shadow: 0 4px 9px 0 rgba(0, 0, 0, 0.35) inset;
+  box-shadow: 0px 4px 9px 0px rgba(140, 132, 249, 0.35) inset;
+  border-radius: 16px;
 }
 </style>
