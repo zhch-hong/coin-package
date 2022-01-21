@@ -11,17 +11,21 @@ export default {
   name: 'AppMain',
   computed: {
     key() {
-      return this.$route.path
-    }
-  }
-}
+      return this.$route.path;
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
 .app-main {
   /*50 = navbar  */
   height: 100%;
-  background-color: #f0f2f5;
+  // background-color: #f0f2f5;
+  background-image: url('../../assets/layout/rightBg.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
   position: relative;
   //overflow: hidden;
 }

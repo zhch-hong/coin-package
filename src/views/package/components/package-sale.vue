@@ -8,15 +8,12 @@
           {{ item.giftName }}
         </div>
 
-        <div style="font-size: 18px; color: #848484; margin-top: 18px; padding-left: 24px">
-          ￥{{ item.price | MIXIN_Points2Yuan }}元
+        <div style="display: flex">
+          <div class="item_bottom_fonst">￥{{ item.price | MIXIN_Points2Yuan }}元</div>
+          <div class="item_bottom_fonst">({{ item.price | MIXIN_Points2StarCoin }}积分)</div>
         </div>
 
-        <div style="font-size: 18px; color: #a3a3a3; margin-top: 6px; padding-left: 24px">
-          {{ item.price | MIXIN_Points2StarCoin }}积分
-        </div>
-
-        <div class="flex-between" style="margin: 16px 0 0 24px">
+        <!-- <div class="flex-between" style="margin: 16px 0 0 24px">
           <el-button
             v-if="item.onlyScanBuy"
             type="primary"
@@ -39,7 +36,7 @@
           </el-button>
 
           <img src="../../../assets/package-sale/cart-icon.png" style="width: 26px" />
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -816,53 +813,51 @@ export default {
 
   .gifts-list {
     flex: 1 auto;
-
     height: 0;
-
     padding: 20px 0;
-
     overflow-y: auto;
-
     display: grid;
-
     grid-row-gap: 20px;
-
     grid-column-gap: 20px;
-
-    grid-template-columns: repeat(auto-fill, 270px);
-
+    /* 屏幕小于1400px */
+    @media screen and (max-width: 1400px) {
+      grid-template-columns: repeat(auto-fill, 190px);
+    }
+    /* 屏幕大于1400px */
+    @media screen and (min-width: 1401px) {
+      grid-template-columns: repeat(auto-fill, 270px);
+    }
     .item {
-      width: 270px;
-
-      height: 310px;
-
+      /* 屏幕小于1400px */
+      @media screen and (max-width: 1400px) {
+        width: 190px;
+      }
+      /* 屏幕大于1400px */
+      @media screen and (min-width: 1401px) {
+        width: 270px;
+      }
+      height: 222px;
       box-sizing: border-box;
-
       padding: 19px 28px 0;
-
       background-color: #ffffff;
-
       border-radius: 1px 1px 1px 1px;
-
       box-shadow: 0px 2px 0px 0px rgba(204, 204, 204, 0.15);
-
       .item-name {
         text-align: center;
-
         padding: 6px;
-
         overflow: hidden;
-
         background-color: #41a3fe;
-
         height: 151px;
-
         color: #ffffff;
-
-        font-size: 20px;
-
+        /* 屏幕小于1400px */
+        @media screen and (max-width: 1400px) {
+          font-size: 17px;
+        }
+        /* 屏幕大于1400px */
+        @media screen and (min-width: 1401px) {
+          font-size: 20px;
+        }
         font-weight: bold;
-
         border-radius: 20px;
       }
     }
@@ -873,5 +868,11 @@ export default {
 
     border-right: 1px solid #e4e7ed;
   }
+}
+.item_bottom_fonst {
+  font-size: 18px;
+  color: #848484;
+  margin-top: 18px;
+  padding-left: 24px;
 }
 </style>

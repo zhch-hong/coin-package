@@ -4,6 +4,9 @@
       <el-aside width="265px">
         <sidebar class="sidebar-container" />
       </el-aside>
+      <!-- <el-aside width="150px" v-if="getdefaultScreenSize < 1400">
+        <sidebar class="sidebar-container" />
+      </el-aside> -->
       <el-container>
         <el-header style="padding: 0; height: 50px">
           <navbar />
@@ -26,7 +29,11 @@ export default {
     Sidebar,
     AppMain,
   },
-  computed: {},
+  computed: {
+    getdefaultScreenSize() {
+      return this.$store.state.defaultScreenSize;
+    },
+  },
   methods: {
     handleClickOutside() {
       this.$store.dispatch('closeSideBar', { withoutAnimation: false });
@@ -83,5 +90,23 @@ export default {
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center;
+}
+/* 屏幕小于1400px */
+@media screen and (max-width: 1400px) {
+  .aSmallScreen {
+    display: block;
+  }
+  .aBigScreen {
+    display: none;
+  }
+}
+/* 屏幕大于1400px */
+@media screen and (min-width: 1401px) {
+  .aSmallScreen {
+    display: none;
+  }
+  .aBigScreen {
+    display: block;
+  }
 }
 </style>

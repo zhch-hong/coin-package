@@ -10,7 +10,7 @@ $subMenuBg: #000033;
 $subMenuHover: #157def;
 
 $sideBarWidth: 265px;
-
+$sideBarWidthmin: 150px;
 // theme variables
 $themeColor: #f1c40f;
 $fontSizeMini: 14px;
@@ -29,4 +29,5 @@ $fontSizeLarge: 20px;
   subMenuBg: $subMenuBg;
   subMenuHover: $subMenuHover;
   sideBarWidth: $sideBarWidth;
+  sideBarWidthmin: $sideBarWidthmin;
 }

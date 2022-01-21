@@ -20,6 +20,7 @@ const store = new Vuex.Store({
     isMaintenance: false, // 是否维护中
     /** 门店存票比率 */
     ticketScale: 0,
+    defaultScreenSize: 0, // 默认屏幕大小
   },
   mutations: {
     SET_TICKETSCALE(state, value) {
@@ -54,6 +55,9 @@ const store = new Vuex.Store({
     TOGGLE_DEVICE: (state, device) => {
       state.device = device;
     },
+    setdefaultScreenSize: (state, device) => {
+      state.defaultScreenSize = device;
+    },
   },
   actions: {
     getMachineCoinNum({ commit }) {
@@ -69,6 +73,9 @@ const store = new Vuex.Store({
     },
     toggleDevice({ commit }, device) {
       commit('TOGGLE_DEVICE', device);
+    },
+    defaultScreenSize({ commit }, device) {
+      commit('setdefaultScreenSize', device);
     },
   },
   getters: {
