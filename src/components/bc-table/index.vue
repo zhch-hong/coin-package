@@ -15,14 +15,24 @@
       @selection-change="handleOnSelectionChange"
       @sort-change="handleOnSortChange"
       :header-cell-style="{ backgroundColor: '#ffffff' }"
-      :cell-style="{ backgroundColor: '#F0F2F5' }"
+      :cell-style="{ backgroundColor: '#f5f7f9' }"
       :span-method="config.spanMethod"
       :show-summary="config.showSummary"
       :summary-method="config.getSum"
     >
       <template v-for="(item, index) in config.columns">
-        <el-table-column align="center" :key="index" v-if="item.type && item.type === 'selection'" type="selection"></el-table-column>
-        <el-table-column align="center" :key="index" v-else-if="item.type && item.type === 'index'" type="index"></el-table-column>
+        <el-table-column
+          align="center"
+          :key="index"
+          v-if="item.type && item.type === 'selection'"
+          type="selection"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          :key="index"
+          v-else-if="item.type && item.type === 'index'"
+          type="index"
+        ></el-table-column>
         <el-table-column align="center" :key="index" v-else-if="item.type && item.type === 'expand'" type="expand">
           <template slot-scope="scope">
             <component :is="item.component" :scope="scope" v-on="$listeners"></component>
@@ -68,95 +78,95 @@ export default {
   props: {
     config: {
       type: Object,
-      required: true
+      required: true,
     },
     data: {
       type: Array,
       default: () => {
-        return []
-      }
+        return [];
+      },
     },
     loading: {
       type: Boolean,
-      default: false
+      default: false,
     },
     showNum: {
       type: Number,
-      default: 20
+      default: 20,
     },
     pageNum: {
       type: Number,
-      default: 1
+      default: 1,
     },
     count: {
       type: Number,
-      default: 0
+      default: 0,
     },
     showHeader: {
       type: Boolean,
-      default: true
+      default: true,
     },
     needPagination: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
       pageSize: 10,
       pageNumber: 1,
-      total: 0
-    }
+      total: 0,
+    };
   },
   // fix bug: 解决固定表格高度后，不显示合计的BUG
   updated() {
     this.$nextTick(() => {
-      this.$refs.table.doLayout()
-    })
+      this.$refs.table.doLayout();
+    });
   },
   watch: {
     pageNum: {
       immediate: true,
       handler(val) {
-        this.pageNumber = val
-      }
+        this.pageNumber = val;
+      },
     },
     showNum: {
       immediate: true,
       handler(val) {
-        this.pageSize = val
-      }
+        this.pageSize = val;
+      },
     },
     count: {
       immediate: true,
       handler(val) {
-        this.total = val
-      }
-    }
+        this.total = val;
+      },
+    },
   },
   methods: {
     handleOnSortChange({ column, prop, order }) {
-      this.$emit('on-sort-change', { column, prop, order })
+      this.$emit('on-sort-change', { column, prop, order });
     },
     changePageNum(pageNum) {
-      this.$emit('on-page-change', pageNum)
+      this.$emit('on-page-change', pageNum);
       this.$emit('change', {
         pageNum: this.pageNumber,
-        showNum: this.pageSize
-      })
+        showNum: this.pageSize,
+      });
     },
     changeShowNum(showNum) {
-      this.$emit('on-size-change', showNum)
+      this.$emit('on-size-change', showNum);
       this.$emit('change', {
         pageNum: this.pageNumber,
-        showNum: this.pageSize
-      })
+        showNum: this.pageSize,
+      });
     },
     handleOnSelectionChange(selection) {
-      this.$emit('on-change', selection)
-    }
-  }
-}
+      this.$emit('on-change', selection);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

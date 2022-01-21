@@ -1,6 +1,14 @@
 <template>
   <div class="bc-search">
-    <el-form ref="form" :inline="true" size="mini" :model="formInfo" :rules="rules" :label-width="labelWidth">
+    <el-form
+      ref="form"
+      :inline="true"
+      size="mini"
+      :model="formInfo"
+      :rules="rules"
+      :label-width="labelWidth"
+      class="form-class"
+    >
       <template v-for="(item, index) in configList">
         <el-form-item :label="item.label" :key="index" :prop="item.prop">
           <!-- 输入框 -->
@@ -13,7 +21,13 @@
             :maxlength="item.maxlength || 30"
           />
           <!-- 下拉框 -->
-          <el-select v-else-if="item.type === 'select'" v-model="formInfo[item.prop]" clearable :multiple="item.multiple" v-bind="item.nativeProps">
+          <el-select
+            v-else-if="item.type === 'select'"
+            v-model="formInfo[item.prop]"
+            clearable
+            :multiple="item.multiple"
+            v-bind="item.nativeProps"
+          >
             <el-option v-for="(opt, i) in item.options" :key="i" :label="opt.label" :value="opt.value" />
           </el-select>
           <!--连级选择器-->
@@ -49,8 +63,19 @@
       </template>
       <el-form-item :label="actionBtnText">
         <div class="flex-center">
-          <el-button type="primary" size="mini" :loading="loading" style="width: 120px" @click="handleOnSearch">查 询 </el-button>
-          <el-button size="mini" :loading="loading" style="width: 120px; border-color: #4194fe; color: #4194fe" @click="handleOnReset"
+          <el-button
+            type="primary"
+            size="mini"
+            :loading="loading"
+            style="width: 120px; border-radius: 10px"
+            @click="handleOnSearch"
+            >查 询
+          </el-button>
+          <el-button
+            size="mini"
+            :loading="loading"
+            style="width: 120px; border-radius: 10px; border-color: #4194fe; color: #4194fe"
+            @click="handleOnReset"
             >重 置
           </el-button>
           <div class="actions">
@@ -75,127 +100,139 @@ export default {
   props: {
     labelWidth: {
       type: String,
-      default: ''
+      default: '',
     },
     config: {
       type: Array,
-      required: true
+      required: true,
     },
     rules: {
       type: Object,
       default: () => {
-        return {}
-      }
+        return {};
+      },
     },
     actionBtnText: {
       type: String,
-      default: ''
+      default: '',
     },
     loading: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       formInfo: {},
-      configList: []
-    }
+      configList: [],
+    };
   },
   filters: {
     formatPlaceholder(val) {
-      let placeholder = `请输入${val.label}`
+      let placeholder = `请输入${val.label}`;
       if (val.nativeProps && val.nativeProps.placeholder) {
-        placeholder = val.nativeProps.placeholder
+        placeholder = val.nativeProps.placeholder;
       }
-      return placeholder
-    }
+      return placeholder;
+    },
   },
   watch: {
     config: {
       immediate: true,
       handler(value) {
         this.configList = value.map((item) => {
-          this.initFormProps(item)
-          return item
-        })
-      }
-    }
+          this.initFormProps(item);
+          return item;
+        });
+      },
+    },
   },
   methods: {
     initFormProps(item) {
-      let initValue = ''
+      let initValue = '';
       if (item.type === 'select' && item.nativeProps && item.nativeProps.multiple) {
-        initValue = []
+        initValue = [];
       }
       if (item.type === 'datePicker' || item.type === 'rangePicker' || item.type === 'cityPicker') {
-        initValue = []
+        initValue = [];
       }
       if (item.prop) {
-        this.$set(this.formInfo, item.prop, initValue)
+        this.$set(this.formInfo, item.prop, initValue);
       }
     },
     getParams() {
-      const result = JSON.parse(JSON.stringify(this.formInfo))
+      const result = JSON.parse(JSON.stringify(this.formInfo));
       this.configList.forEach((item) => {
-        if ((item.type === 'datePicker' || item.type === 'rangePicker' || item.type === 'cityPicker') && item.valueType) {
+        if (
+          (item.type === 'datePicker' || item.type === 'rangePicker' || item.type === 'cityPicker') &&
+          item.valueType
+        ) {
           if (item.type === 'cityPicker') {
-            result.province = result[item.prop][0] || ''
-            result.city = result[item.prop][1] || ''
-            result.area = result[item.prop][2] || ''
-            delete result[item.prop]
+            result.province = result[item.prop][0] || '';
+            result.city = result[item.prop][1] || '';
+            result.area = result[item.prop][2] || '';
+            delete result[item.prop];
           } else if ((item.valueType === 'string' || item.valueType === 'number') && item.startProp && item.endProp) {
             if (result[item.prop] && result[item.prop].length) {
-              result[item.startProp] = result[item.prop][0]
-              result[item.endProp] = result[item.prop][1]
-              delete result[item.prop]
+              result[item.startProp] = result[item.prop][0];
+              result[item.endProp] = result[item.prop][1];
+              delete result[item.prop];
             } else {
-              result[item.startProp] = ''
-              result[item.endProp] = ''
-              delete result[item.prop]
+              result[item.startProp] = '';
+              result[item.endProp] = '';
+              delete result[item.prop];
             }
           }
         } else if (item.valueType && item.valueType === 'number') {
           if (result[item.prop] !== '' && result[item.prop] !== null) {
-            result[item.prop] = Number(result[item.prop])
+            result[item.prop] = Number(result[item.prop]);
           } else {
-            result[item.prop] = ''
+            result[item.prop] = '';
           }
         }
-      })
-      return result
+      });
+      return result;
     },
     handleOnSearch() {
       this.$refs.form.validate((v) => {
         if (v) {
-          this.$emit('on-search', this.getParams())
+          this.$emit('on-search', this.getParams());
         }
-      })
+      });
     },
     handleOnReset() {
-      this.$refs.form.resetFields()
+      this.$refs.form.resetFields();
       if (this.formInfo.hasOwnProperty('pca')) {
-        this.$set(this.formInfo, 'pca', [])
+        this.$set(this.formInfo, 'pca', []);
       }
-      this.handleOnSearch()
-    }
+      this.handleOnSearch();
+    },
   },
   mounted() {
-    this.$refs.form.resetFields()
-  }
+    this.$refs.form.resetFields();
+  },
   // created() {
   //     this.configList = this.config.map(item => {
   //         this.initFormProps(item)
   //         return item
   //     })
   // }
-}
+};
 </script>
 
 <style lang="scss" scoped>
 .bc-search {
+  border-radius: 10px;
+  padding: 24px 24px 10px 24px;
+  box-sizing: border-box;
+  background: #fff;
   .actions {
     margin: 0 10px;
+  }
+  .form-class {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
 }
 </style>

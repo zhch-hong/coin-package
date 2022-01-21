@@ -1,12 +1,6 @@
 <template>
   <div class="validation-record">
-    <bc-search
-      ref="condition"
-      style="padding: 24px; background-color: #ffffff"
-      :loading="loading"
-      :config="filterConfig"
-      @on-search="handleOnSearch(1)"
-    />
+    <bc-search ref="condition" :loading="loading" :config="filterConfig" @on-search="handleOnSearch(1)" />
     <bc-table
       :config="tableConfig"
       :data="tableData"
@@ -22,7 +16,7 @@
 </template>
 
 <script>
-import { to } from '@/utils/tools'
+import { to } from '@/utils/tools';
 
 export default {
   name: 'validation-record',
@@ -32,8 +26,8 @@ export default {
       tableData: [],
       pageNum: 1,
       showNum: 10,
-      count: 0
-    }
+      count: 0,
+    };
   },
   computed: {
     filterConfig() {
@@ -48,9 +42,9 @@ export default {
           valueType: 'string',
           prop: 'time',
           startProp: 'startTime',
-          endProp: 'endTime'
-        }
-      ]
+          endProp: 'endTime',
+        },
+      ];
     },
     tableConfig() {
       return {
@@ -64,36 +58,36 @@ export default {
           { label: '核销数量', prop: 'count' },
           { label: '核销金额', filter: (data) => this.MIXIN_Points2Yuan(data.leagueSettle) },
           { label: '核销模块', prop: 'moduleName' },
-          { label: '核销员工', prop: 'staffName' }
-        ]
-      }
-    }
+          { label: '核销员工', prop: 'staffName' },
+        ],
+      };
+    },
   },
   methods: {
     handleOnSizeChange(showNum) {
-      this.showNum = showNum
-      this.handleOnSearch(1)
+      this.showNum = showNum;
+      this.handleOnSearch(1);
     },
     async handleOnSearch(pageNum) {
       if (pageNum) {
-        this.pageNum = pageNum
+        this.pageNum = pageNum;
       }
-      const params = this.$refs.condition.getParams()
-      params.pageNum = this.pageNum
-      params.showNum = this.showNum
-      this.loading = true
-      const [err, res] = await to(this.$api.getLeagueCheckDetail(params))
-      this.loading = false
+      const params = this.$refs.condition.getParams();
+      params.pageNum = this.pageNum;
+      params.showNum = this.showNum;
+      this.loading = true;
+      const [err, res] = await to(this.$api.getLeagueCheckDetail(params));
+      this.loading = false;
       if (res) {
-        this.tableData = res.body.items
-        this.count = res.body.count
+        this.tableData = res.body.items;
+        this.count = res.body.count;
       }
-    }
+    },
   },
   mounted() {
-    this.handleOnSearch(1)
-  }
-}
+    this.handleOnSearch(1);
+  },
+};
 </script>
 
 <style lang="scss" scoped>
