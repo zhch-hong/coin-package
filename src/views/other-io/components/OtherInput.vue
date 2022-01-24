@@ -89,5 +89,6 @@ export default {
 .other-input {
   display: flex;
   flex-wrap: wrap;
+  padding-top: 20px;
 }
 </style>

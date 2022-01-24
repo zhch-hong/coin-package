@@ -64,8 +64,10 @@
             </el-radio-group>
           </div>
           <div class="flex-start flex-warp1" v-for="(item, index) in pkgDetail" :key="index">
-            <div class="flex-start">
-              <h2>{{ item.name }}</h2>
+            <div class="flex-start flex-warp1">
+              <div>
+                <h2>{{ item.name }}</h2>
+              </div>
               <div>（{{ useCount }}份）：</div>
             </div>
             <div>

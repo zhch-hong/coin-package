@@ -24,23 +24,46 @@ export default {
 .type-item {
   display: inline-block;
   margin: 20px;
-
-  .layout {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    width: 240px;
-    height: 109px;
-    padding: 10px;
-    color: #fff;
-    font-size: 23px;
-    background-position: center;
-    background-size: contain;
-
-    .content {
-      // position: relative;
-      margin: 0;
+  /* 屏幕小于1400px */
+  @media screen and (max-width: 1400px) {
+    .layout {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      width: 222px;
+      height: 109px;
+      padding: 10px;
+      color: #fff;
+      font-size: 18px;
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      .content {
+        // position: relative;
+        margin: 0;
+      }
+    }
+  }
+  /* 屏幕大于1400px */
+  @media screen and (min-width: 1401px) {
+    .layout {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      width: 283px;
+      height: 109px;
+      padding: 30px;
+      color: #fff;
+      font-size: 20px;
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      .content {
+        // position: relative;
+        margin: 0;
+      }
     }
   }
 }

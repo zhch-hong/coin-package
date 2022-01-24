@@ -6,6 +6,7 @@
       :show-close="false"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
+      :width="getdefaultScreenSize > 1400 ? '50%' : '60%'"
     >
       <div class="el-dialog-title-box">
         <div><img class="login_logo" src="@/assets/login_logo.png" alt="" /></div>
@@ -37,17 +38,26 @@
       </el-form>
 
       <template #footer>
-        <el-button
-          type="info"
-          style="width: 100px; margin-left: 41px"
-          size="mini"
-          :loading="loading"
-          @click="closeModal"
-          >取 消
-        </el-button>
-        <el-button type="primary" style="width: 100px" size="mini" :loading="loading" @click="handleSubmit"
-          >确定
-        </el-button>
+        <div slot="footer" class="dialog-footer">
+          <div class="flex-center">
+            <el-button
+              type="primary"
+              style="width: 116px; margin-left: 40px; border-radius: 10px; padding: 9px 0"
+              size="mini"
+              :loading="loading"
+              @click="handleSubmit"
+              >确定
+            </el-button>
+            <el-button
+              type="info"
+              style="width: 116px; margin-left: 40px; border-radius: 10px; padding: 9px 0"
+              size="mini"
+              :loading="loading"
+              @click="closeModal"
+              >取 消
+            </el-button>
+          </div>
+        </div>
       </template>
     </el-dialog>
   </div>
@@ -90,7 +100,11 @@ export default {
       this.showModal = newVal;
     },
   },
-
+  computed: {
+    getdefaultScreenSize() {
+      return this.$store.state.defaultScreenSize;
+    },
+  },
   created() {
     this.setDefaultExportHouse();
   },
