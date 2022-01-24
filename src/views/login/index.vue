@@ -116,11 +116,14 @@ import { to } from '@/utils/tools';
 import startAd from '@utils/ad';
 import { setToken } from '../../utils/auth';
 
+const dirname = __dirname;
+
 export default {
   name: 'Login',
 
   data() {
     return {
+      dirname,
       refreshFlag: false,
 
       webview: null,
@@ -183,6 +186,15 @@ export default {
 
       userInfoByScan: {},
     };
+  },
+
+  created() {
+    this.$store.commit('TOGGLE_OFFLINE', false);
+  },
+
+  mounted() {
+    this.initWebview();
+    console.log(this.dirname);
   },
 
   methods: {
@@ -535,14 +547,6 @@ export default {
         this.showModuleKeyModal = true;
       }
     },
-  },
-
-  created() {
-    this.$store.commit('TOGGLE_OFFLINE', false);
-  },
-
-  mounted() {
-    this.initWebview();
   },
 };
 </script>

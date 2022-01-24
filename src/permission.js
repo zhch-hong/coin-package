@@ -1,22 +1,22 @@
-import { getToken } from '@/utils/auth' // get token from cookie
-import router from './router'
+import { getToken } from '@/utils/auth'; // get token from cookie
+import router from './router';
 
-const whiteList = ['/login', '/wxAuth'] // no redirect whitelist
+const whiteList = ['/login', '/wxAuth', '/ad-view']; // no redirect whitelist
 
 router.beforeEach(async (to, from, next) => {
   if (getToken()) {
     if (to.path === '/login') {
-      next({ path: '/' })
+      next({ path: '/' });
     } else {
-      next()
+      next();
     }
   } else if (whiteList.indexOf(to.path) !== -1) {
-    next()
+    next();
   } else {
-    next(`/login`)
+    next(`/login`);
   }
-})
+});
 
 router.afterEach(() => {
   // finish progress bar
-})
+});

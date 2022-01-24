@@ -36,6 +36,10 @@ export const constantRoutes = [
     redirect: '/package/package-sales',
   },
   {
+    path: '/ad-view',
+    component: () => import('@views/ad-view.vue'),
+  },
+  {
     path: '/package',
     component: Layout,
     redirect: '/package/package-sales',
