@@ -113,7 +113,7 @@
 import md5 from 'md5';
 
 import { to } from '@/utils/tools';
-
+import startAd from '@utils/ad';
 import { setToken } from '../../utils/auth';
 
 export default {
@@ -209,12 +209,10 @@ export default {
 
         .then(() => {
           this.$message.success('激活成功');
-
           localStorage.setItem('moduleKey', this.moduleKey);
-
           this.initWebview();
-
           this.closeModal();
+          startAd();
         })
 
         .finally(() => {
@@ -525,6 +523,8 @@ export default {
           .then((res) => {
             if (!res.body.activeFlag) {
               this.showModuleKeyModal = true;
+            } else {
+              startAd();
             }
           })
 

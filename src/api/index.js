@@ -1,6 +1,14 @@
 import request from '@/utils/request';
 
 export default {
+  /**
+   * 获取广告
+   * @param {string} moduleKey - key
+   * @returns
+   */
+  readModuleAd(moduleKey) {
+    return request({ url: '/cash/getModuleAd', method: 'get', data: { moduleKey } });
+  },
   // 查询模块key是否激活
   getModuleActiveFlag(data) {
     return request({ url: '/cash/getModuleActiveFlag', method: 'post', data });
