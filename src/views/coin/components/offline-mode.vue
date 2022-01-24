@@ -8,11 +8,17 @@
           当前模式：<span :style="{ color: $store.state.offline ? '#7A7A80' : '#67C23A' }">{{ modeText }}模式</span>
         </div>
         <div>
-          <el-button type="primary" style="width: 170px" :loading="loading" @click="dialogVisible = true">启动{{ targetModeText }}模式</el-button>
+          <el-button
+            type="primary"
+            style="width: 170px; border-radius: 15px"
+            :loading="loading"
+            @click="dialogVisible = true"
+            >启动{{ targetModeText }}模式</el-button
+          >
           <el-button
             type="info"
             :plain="$store.state.offline"
-            style="width: 170px"
+            style="width: 170px; border-radius: 15px"
             :loading="loading"
             :disabled="$store.state.offline"
             @click="handleOnSyncData"
@@ -68,8 +74,16 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <div class="flex-center">
-          <el-button type="primary" style="width: 100px" :loading="loading" @click="closeScanUserInfoModal">确定 </el-button>
-          <el-button type="info" style="width: 100px; margin-left: 100px" :loading="loading" @click="dialogVisible2 = false">取 消 </el-button>
+          <el-button type="primary" style="width: 100px" :loading="loading" @click="closeScanUserInfoModal"
+            >确定
+          </el-button>
+          <el-button
+            type="info"
+            style="width: 100px; margin-left: 100px"
+            :loading="loading"
+            @click="dialogVisible2 = false"
+            >取 消
+          </el-button>
         </div>
       </div>
     </el-dialog>
@@ -92,8 +106,16 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <div class="flex-center">
-          <el-button type="primary" style="width: 100px" :loading="loading" @click="closeScanUserInfoModal2">确定 </el-button>
-          <el-button type="info" style="width: 100px; margin-left: 100px" :loading="loading" @click="dialogVisible3 = false">取 消 </el-button>
+          <el-button type="primary" style="width: 100px" :loading="loading" @click="closeScanUserInfoModal2"
+            >确定
+          </el-button>
+          <el-button
+            type="info"
+            style="width: 100px; margin-left: 100px"
+            :loading="loading"
+            @click="dialogVisible3 = false"
+            >取 消
+          </el-button>
         </div>
       </div>
     </el-dialog>
@@ -101,8 +123,8 @@
 </template>
 
 <script>
-import { to } from '@/utils/tools'
-import { removeToken } from '@/utils/auth'
+import { to } from '@/utils/tools';
+import { removeToken } from '@/utils/auth';
 
 export default {
   name: 'offline-mode',
@@ -111,68 +133,68 @@ export default {
       loading: false,
       dialogVisible: false,
       dialogVisible2: false, // 同步数据
-      dialogVisible3: false // 切换在线模式
-    }
+      dialogVisible3: false, // 切换在线模式
+    };
   },
   computed: {
     modeText() {
-      return this.$store.state.offline ? '离线' : '在线'
+      return this.$store.state.offline ? '离线' : '在线';
     },
     targetModeText() {
-      return this.$store.state.offline ? '在线' : '离线'
-    }
+      return this.$store.state.offline ? '在线' : '离线';
+    },
   },
   methods: {
     handleOnSyncData() {
-      this.dialogVisible2 = true
+      this.dialogVisible2 = true;
     },
     // 同步数据确认
     async closeScanUserInfoModal() {
-      this.loading = true
-      const db = await this.$db.openDB('offlineDB')
-      const prizeRecord = await this.$db.cursorGetData(db, 'prizeRecord')
+      this.loading = true;
+      const db = await this.$db.openDB('offlineDB');
+      const prizeRecord = await this.$db.cursorGetData(db, 'prizeRecord');
       const [prizeErr, prizeRes] = await to(
         this.$api.cashUploadOrder({
           type: 2,
-          orderList: prizeRecord
+          orderList: prizeRecord,
         })
-      )
-      this.dialogVisible2 = false
+      );
+      this.dialogVisible2 = false;
       if (prizeErr) {
-        this.$message.error('同步商品订单信息失败')
-        this.loading = false
-        return
+        this.$message.error('同步商品订单信息失败');
+        this.loading = false;
+        return;
       }
-      const giftRecord = await this.$db.cursorGetData(db, 'giftRecord')
-      const [giftErr, giftRes] = await to(this.$api.cashUploadOrder({ type: 1, orderList: giftRecord }))
+      const giftRecord = await this.$db.cursorGetData(db, 'giftRecord');
+      const [giftErr, giftRes] = await to(this.$api.cashUploadOrder({ type: 1, orderList: giftRecord }));
       if (giftErr) {
-        this.$message.error('同步套餐订单信息失败')
-        this.loading = false
-        return
+        this.$message.error('同步套餐订单信息失败');
+        this.loading = false;
+        return;
       }
       if (prizeRes && giftRes) {
-        await this.$db.clearDB(db, 'prizeRecord')
-        await this.$db.clearDB(db, 'giftRecord')
-        this.loading = false
-        this.$message.success('同步数据完成')
+        await this.$db.clearDB(db, 'prizeRecord');
+        await this.$db.clearDB(db, 'giftRecord');
+        this.loading = false;
+        this.$message.success('同步数据完成');
       }
     },
     // 切换在线模式
     closeScanUserInfoModal2() {
-      removeToken()
-      sessionStorage.clear()
-      this.$router.replace({ path: '/login' })
+      removeToken();
+      sessionStorage.clear();
+      this.$router.replace({ path: '/login' });
     },
     handleOnToggleMode() {
       if (!this.$store.state.offline) {
-        this.$store.commit('TOGGLE_OFFLINE', !this.$store.state.offline)
-        this.dialogVisible = false
+        this.$store.commit('TOGGLE_OFFLINE', !this.$store.state.offline);
+        this.dialogVisible = false;
       } else {
-        this.dialogVisible3 = true
+        this.dialogVisible3 = true;
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

@@ -4,7 +4,7 @@
     :show-close="false"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
-    width="30%"
+    :width="getdefaultScreenSize > 1400 ? '30%' : '40%'"
     @closed="$emit('closed')"
   >
     <template #title>
@@ -92,6 +92,9 @@ export default {
   computed: {
     offline() {
       return store.state.offline;
+    },
+    getdefaultScreenSize() {
+      return store.state.defaultScreenSize;
     },
   },
 

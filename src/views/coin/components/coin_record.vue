@@ -15,9 +15,9 @@
       <div class="el-from-box">
         <el-form ref="searchForm" :inline="true" :model="searchForm">
           <el-row>
-            <el-col :span="9">
+            <el-col :span="8">
               <el-form-item label="类型:">
-                <el-select v-model="searchForm.reason" style="width: 200px" clearable size="mini" placeholder="请选择">
+                <el-select v-model="searchForm.reason" style="width: 150px" clearable size="mini" placeholder="请选择">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -27,7 +27,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="9">
+            <el-col :span="12">
               <el-form-item label="记录时间:">
                 <el-date-picker
                   v-model="searchForm.time"
@@ -46,9 +46,11 @@
                 ></el-date-picker>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="3">
               <el-form-item>
-                <el-button type="primary" size="mini" style="width: 132px" @click="handleSearch">查 询 </el-button>
+                <el-button type="primary" size="mini" style="width: 120px; border-radius: 10px" @click="handleSearch"
+                  >查 询
+                </el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -88,10 +90,20 @@
         ></el-pagination>
       </div>
       <div slot="footer">
-        <el-button type="primary" style="width: 100px" size="mini" :loading="loading" @click="closeModal"
+        <el-button
+          type="primary"
+          style="width: 116px; border-radius: 10px; padding: 10px 0"
+          size="mini"
+          :loading="loading"
+          @click="closeModal"
           >确定
         </el-button>
-        <el-button type="info" style="width: 100px" size="mini" :loading="loading" @click="closeModal"
+        <el-button
+          type="info"
+          style="width: 116px; border-radius: 10px; padding: 10px 0"
+          size="mini"
+          :loading="loading"
+          @click="closeModal"
           >取 消
         </el-button>
       </div>

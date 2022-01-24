@@ -1,14 +1,26 @@
 <template>
   <div class="error-handler">
-    <vcard padding flex style="background: #f0f2f5">
-      <el-form class="el-form-box" style="width: 100%" ref="searchForm" :inline="true" :model="searchForm" label-width="120px">
+    <vcard padding flex style="background: bottom">
+      <el-form
+        class="el-form-box"
+        style="width: 100%"
+        ref="searchForm"
+        :inline="true"
+        :model="searchForm"
+        label-width="120px"
+      >
         <el-row justify="space-between" align="center">
           <el-col :span="8">
             <el-form-item label="订单号:" prop="orderId">
-              <el-input v-model.number="searchForm.orderId" size="mini" style="width: 200px" placeholder="请输入"></el-input>
+              <el-input
+                v-model.number="searchForm.orderId"
+                size="mini"
+                style="width: 200px"
+                placeholder="请输入"
+              ></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="10">
             <el-form-item label="购买时间:" prop="times">
               <el-date-picker
                 v-model="searchForm.times"
@@ -27,19 +39,19 @@
               ></el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <div style="padding-top: 3px">
-              <el-button type="primary" style="width: 120px" size="mini" @click="search">查 询</el-button>
-              <el-button size="mini" style="width: 120px" @click="reset">重 置</el-button>
+              <el-button type="primary" size="mini" @click="search" style="width: 120px; border-radius: 10px"
+                >查 询</el-button
+              >
+              <el-button size="mini" @click="reset" style="width: 120px; border-radius: 10px">重 置</el-button>
             </div>
           </el-col>
         </el-row>
       </el-form>
     </vcard>
-    <vcard style="background-color: #f0f2f5; margin-bottom: 0px">
-      <el-row class="list-container" type="flex" align="middle">
-        <el-col :span="12"><div class="bc-title">异常处理</div></el-col>
-      </el-row>
+    <div class="bc-title" style="margin: 20px 0 20px 35px">异常处理</div>
+    <vcard style="background: bottom">
       <div class="padding-table">
         <el-table
           :data="tableData"
@@ -118,21 +130,20 @@
           </el-table-column>
         </el-table>
       </div>
-
-      <!--导出以及分页部分-->
-      <div class="pagenation-box flex-center">
-        <el-pagination
-          :page-size.sync="showNum"
-          :current-page.sync="pageNum"
-          @current-change="changePage"
-          @size-change="changePage"
-          background
-          :page-sizes="[10, 20, 50, 100]"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="count"
-        ></el-pagination>
-      </div>
     </vcard>
+    <!--导出以及分页部分-->
+    <div class="pagenation-box flex-center">
+      <el-pagination
+        :page-size.sync="showNum"
+        :current-page.sync="pageNum"
+        @current-change="changePage"
+        @size-change="changePage"
+        background
+        :page-sizes="[10, 20, 50, 100]"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="count"
+      ></el-pagination>
+    </div>
     <el-dialog
       title="异常处理"
       :visible.sync="showModal"
@@ -213,12 +224,12 @@
 </template>
 
 <script>
-import StaffAuth from '../../../components/StaffAuth'
+import StaffAuth from '../../../components/StaffAuth';
 
 export default {
   name: 'errorHandler',
   components: {
-    StaffAuth
+    StaffAuth,
   },
   data() {
     return {
@@ -228,103 +239,103 @@ export default {
       // 查询、翻页
       searchForm: {
         orderId: '',
-        times: ''
+        times: '',
       },
       pageNum: 1,
       showNum: 10,
       count: 0,
       tableData: [],
-      currentOrder: {}
-    }
+      currentOrder: {},
+    };
   },
   filters: {
     toFixed2(v) {
-      return v.toFixed(2)
-    }
+      return v.toFixed(2);
+    },
   },
   methods: {
     authSuccess(data) {
-      console.log(data)
-      this.fixAbnormalOrder(data)
+      console.log(data);
+      this.fixAbnormalOrder(data);
     },
     fixAbnormalOrder(data) {
       this.$api
         .fixAbnormalOrder({ ...data, orderId: this.currentOrder.orderId })
         .then((res) => {
-          this.showModal = false
+          this.showModal = false;
           if (this.currentOrder.coinType == 1)
             this.$root.$children[0].errorSendCoin(
               this.$calc.Subtr(this.currentOrder.coinNum, this.currentOrder.sureCoin),
               this.currentOrder.orderId,
               this.currentOrder.sureCoin
-            )
+            );
         })
         .catch((e) => {
-          this.$message.error('处理失败')
-        })
+          this.$message.error('处理失败');
+        });
     },
     handleOrder(item) {
-      console.log(item)
+      console.log(item);
       this.$confirm('温馨提醒：处理异常订单前，请先确认是否已收款。若未收到款项请勿处理该笔订单。', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
+        type: 'warning',
       })
         .then(() => {
-          this.currentOrder = { ...item }
+          this.currentOrder = { ...item };
           if (!this.currentOrder.transactionId) {
-            this.currentOrder.transactionId = '无'
+            this.currentOrder.transactionId = '无';
           }
-          this.currentOrder.count = this.currentOrder.orderGift[0].count
-          this.currentOrder.offValueSum = this.MIXIN_Points2Yuan(this.currentOrder.offValueSum).toFixed(2)
-          this.currentOrder.sureSend = this.currentOrder.sureCoin ? '是' : '否'
-          this.currentOrder.completeState = '否'
-          this.showModal = true
+          this.currentOrder.count = this.currentOrder.orderGift[0].count;
+          this.currentOrder.offValueSum = this.MIXIN_Points2Yuan(this.currentOrder.offValueSum).toFixed(2);
+          this.currentOrder.sureSend = this.currentOrder.sureCoin ? '是' : '否';
+          this.currentOrder.completeState = '否';
+          this.showModal = true;
         })
-        .catch(() => {})
+        .catch(() => {});
     },
     reset() {
-      this.$refs.searchForm.resetFields()
-      this.pageNum = 1
-      this.getInfo()
+      this.$refs.searchForm.resetFields();
+      this.pageNum = 1;
+      this.getInfo();
     },
     search() {
-      this.pageNum = 1
-      this.getInfo()
+      this.pageNum = 1;
+      this.getInfo();
     },
     // 翻页
     changePage(val) {
-      this.getInfo()
+      this.getInfo();
     },
     getInfo() {
       // 默认参数
-      const params = { ...this.searchForm }
+      const params = { ...this.searchForm };
       if (params.times && params.times.length) {
-        params.startTime = params.times[0]
-        params.endTime = params.times[1]
+        params.startTime = params.times[0];
+        params.endTime = params.times[1];
       } else {
-        params.startTime = ''
-        params.endTime = ''
+        params.startTime = '';
+        params.endTime = '';
       }
-      delete params.times
-      params.pageNum = this.pageNum
-      params.showNum = this.showNum
-      this.loading = true
+      delete params.times;
+      params.pageNum = this.pageNum;
+      params.showNum = this.showNum;
+      this.loading = true;
       this.$api
         .getAbnormalOrder(params)
         .then((res) => {
-          this.tableData = res.body.items
-          this.count = res.body.count
+          this.tableData = res.body.items;
+          this.count = res.body.count;
         })
         .finally((result) => {
-          this.loading = false
-        })
-    }
+          this.loading = false;
+        });
+    },
   },
   created() {
-    this.getInfo()
-  }
-}
+    this.getInfo();
+  },
+};
 </script>
 
 <style lang="scss" scoped>

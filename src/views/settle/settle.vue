@@ -1,6 +1,6 @@
 <template>
   <div class="store-manage">
-    <vcard padding v-loading="loading">
+    <vcard padding v-loading="loading" style="background: bottom">
       <el-form style="width: 100%" :inline="true" :model="searchForm">
         <!-- <el-row>
           <el-col :span="4">
@@ -198,35 +198,30 @@
           </el-col>
           <el-col :span="8"> </el-col>
         </el-row>
-        <el-row class="btn-box-padding">
-          <el-col :span="24">
-            <el-button
-              :loading="loading"
-              type="primary"
-              size="mini"
-              style="width: 96px"
-              @click="handleOnOpenAuthModal('exportXlSX')"
-              >导 出
-            </el-button>
-            <el-button
-              :loading="loading"
-              type="info"
-              size="mini"
-              style="width: 96px"
-              @click="handleOnOpenAuthModal('printTicket')"
-              >打 印
-            </el-button>
-            <el-button
-              :loading="loading"
-              :disabled="disabledSettle"
-              type="success"
-              size="mini"
-              style="width: 96px"
-              @click="handleOnOpenAuthModal('cashInvoicing')"
-              >确认班结
-            </el-button>
-          </el-col>
-        </el-row>
+        <div class="btn-box-padding">
+          <el-button
+            :loading="loading"
+            type="primary"
+            class="settlet-button-style"
+            @click="handleOnOpenAuthModal('exportXlSX')"
+            >导 出
+          </el-button>
+          <el-button
+            :loading="loading"
+            type="info"
+            class="settlet-button-style"
+            @click="handleOnOpenAuthModal('printTicket')"
+            >打 印
+          </el-button>
+          <el-button
+            :loading="loading"
+            :disabled="disabledSettle"
+            type="primary"
+            plain
+            @click="handleOnOpenAuthModal('cashInvoicing')"
+            >确认班结
+          </el-button>
+        </div>
       </el-form>
     </vcard>
     <staff-auth :show.sync="showAuthModal" @success="handleOnAuthSuccess"></staff-auth>
@@ -491,10 +486,6 @@ export default {
   }
 }
 
-.btn-box-padding {
-  padding-top: 80px;
-}
-
 .list-box {
   padding-top: 33px;
 
@@ -509,7 +500,7 @@ export default {
     position: relative;
     width: 226px;
     height: 33px;
-    background: #ffffff;
+    // background: #ffffff;
     border: 1px solid transparent;
     border-radius: 4px;
     &::after {
@@ -555,6 +546,32 @@ export default {
     height: 21px;
     background: #ff9801;
     margin-right: 10px;
+  }
+}
+
+/* 屏幕小于1400px */
+@media screen and (max-width: 1400px) {
+  .btn-box-padding {
+    padding-top: 80px;
+    display: flex;
+    justify-content: center;
+  }
+  .settlet-button-style {
+    width: 122px;
+    margin-right: 22px;
+  }
+}
+/* 屏幕大于1400px */
+@media screen and (min-width: 1401px) {
+  .btn-box-padding {
+    padding-top: 80px;
+    width: 90%;
+    display: flex;
+    justify-content: center;
+  }
+  .settlet-button-style {
+    width: 122px;
+    margin-right: 22px;
   }
 }
 </style>

@@ -40,8 +40,10 @@
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button :loading="loading" @click="closeAuthModal">取 消</el-button>
-        <el-button :loading="loading" type="primary" @click="confirm">确 定</el-button>
+        <el-button :loading="loading" type="primary" style="width: 116px; margin-right: 49px" @click="confirm"
+          >确 定</el-button
+        >
+        <el-button :loading="loading" type="info" style="width: 116px" @click="closeAuthModal">取 消</el-button>
       </div>
     </el-dialog>
   </div>

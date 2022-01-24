@@ -7,7 +7,12 @@
       :close-on-click-modal="false"
       :close-on-press-escape="false"
       @opened="onOpened"
+      :width="getdefaultScreenSize > 1400 ? '50%' : '60%'"
     >
+      <div class="el-dialog-top-box">
+        <img class="gold-icon" src="@/assets/gold-icon.png" alt="" />
+        <div>清 币</div>
+      </div>
       <el-form
         inline
         ref="form"
@@ -34,7 +39,18 @@
       </el-form>
 
       <template #footer>
-        <el-button :loading="coinLoading" type="primary" size="small" @click="handleSubmit">确定</el-button>
+        <div slot="footer" class="dialog-footer">
+          <div class="flex-center">
+            <el-button
+              :loading="coinLoading"
+              style="width: 116px; margin-left: 40px; border-radius: 10px; padding: 9px 0"
+              type="primary"
+              size="small"
+              @click="handleSubmit"
+              >确定</el-button
+            >
+          </div>
+        </div>
       </template>
     </el-dialog>
   </div>
@@ -80,8 +96,10 @@ export default {
         this.$emit('input', v);
       },
     },
+    getdefaultScreenSize() {
+      return this.$store.state.defaultScreenSize;
+    },
   },
-
   methods: {
     handleSubmit() {
       this.$refs.form.validate(async (v) => {
@@ -133,4 +151,18 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import '@/styles/mixin.scss';
+.el-dialog-top-box {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 23px;
+  color: #4194fe;
+  padding: 28px 0 26px 0;
+}
+.gold-icon {
+  width: 37px;
+  height: 36px;
+  margin-right: 18px;
+}
 </style>

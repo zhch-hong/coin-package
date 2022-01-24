@@ -4,7 +4,7 @@
     :show-close="false"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
-    width="30%"
+    :width="ScreenSize > 1400 ? '30%' : '40%'"
     @closed="$emit('closed')"
   >
     <template #title>
@@ -13,13 +13,13 @@
         <img class="close" src="@/assets/close-windows-icon.png" alt="关闭" @click="handleCancel" />
       </div>
     </template>
-    <div style="margin: 0 80px">
+    <div style="margin: 0 40px">
       <div class="io-type">
         <img class="io-icon" src="@/assets/gold-icon.png" alt="金额" />
         <span class="io-text">{{ ioText }}</span>
       </div>
-      <el-form ref="submitFrom" :model="submitFrom" :rules="rules" label-width="60px">
-        <el-form-item label="金额" prop="payValue">
+      <el-form ref="submitFrom" :model="submitFrom" :rules="rules" label-width="120px">
+        <el-form-item :label="ioText + '金额'" prop="payValue">
           <el-input v-model.trim="submitFrom.payValue" @input="onPayInput"></el-input>
         </el-form-item>
         <el-form-item label="备注" prop="backup">
@@ -35,8 +35,12 @@
     </div>
     <template #footer>
       <div class="dialog-footer">
-        <el-button size="small" type="primary" @click="handleSubmit">确定</el-button>
-        <el-button size="small" type="info" @click="handleCancel">取消</el-button>
+        <el-button size="small" type="primary" style="border-radius: 10px; width: 116px" @click="handleSubmit"
+          >确定</el-button
+        >
+        <el-button size="small" type="info" style="border-radius: 10px; width: 116px" @click="handleCancel"
+          >取消</el-button
+        >
       </div>
     </template>
   </el-dialog>
@@ -105,6 +109,7 @@ export default {
         payValue: '',
         backup: '',
       },
+      ScreenSize: 1400,
       rules: {
         payValue: [
           {
@@ -140,6 +145,7 @@ export default {
   methods: {
     show() {
       this.visible = true;
+      this.ScreenSize = window.screen.width;
     },
 
     hide() {
@@ -218,7 +224,7 @@ export default {
 }
 
 .dialog-footer {
-  margin: 0 150px;
+  margin: 0 120px;
   display: flex;
   justify-content: space-between;
 }

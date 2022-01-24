@@ -11,11 +11,13 @@
         >
           <el-table-column label="操作" width="250px" align="center">
             <template slot-scope="scope">
-              <el-button type="text" @click="cutCoin(scope.row)">清币</el-button>
-              <el-divider direction="vertical"></el-divider>
-              <el-button type="text" @click="appendCoin(scope.row)">加币</el-button>
-              <el-divider direction="vertical"></el-divider>
-              <el-button type="text" @click="coinRecord(scope.row)">变更清单</el-button>
+              <div class="table-button-box">
+                <el-button type="text" @click="cutCoin(scope.row)">清币</el-button>
+                <el-divider direction="vertical"></el-divider>
+                <el-button type="text" @click="appendCoin(scope.row)">加币</el-button>
+                <el-divider direction="vertical"></el-divider>
+                <el-button type="text" @click="coinRecord(scope.row)">变更清单</el-button>
+              </div>
             </template>
           </el-table-column>
           <el-table-column
@@ -47,12 +49,16 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <div class="flex-center">
-          <el-button type="primary" style="width: 100px" :loading="loading" @click="closeScanUserInfoModal"
+          <el-button
+            type="primary"
+            style="width: 116px; border-radius: 10px; padding: 14px 0"
+            :loading="loading"
+            @click="closeScanUserInfoModal"
             >确定
           </el-button>
           <el-button
             type="info"
-            style="width: 100px; margin-left: 100px"
+            style="width: 116px; margin-left: 40px; border-radius: 10px; padding: 14px 0"
             :loading="loading"
             @click="dialogVisible = false"
             >取 消
@@ -162,6 +168,9 @@ export default {
     padding: 0;
   }
 }
+/deep/ .el-button {
+  padding: 7px 0;
+}
 .store-manage {
   .list-container {
     padding: 20px;
@@ -181,9 +190,14 @@ export default {
   padding: 19px 14px 0 14px;
   box-sizing: border-box;
 }
+.table-button-box {
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #4194fe;
+}
 </style>
 <style>
 .el-divider {
-  background: #898989;
+  background: #4194fe;
 }
 </style>

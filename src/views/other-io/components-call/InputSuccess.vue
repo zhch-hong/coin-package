@@ -4,7 +4,7 @@
     :show-close="false"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
-    width="30%"
+    :width="getdefaultScreenSize > 1400 ? '30%' : '40%'"
     @closed="$emit('closed')"
   >
     <div class="success">
@@ -15,17 +15,23 @@
   </el-dialog>
 </template>
 <script>
+import store from '@/store';
+
 export default {
   data() {
     return {
-      visible: false,
+      visible: true,
     };
   },
 
   mounted() {
     this.show();
   },
-
+  computed: {
+    getdefaultScreenSize() {
+      return store.state.defaultScreenSize;
+    },
+  },
   methods: {
     show() {
       this.visible = true;
