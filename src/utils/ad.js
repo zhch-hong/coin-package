@@ -23,5 +23,9 @@ export default async () => {
     },
   });
   const key = localStorage.getItem('moduleKey');
-  window.loadURL(`http://127.0.0.1:9310/GFAdmin_cashier/#/ad-view?key=${key}`);
+  if (process.env.WEBPACK_DEV_SERVER_URL) {
+    window.loadURL(`http://127.0.0.1:9310/GFAdmin_cashier/#/ad-view?key=${key}`);
+  } else {
+    window.loadURL(`app://./index.html#/ad-view?key=${key}`);
+  }
 };
