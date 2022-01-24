@@ -15,7 +15,6 @@
       @selection-change="handleOnSelectionChange"
       @sort-change="handleOnSortChange"
       :header-cell-style="{ backgroundColor: '#ffffff' }"
-      :cell-style="{ backgroundColor: '#f5f7f9' }"
       :span-method="config.spanMethod"
       :show-summary="config.showSummary"
       :summary-method="config.getSum"
