@@ -746,3 +746,11 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.el-table,
+.el-table__expanded-cell,
+.el-table th,
+.el-table tr {
+  background-color: transparent;
+}
+</style>

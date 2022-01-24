@@ -1,8 +1,7 @@
 import { remote } from 'electron';
-import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import $api from '@/api';
 
-const { screen, BrowserWindow, protocol } = remote;
+const { screen, BrowserWindow } = remote;
 // protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }]);
 
 export default async () => {
