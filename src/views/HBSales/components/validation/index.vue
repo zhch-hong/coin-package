@@ -1,7 +1,7 @@
 <template>
   <div class="validation">
     <el-row>
-      <el-col class="validation-el-col" :span="10">
+      <el-col class="validation-el-col" :span="8">
         <div class="flex-center"><img src="@/assets/hb-exclusive.png" class="hb-exclusive" /></div>
         <div class="flex-center">
           <div class="hb-button-style" @click="handleOpenScanModal">点击扫描嗨呗核销二维码</div>
@@ -52,7 +52,7 @@
           </div>
         </template>
       </el-col>
-      <el-col :span="14" style="padding: 24px 24px 0 63px; box-sizing: border-box">
+      <el-col :span="16" style="padding: 24px 24px 0 63px; box-sizing: border-box">
         <template v-if="showPackageDetail">
           <div class="bc-title">核销码绑定套餐包括：</div>
           <div class="flex-start writing-style" v-if="showCoinTypeRadio">
@@ -63,11 +63,9 @@
               <el-radio :label="2">电子币</el-radio>
             </el-radio-group>
           </div>
-          <div class="flex-start flex-warp1" v-for="(item, index) in pkgDetail" :key="index">
-            <div class="flex-start flex-warp1">
-              <div>
-                <h2>{{ item.name }}</h2>
-              </div>
+          <div class="flex-start" v-for="(item, index) in pkgDetail" :key="index">
+            <div class="flex-start">
+              <h2>{{ item.name }}</h2>
               <div>（{{ useCount }}份）：</div>
             </div>
             <div>
@@ -99,7 +97,7 @@
       custom-class="success-dialog"
       :close-on-press-escape="false"
       :close-on-click-modal="false"
-      :width="getdefaultScreenSize > 1400 ? '30%' : '40%'"
+      width="30%"
     >
       <div
         style="
@@ -115,8 +113,8 @@
       <div class="flex-center" style="margin: 40px 0">
         <img src="@/assets/scan-icon.png" style="width: 54px; margin-right: 24px" />
         <div>
-          <div class="dialog-tip">确认后将绑定套餐下发至玩家中心</div>
-          <div class="dialog-tip">个人账户，请确定是否核销？</div>
+          <div style="font-size: 21px; font-weight: bold; color: #616161">确认后将绑定套餐下发至玩家中心</div>
+          <div style="font-size: 21px; font-weight: bold; color: #616161">个人账户，请确定是否核销？</div>
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
@@ -167,9 +165,6 @@ export default {
   computed: {
     showCoinTypeRadio() {
       return this.pkgDetail.some((item) => item.type === 1);
-    },
-    getdefaultScreenSize() {
-      return this.$store.state.defaultScreenSize;
     },
   },
   methods: {
@@ -309,6 +304,7 @@ export default {
     },
     // 扫码完成
     handleOnScanSuccess(code) {
+      console.log('============', code);
       let query;
       try {
         query = this.parseQuery(code.split('?')[1]);
@@ -316,12 +312,12 @@ export default {
         this.$message.error('该二维码无效，请重新扫码');
         return;
       }
-      if (!query || !query.orderId || isNaN(query.orderId)) {
+      if (!query || !query.orderid || isNaN(query.orderid)) {
         this.$message.error('错误的二维码，请重新扫码');
         return;
       }
       this.clearGoodsInfo();
-      this.validateCode = query.orderId;
+      this.validateCode = query.orderid;
       this.getDataMode = 1;
       this.handleGetInfo();
     },
@@ -423,7 +419,7 @@ export default {
 }
 .validation-el-col {
   padding: 24px 80px 0 80px;
-  border-right: 1px solid #8a8a8a;
+  border-right: 1px solid #e4e7ed;
   box-sizing: border-box;
 }
 .writing-style {
@@ -445,13 +441,5 @@ export default {
   line-height: 42px;
   font-size: 16px;
   color: white;
-}
-.flex-warp1 {
-  flex-wrap: wrap;
-}
-.dialog-tip {
-  font-size: 21px;
-  color: #616161;
-  line-height: 32px;
 }
 </style>
