@@ -1,17 +1,20 @@
 import { remote } from 'electron';
-import $api from '@/api';
+import router from '@/router';
 
 const { screen, BrowserWindow } = remote;
-// protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }]);
 
 export default async () => {
+  // const key = localStorage.getItem('moduleKey');
+  // router.push({ path: '/ad-view', query: { key } });
   const displays = screen.getAllDisplays();
   const extend = displays[1];
   const window = new BrowserWindow({
     x: extend.bounds.x,
     y: extend.bounds.y,
+    width: 1600,
+    height: 900,
     movable: false,
-    // fullscreen: true,
+    fullscreen: true,
     webPreferences: {
       nodeIntegration: true,
       webSecurity: false,
@@ -20,18 +23,5 @@ export default async () => {
     },
   });
   const key = localStorage.getItem('moduleKey');
-  const { body, errCode } = await $api.readModuleAd(key);
-  if (errCode === 0) {
-    console.log(body);
-  }
-  window.webContents.openDevTools();
-  // window.loadURL('http://127.0.0.1:9310/ad.html');
-  window.loadURL('http://127.0.0.1:9310/GFAdmin_cashier/#/ad-view');
-  // window.loadURL('"http://localhost:9310/GFAdmin_cashier/#/login"');
-  // window.loadFile('index.html');
+  window.loadURL(`http://127.0.0.1:9310/GFAdmin_cashier/#/ad-view?key=${key}`);
 };
-
-// export default async function startAd() {
-//   createExtendWindow();
-
-// }
