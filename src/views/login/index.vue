@@ -116,14 +116,11 @@ import { to } from '@/utils/tools';
 import startAd from '@utils/ad';
 import { setToken } from '../../utils/auth';
 
-const dirname = __dirname;
-
 export default {
   name: 'Login',
 
   data() {
     return {
-      dirname,
       refreshFlag: false,
 
       webview: null,

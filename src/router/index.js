@@ -37,7 +37,7 @@ export const constantRoutes = [
   },
   {
     path: '/ad-view',
-    component: () => import('@views/ad-view.vue'),
+    component: () => import('@/views/ad-view/ad-view.vue'),
   },
   {
     path: '/package',
