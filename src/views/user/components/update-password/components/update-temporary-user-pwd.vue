@@ -10,7 +10,15 @@
       <span>验证码</span>
       <input v-model="formInfo.code" type="text" placeholder="请输入验证码" :maxlength="6" />
       <div
-        style="width: 102px; height: 32px; font-size: 16px; background-color: #4194fe; cursor: pointer; border-radius: 16px; color: #ffffff"
+        style="
+          width: 102px;
+          height: 32px;
+          font-size: 16px;
+          background-color: #4194fe;
+          cursor: pointer;
+          border-radius: 16px;
+          color: #ffffff;
+        "
         class="flex-center"
         @click="getCode"
       >
@@ -20,23 +28,46 @@
     <div class="form-item flex-start">
       <img src="@/assets/open-temporary-card/new-password-icon.png" alt="phone" />
       <span>新密码</span>
-      <input v-model="formInfo.password" :maxlength="6" @input="handleInput('password')" type="password" placeholder="请输入新密码" />
+      <input
+        v-model="formInfo.password"
+        :maxlength="6"
+        @input="handleInput('password')"
+        type="password"
+        placeholder="请输入新密码"
+      />
     </div>
     <div class="form-item flex-start">
       <img src="@/assets/open-temporary-card/new-password-icon.png" alt="phone" />
       <span>确认新密码</span>
-      <input v-model="formInfo.confirmPassword" :maxlength="6" @input="handleInput('confirmPassword')" type="password" placeholder="再次输入新密码" />
+      <input
+        v-model="formInfo.confirmPassword"
+        :maxlength="6"
+        @input="handleInput('confirmPassword')"
+        type="password"
+        placeholder="再次输入新密码"
+      />
     </div>
-    <div>
-      <el-button type="primary" size="medium" style="width: 150px" @click="handleConfirm">确定</el-button>
-      <el-button size="medium" style="width: 150px; background-color: #7a7a80; color: #ffffff" @click="initForm">取消 </el-button>
+    <div class="flex-center">
+      <el-button
+        type="primary"
+        size="medium"
+        style="width: 120px; border-radius: 10px; margin-right: 30px"
+        @click="handleConfirm"
+        >确定</el-button
+      >
+      <el-button
+        size="medium"
+        style="width: 120px; background-color: #7a7a80; color: #ffffff; border-radius: 10px"
+        @click="initForm"
+        >取消
+      </el-button>
     </div>
   </div>
 </template>
 
 <script>
-import { to } from '@/utils/tools'
-import { isPhone } from '@/utils/validate'
+import { to } from '@/utils/tools';
+import { isPhone } from '@/utils/validate';
 
 export default {
   name: 'update-public-user-pwd',
@@ -47,90 +78,90 @@ export default {
         phone: '',
         code: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
       },
       verCodeText: '获取验证码',
       timer: null,
       coolDown: 60,
       openCardInfo: {},
-      showStaffAuth: false
-    }
+      showStaffAuth: false,
+    };
   },
   methods: {
     handleInput(prop) {
-      this.formInfo[prop] = this.formInfo[prop].replace(/\D/g, '')
+      this.formInfo[prop] = this.formInfo[prop].replace(/\D/g, '');
     },
     initForm() {
       this.formInfo = {
         phone: '',
         code: '',
         password: '',
-        confirmPassword: ''
-      }
-      this.initGetCode()
+        confirmPassword: '',
+      };
+      this.initGetCode();
     },
     initGetCode() {
-      clearInterval(this.timer)
-      this.verCodeText = '获取验证码'
-      this.coolDown = 60
+      clearInterval(this.timer);
+      this.verCodeText = '获取验证码';
+      this.coolDown = 60;
     },
     getCode() {
       if (!isPhone.test(this.formInfo.phone)) {
-        this.$message.error('请输入正确的手机号')
-        return
+        this.$message.error('请输入正确的手机号');
+        return;
       }
-      if (this.verCodeText !== '获取验证码' && this.verCodeText !== '重新发送') return
-      this.verCodeText = '60s后重发'
+      if (this.verCodeText !== '获取验证码' && this.verCodeText !== '重新发送') return;
+      this.verCodeText = '60s后重发';
       this.timer = setInterval(() => {
         if (this.coolDown === 0) {
-          clearInterval(this.timer)
-          this.verCodeText = '重新发送'
-          this.coolDown = 60
+          clearInterval(this.timer);
+          this.verCodeText = '重新发送';
+          this.coolDown = 60;
         } else {
-          this.coolDown--
-          this.verCodeText = `${this.coolDown}s后重发`
+          this.coolDown--;
+          this.verCodeText = `${this.coolDown}s后重发`;
         }
-      }, 1000)
+      }, 1000);
       this.$api.sendUserPhoneCode({ codeType: 1, /* 1短信 2语音 */ phone: this.formInfo.phone }).then(() => {
-        this.$message.success('发送成功')
-      })
+        this.$message.success('发送成功');
+      });
     },
     handleConfirm() {
       if (!isPhone.test(this.formInfo.phone)) {
-        this.$message.error('请输入正确的手机号')
-        return
+        this.$message.error('请输入正确的手机号');
+        return;
       }
       if (!this.formInfo.code) {
-        this.$message.error('请输入验证码')
-        return
+        this.$message.error('请输入验证码');
+        return;
       }
       if (isNaN(this.formInfo.password) || this.formInfo.password.length !== 6) {
-        this.$message.error('密码只能为6位数字')
-        return
+        this.$message.error('密码只能为6位数字');
+        return;
       }
       if (this.formInfo.password !== this.formInfo.confirmPassword) {
-        this.$message.error('两次密码输入不一致')
-        return
+        this.$message.error('两次密码输入不一致');
+        return;
       }
-      this.requestOpenCard()
+      this.requestOpenCard();
     },
     async requestOpenCard() {
-      this.loading = true
+      this.loading = true;
       const params = {
         type: 2,
         cardNum: this.formInfo.phone,
         code: Number(this.formInfo.code),
-        pwd: this.formInfo.password
-      }
-      const [, res] = await to(this.$api.updateCardPwd(params))
-      this.loading = false
+        pwd: this.formInfo.password,
+      };
+      const [, res] = await to(this.$api.updateCardPwd(params));
+      this.loading = false;
       if (res) {
-        this.$message.success('修改成功')
-        this.initForm()
+        this.$message.success('修改成功');
+        this.initForm();
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

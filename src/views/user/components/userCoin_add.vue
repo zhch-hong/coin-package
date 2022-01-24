@@ -4,7 +4,7 @@
       <el-col :span="7">
         <div class="user-content">
           <el-form style="width: 100%; padding: 40px 20px 0 60px" @submit.native.prevent :inline="false">
-            <div class="bc-title">会员信息：</div>
+            <div class="bc-title">会员信息</div>
             <img src="@/assets/scan-user.png" alt="" style="width: 184px; margin: 60px 0 60px 40px" />
             <el-form-item label="">
               <el-input
@@ -20,27 +20,45 @@
               <el-button
                 type="primary"
                 size="mini"
-                style="width: 120px; font-size: 15px"
+                style="width: 120px; font-size: 15px; border-radius: 10px; margin-left: 55px"
                 :loading="loading"
                 @click="handleSearchUser"
                 >确 定
               </el-button>
             </el-form-item>
-            <p>会员ID：{{ userInfo.uid }}</p>
-            <p>游戏币数：{{ userCoin }}</p>
-            <p>积分数：{{ userStarCoin }}</p>
+            <div
+              style="
+                font-size: 17px;
+                color: #3d3d3e;
+                font-weight: 500;
+                line-height: 28px;
+                margin-top: 40px;
+                padding-left: 55px;
+              "
+            >
+              <div>会员ID：{{ userInfo.uid }}</div>
+              <div>游戏币数：{{ userCoin }}</div>
+              <div>积分数：{{ userStarCoin }}</div>
+            </div>
           </el-form>
         </div>
       </el-col>
       <el-col :span="17">
+        <div style="padding-left: 60px">
+          <div class="bc-title" style="width: 100%; margin: 40px 0 0 0">手动补游戏币/积分/彩票</div>
+        </div>
         <el-row>
           <el-col :span="8">
-            <el-form ref="putCoin" style="padding: 40px 20px 0 60px" @submit.native.prevent label-position="top">
-              <div class="bc-title">手动补游戏币/积分/彩票：</div>
+            <el-form
+              ref="putCoin"
+              style="padding: 0 20px 0 60px; box-sizing: border-box"
+              @submit.native.prevent
+              label-position="top"
+            >
               <el-form-item label="补游戏币" style="margin-top: 40px">
                 <el-input
                   v-model="putCoin"
-                  style="width: 210px"
+                  style="width: 175px"
                   placeholder="请输入补游戏币数量"
                   @input="supInteger('putCoin', $event)"
                 ></el-input>
@@ -49,7 +67,7 @@
                 <el-input
                   v-model="putCoinRemark"
                   :maxlength="50"
-                  style="width: 210px"
+                  style="width: 175px"
                   placeholder="请输入备注"
                 ></el-input>
               </el-form-item>
@@ -57,7 +75,7 @@
                 <el-button
                   type="primary"
                   size="mini"
-                  style="width: 120px; font-size: 15px"
+                  style="width: 120px; font-size: 15px; border-radius: 10px; margin-left: 32px"
                   :loading="loading"
                   @click="openAuthModal(1)"
                   >确 定
@@ -67,22 +85,20 @@
           </el-col>
           <el-col :span="8">
             <el-form
-              style="padding: 20px 50px 0"
               ref="putStar"
               label-position="top"
               @submit.native.prevent
               :inline="false"
+              style="padding: 0 20px 0 60px; box-sizing: border-box"
             >
-              <h4><br /></h4>
-              <br />
-              <el-form-item label="补积分">
-                <el-input v-model="putStar" style="width: 210px" placeholder="请输入补积分数量"></el-input>
+              <el-form-item label="补积分" style="margin-top: 40px">
+                <el-input v-model="putStar" style="width: 175px" placeholder="请输入补积分数量"></el-input>
               </el-form-item>
               <el-form-item label="备注" :rules="{ required: true, message: '请输入备注' }">
                 <el-input
                   v-model="putStarRemark"
                   :maxlength="50"
-                  style="width: 210px"
+                  style="width: 175px"
                   placeholder="请输入备注"
                 ></el-input>
               </el-form-item>
@@ -90,7 +106,7 @@
                 <el-button
                   type="primary"
                   size="mini"
-                  style="width: 120px; font-size: 15px"
+                  style="width: 120px; font-size: 15px; border-radius: 10px; margin-left: 32px"
                   :loading="loading"
                   @click="openAuthModal(2)"
                 >
@@ -101,31 +117,29 @@
           </el-col>
           <el-col :span="8">
             <el-form
-              style="padding: 20px 50px 0"
               ref="putTicket"
               label-position="top"
               @submit.native.prevent
               :inline="false"
+              style="padding: 0 20px 0 60px; box-sizing: border-box"
             >
-              <h4><br /></h4>
-              <br />
-              <el-form-item label="补彩票">
+              <el-form-item label="补彩票" style="margin-top: 40px">
                 <el-input
                   v-model="putTicket"
-                  style="width: 210px"
+                  style="width: 175px"
                   placeholder="请输入补彩票数量"
                   :maxlength="6"
                   @input="supInteger('putTicket', $event)"
                 ></el-input>
-                <p>
+                <div>
                   需扣除门店积分<span style="color: red; margin-left: 6px">{{ deductScore }}</span>
-                </p>
+                </div>
               </el-form-item>
-              <el-form-item label="备注" :rules="{ required: true, message: '请输入备注' }">
+              <el-form-item label="备注" :rules="{ required: true, message: '请输入备注' }" style="margin-top: -40px">
                 <el-input
                   v-model="putTicketRemark"
                   :maxlength="50"
-                  style="width: 210px"
+                  style="width: 175px"
                   placeholder="请输入备注"
                 ></el-input>
               </el-form-item>
@@ -133,7 +147,7 @@
                 <el-button
                   type="primary"
                   size="mini"
-                  style="width: 120px; font-size: 15px"
+                  style="width: 120px; font-size: 15px; border-radius: 10px; margin-left: 32px"
                   :loading="loading"
                   @click="openAuthModal(3)"
                 >
@@ -150,11 +164,11 @@
 </template>
 
 <script>
+import calc from '@/utils/calc';
 import { isPositiveInt, isNumber, isPositiveFloat, isPhone } from '../../../utils/validate';
 
 import { to } from '../../../utils/tools';
 import StaffAuth from '../../../components/StaffAuth';
-import calc from '@/utils/calc';
 
 export default {
   name: 'store',
@@ -336,8 +350,6 @@ export default {
 
 <style lang="scss" scoped>
 .user-content {
-  height: 800px;
-
   .el-divider--vertical {
     height: 120px;
     top: 90px;
