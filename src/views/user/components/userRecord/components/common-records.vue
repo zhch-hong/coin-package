@@ -2,7 +2,13 @@
   <div class="common-records">
     <el-form
       ref="searchForm"
-      style="width: 100%; background-color: #ffffff; padding: 20px; border-radius: 10px"
+      style="
+        width: 100%;
+        background-color: #ffffff;
+        padding: 20px 20px 0 20px;
+        border-radius: 10px;
+        box-sizing: border-box;
+      "
       :inline="true"
       :model="searchForm"
       label-width="120px"
@@ -53,21 +59,20 @@
       </el-row>
       <div class="flex-end">
         <el-form-item>
-          <el-button type="primary" size="mini" style="width: 120px" @click="search">查 询</el-button>
-          <el-button size="mini" style="width: 120px; border-color: #4194fe; color: #4194fe" @click="reset"
+          <el-button type="primary" size="mini" style="border-radius: 10px; width: 120px" @click="search"
+            >查 询</el-button
+          >
+          <el-button
+            size="mini"
+            style="border-radius: 10px; width: 120px; border-color: #4194fe; color: #4194fe"
+            @click="reset"
             >重 置
           </el-button>
         </el-form-item>
       </div>
     </el-form>
-    <div class="bc-title" style="margin: 20px 0">操作记录</div>
-    <el-table
-      :loading="loading"
-      :data="tableData"
-      style="width: 100%"
-      :header-cell-style="{ backgroundColor: '#ffffff' }"
-      :cell-style="{ backgroundColor: '#F0F2F5' }"
-    >
+    <div class="bc-title" style="margin: 20px 0 20px 35px">操作记录</div>
+    <el-table :loading="loading" :data="tableData" style="width: 100%">
       <el-table-column label="操作时间" prop="time" align="center" min-width="140"></el-table-column>
       <el-table-column label="玩家ID" prop="uid" align="center" min-width="140"></el-table-column>
       <el-table-column
@@ -286,6 +291,15 @@ export default {
       width: 240px;
       height: 240px;
     }
+  }
+}
+/deep/ .el-table__header-wrapper {
+  border-radius: 10px;
+  background: white;
+}
+/deep/ .el-table {
+  .thead {
+    color: red;
   }
 }
 </style>
