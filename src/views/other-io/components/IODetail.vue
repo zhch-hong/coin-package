@@ -60,17 +60,15 @@
       </el-form>
     </div>
     <div class="bc-title" style="margin: 20px 0 20px 35px">收支明细</div>
-    <div class="table-box-style">
-      <el-table :data="tableData" height="70vh" border>
-        <el-table-column label="操作时间" prop="time" align="center"></el-table-column>
-        <el-table-column label="类别" prop="balanceName" align="center"></el-table-column>
-        <el-table-column label="类型" prop="balanceType" :formatter="typeFormat" align="center"></el-table-column>
-        <el-table-column label="金额" prop="payValue" :formatter="pointFormat" align="center"></el-table-column>
-        <el-table-column label="收银员" prop="staffName" align="center"></el-table-column>
-        <el-table-column label="授权员工" prop="adminName" align="center"></el-table-column>
-        <el-table-column label="备注" prop="backup" width="310" align="center"> </el-table-column>
-      </el-table>
-    </div>
+    <el-table :data="tableData" height="70vh">
+      <el-table-column label="操作时间" prop="time" align="center"></el-table-column>
+      <el-table-column label="类别" prop="balanceName" align="center"></el-table-column>
+      <el-table-column label="类型" prop="balanceType" :formatter="typeFormat" align="center"></el-table-column>
+      <el-table-column label="金额" prop="payValue" :formatter="pointFormat" align="center"></el-table-column>
+      <el-table-column label="收银员" prop="staffName" align="center"></el-table-column>
+      <el-table-column label="授权员工" prop="adminName" align="center"></el-table-column>
+      <el-table-column label="备注" prop="backup" width="310" align="center"> </el-table-column>
+    </el-table>
 
     <el-row style="margin-top: 16px">
       <el-col :span="2">
@@ -247,7 +245,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
 .el-form-style {
   background: #ffffff;
   border-radius: 10px;
@@ -259,5 +257,14 @@ export default {
   background: white;
   border-radius: 10px;
   box-sizing: border-box;
+}
+/deep/ .el-table__header-wrapper {
+  border-radius: 10px;
+  background: white;
+}
+/deep/ .el-table {
+  .thead {
+    color: red;
+  }
 }
 </style>

@@ -33,7 +33,7 @@
       custom-class="success-dialog"
       :close-on-press-escape="false"
       :show-close="false"
-      width="30%"
+      :width="getdefaultScreenSize < 1400 ? '30%' : '40%'"
     >
       <div>
         <div class="dialog-title-box">
@@ -52,8 +52,18 @@
         </div>
       </div>
       <div slot="footer" class="flex-center">
-        <el-button type="primary" style="width: 100px" @click="handleOnToggleMode">确 定</el-button>
-        <el-button type="info" style="width: 100px; margin-left: 100px" @click="dialogVisible = false">取 消</el-button>
+        <el-button
+          type="primary"
+          style="width: 116px; margin-left: 40px; border-radius: 10px; padding: 9px 0"
+          @click="handleOnToggleMode"
+          >确 定</el-button
+        >
+        <el-button
+          type="info"
+          style="width: 116px; margin-left: 40px; border-radius: 10px; padding: 9px 0"
+          @click="dialogVisible = false"
+          >取 消</el-button
+        >
       </div>
     </el-dialog>
     <!-- 数据同步 -->
@@ -74,12 +84,16 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <div class="flex-center">
-          <el-button type="primary" style="width: 100px" :loading="loading" @click="closeScanUserInfoModal"
+          <el-button
+            type="primary"
+            style="width: 116px; margin-left: 40px; border-radius: 10px; padding: 9px 0"
+            :loading="loading"
+            @click="closeScanUserInfoModal"
             >确定
           </el-button>
           <el-button
             type="info"
-            style="width: 100px; margin-left: 100px"
+            style="width: 116px; margin-left: 40px; border-radius: 10px; padding: 9px 0"
             :loading="loading"
             @click="dialogVisible2 = false"
             >取 消
@@ -106,12 +120,16 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <div class="flex-center">
-          <el-button type="primary" style="width: 100px" :loading="loading" @click="closeScanUserInfoModal2"
+          <el-button
+            type="primary"
+            style="width: 116px; margin-left: 40px; border-radius: 10px; padding: 9px 0"
+            :loading="loading"
+            @click="closeScanUserInfoModal2"
             >确定
           </el-button>
           <el-button
             type="info"
-            style="width: 100px; margin-left: 100px"
+            style="width: 116px; margin-left: 40px; border-radius: 10px; padding: 9px 0"
             :loading="loading"
             @click="dialogVisible3 = false"
             >取 消
@@ -142,6 +160,9 @@ export default {
     },
     targetModeText() {
       return this.$store.state.offline ? '在线' : '离线';
+    },
+    getdefaultScreenSize() {
+      return this.$store.state.defaultScreenSize;
     },
   },
   methods: {

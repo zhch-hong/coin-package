@@ -1,7 +1,7 @@
 <template>
   <div class="sub-page-flex">
     <el-row>
-      <el-col :span="10">
+      <el-col :span="12">
         <div class="user-content">
           <el-form style="width: 100%; padding: 40px 20px 0 60px" @submit.native.prevent :inline="false">
             <div class="bc-title">会员信息：</div>
@@ -9,35 +9,44 @@
             <el-form-item label="">
               <el-input v-model="userId" clearable style="width: 224px" placeholder="点击输入会员ID"></el-input>
             </el-form-item>
-            <el-form-item>
+            <el-form-item style="margin-top: 40px">
               <el-button
                 type="primary"
                 size="mini"
-                style="width: 120px; font-size: 15px"
+                style="width: 108px; font-size: 15px; border-radius: 10px; margin-left: 55px"
                 :loading="loading"
                 @click="handleSearchUser"
                 >确 定
               </el-button>
             </el-form-item>
-            <div style="font-size: 17px; color: #3d3d3e; font-weight: 500; line-height: 28px">
+            <div
+              style="
+                font-size: 17px;
+                color: #3d3d3e;
+                font-weight: 500;
+                line-height: 28px;
+                margin-top: 40px;
+                padding-left: 55px;
+              "
+            >
               <div>会员ID：{{ uid }}</div>
               <div>游戏币数：{{ userCoin }}</div>
             </div>
           </el-form>
         </div>
       </el-col>
-      <el-col :span="14">
+      <el-col :span="12">
         <div class="user-content" v-if="userCoin !== '0'">
           <el-form style="width: 100%; padding: 40px 20px 0 60px" :inline="false">
             <div class="bc-title">会员提币：</div>
             <el-form-item label="" style="margin-top: 40px">
               <el-input v-model="getNum" clearable style="width: 263px" placeholder="请输入提币数量"></el-input>
             </el-form-item>
-            <el-form-item>
+            <el-form-item style="margin-top: 40px">
               <el-button
                 type="primary"
                 size="mini"
-                style="width: 120px; font-size: 15px"
+                style="width: 108px; font-size: 15px; border-radius: 10px"
                 :loading="loading"
                 @click="userGetCoin"
                 >确 定

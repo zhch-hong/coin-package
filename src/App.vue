@@ -753,4 +753,10 @@ export default {
 .el-table tr {
   background-color: transparent;
 }
+.el-table thead {
+  color: #000;
+}
+.el-table {
+  color: #000;
+}
 </style>

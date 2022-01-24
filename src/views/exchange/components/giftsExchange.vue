@@ -6,10 +6,15 @@
       </el-row>
       <div>
         <img src="@/assets/sacn-exchage.png" class="scan-card-image" />
-        <div class="button-style" @click="openModalByScan">点击扫码</div>
+        <div class="button-style button-style1" @click="openModalByScan">点击扫码</div>
       </div>
       <div class="box-bottom">
-        <el-input v-model="code" size="mini" style="width: 140px; padding: 40px 0" placeholder="点击手动输入兑换码"></el-input>
+        <el-input
+          v-model="code"
+          size="mini"
+          style="width: 205px; padding: 20px 0px 38px 0"
+          placeholder="点击手动输入兑换码"
+        ></el-input>
       </div>
       <div class="box-bottom">
         <el-button type="danger" style="width: 140px" @click="search">查 询</el-button>
@@ -17,11 +22,16 @@
     </div>
     <div class="gifts-list-container-box">
       <div class="gifts-list-container">
-        <vcard>
+        <vcard style="margin-bottom: 0">
           <el-row class="list-container coupons-padding-left" type="flex" align="middle">
             <el-col :span="12"><div class="bc-title">兑换记录</div></el-col>
           </el-row>
-          <el-table :data="tableData" style="width: 100%" height="600" :header-cell-style="{ backgroundColor: '#EBF5FF' }">
+          <el-table
+            :data="tableData"
+            style="width: 100%"
+            height="400"
+            :header-cell-style="{ backgroundColor: '#EBF5FF' }"
+          >
             <el-table-column
               v-for="(col, index) in dataColumn"
               :key="index"
@@ -42,7 +52,7 @@
           </el-table>
         </vcard>
         <div class="total-content">玩家ID：{{ uid }}</div>
-        <div class="total-content">游戏币数:{{ userCoin }}枚</div>
+        <div class="total-content tatal-content1">游戏币数:{{ userCoin }}枚</div>
       </div>
     </div>
     <el-dialog
@@ -69,8 +79,8 @@
 </template>
 
 <script>
-import moment from 'moment'
-import { getToken } from '../../../utils/auth'
+import moment from 'moment';
+import { getToken } from '../../../utils/auth';
 
 export default {
   name: 'store',
@@ -85,79 +95,79 @@ export default {
       dataColumn: [
         { prop: 'prizeName', label: '商品名称', width: 120 },
         { prop: 'count', label: '兑换数量', width: 120 },
-        { prop: 'title', label: '来源', width: 120 }
+        { prop: 'title', label: '来源', width: 120 },
       ],
       tableData: [],
       // 扫码
-      showScanModal: false
-    }
+      showScanModal: false,
+    };
   },
   methods: {
     openModalByScan() {
-      this.code = ''
-      this.showScanModal = true
+      this.code = '';
+      this.showScanModal = true;
       document.onkeydown = (e) => {
         if (e.key !== 'Enter') {
-          this.code += e.key
+          this.code += e.key;
         } else {
-          this.code = this.code.replace(/\s+/g, '')
-          document.onkeydown = null
-          this.loading = true
-          this.code = this.code.replace(/\s+/g, '')
+          this.code = this.code.replace(/\s+/g, '');
+          document.onkeydown = null;
+          this.loading = true;
+          this.code = this.code.replace(/\s+/g, '');
           this.$api
             .getExchangeInfo({ code: this.code })
             .then((res) => {
-              this.tableData.length = 0
-              this.tableData.push(res.body.prizeInfo)
-              this.uid = res.body.userInfo.uid
-              this.userCoin = res.body.userInfo.userCoin
+              this.tableData.length = 0;
+              this.tableData.push(res.body.prizeInfo);
+              this.uid = res.body.userInfo.uid;
+              this.userCoin = res.body.userInfo.userCoin;
             })
             .finally(() => {
-              this.loading = false
-              this.closeScanModal()
-            })
+              this.loading = false;
+              this.closeScanModal();
+            });
         }
-      }
+      };
     },
     closeScanModal() {
-      document.onkeydown = null
-      this.showScanModal = false
+      document.onkeydown = null;
+      this.showScanModal = false;
     },
     search() {
       if (!this.code) {
-        this.$message.warning('请输入兑换码')
-        return
+        this.$message.warning('请输入兑换码');
+        return;
       }
-      this.loading = true
+      this.loading = true;
       this.$api
         .getExchangeInfo({ code: this.code })
         .then((res) => {
-          this.loading = false
-          this.tableData.length = 0
-          this.tableData.push(res.body.prizeInfo)
-          this.uid = res.body.userInfo.uid
-          this.userCoin = res.body.userInfo.userCoin
+          this.loading = false;
+          this.tableData.length = 0;
+          this.tableData.push(res.body.prizeInfo);
+          this.uid = res.body.userInfo.uid;
+          this.userCoin = res.body.userInfo.userCoin;
         })
         .finally(() => {
-          this.loading = false
-        })
+          this.loading = false;
+        });
     },
     exchange(item) {
       this.$api
         .userExchange({ code: this.code })
         .then((res) => {
-          this.$message.success('兑换成功')
-          this.uid = ''
-          this.code = ''
-          this.userCoin = 0
-          this.tableData = []
+          this.$message.success('兑换成功');
+          this.uid = '';
+          this.code = '';
+          this.userCoin = 0;
+          this.tableData = [];
         })
         .finally(() => {
-          this.loading = false
-        })
-    }
-  }
-}
+          this.loading = false;
+        });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -172,16 +182,13 @@ export default {
   }
 }
 .store-manage {
-  background-color: #f2f2f2;
   @include flex(space-between, flex-start, row);
   .gifts-list-container-box {
     // padding-right: 33px;
     box-sizing: border-box;
   }
   .gifts-list-container {
-    background-color: #ffffff;
-    width: 60vw;
-    height: 80vh;
+    width: 45vw;
     border-top: 3px solid #bfc7d2;
     .list-container {
       padding: 20px 0;
@@ -198,12 +205,12 @@ export default {
       font-size: 17px;
       padding: 20px 50px 0 50px;
       box-sizing: border-box;
+      background: white;
     }
   }
 
   .gift-exchange {
-    width: 26vw;
-    height: 80vh;
+    width: 35vw;
 
     .list-container {
       padding: 20px 0;
@@ -235,5 +242,13 @@ export default {
   width: 200px;
   display: flex;
   justify-content: center;
+}
+.tatal-content1 {
+  padding-bottom: 20px !important;
+  border-radius: 0 0 10px 10px;
+}
+.button-style1 {
+  width: 205px;
+  padding: 12px 0;
 }
 </style>

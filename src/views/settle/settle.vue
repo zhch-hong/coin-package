@@ -487,7 +487,7 @@ export default {
 }
 
 .list-box {
-  padding-top: 33px;
+  padding-top: 20px;
 
   .item-list {
     display: flex;
@@ -552,7 +552,7 @@ export default {
 /* 屏幕小于1400px */
 @media screen and (max-width: 1400px) {
   .btn-box-padding {
-    padding-top: 80px;
+    padding-top: 20px;
     display: flex;
     justify-content: center;
   }

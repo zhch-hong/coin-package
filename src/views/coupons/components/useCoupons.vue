@@ -1,10 +1,10 @@
 <template>
   <div class="user-consume-page" v-loading="loading">
-    <el-row :gutter="40">
+    <el-row>
       <el-col :span="12" class="coupons-padding-left">
         <div class="bc-title">读优惠券</div>
         <img src="@/assets/discount-icon.png" class="scan-card-image" />
-        <div class="button-style" @click="openScanUserInfoModal">点击扫描核销二维码</div>
+        <div class="button-style" style="width: 190px" @click="openScanUserInfoModal">点击扫描核销二维码</div>
         <div class="sweep-code-prompt">扫码提示：</div>
         <div class="sweep-code-prompt-tip">请把优惠券二维码放在扫码器上扫码读取</div>
       </el-col>
@@ -12,8 +12,16 @@
         <div class="bc-title">优惠券详情</div>
         <div class="details-lable">优惠券码：{{ couponsCode }}</div>
         <div class="details-lable">兑换币数：{{ coinNum }}</div>
-        <el-button type="primary" style="width: 128px; margin-top: 75px" @click="sureUseCoupons"> 确定</el-button>
-        <el-button type="info" style="width: 128px; margin-top: 75px" @click="resetCoupons"> 取消</el-button>
+        <el-button type="primary" style="width: 122px; margin-top: 75px; border-radius: 10px" @click="sureUseCoupons">
+          确定</el-button
+        >
+        <el-button
+          type="info"
+          style="width: 122px; margin-top: 75px; margin-left: 26px; border-radius: 10px"
+          @click="resetCoupons"
+        >
+          取消</el-button
+        >
       </el-col>
     </el-row>
     <el-dialog
@@ -40,9 +48,9 @@
 </template>
 
 <script>
-import moment from 'moment'
-import { isPositiveInt } from '../../../utils/validate'
-import { getToken } from '../../../utils/auth'
+import moment from 'moment';
+import { isPositiveInt } from '../../../utils/validate';
+import { getToken } from '../../../utils/auth';
 
 export default {
   name: 'useCoupons',
@@ -60,111 +68,111 @@ export default {
       currentPkg: {
         useTimeList: [],
         type: 2,
-        endTime: '---'
-      }
-    }
+        endTime: '---',
+      },
+    };
   },
   methods: {
     // 取消核销
     resetCoupons() {
-      this.couponsCode = ''
-      this.coinNum = 0
+      this.couponsCode = '';
+      this.coinNum = 0;
     },
     // 打开扫描用户信息二维码弹窗
     openScanUserInfoModal() {
-      this.uid = ''
-      this.couponsCode = ''
-      this.couponsUrl = ''
-      this.showScanUserInfoModal = true
+      this.uid = '';
+      this.couponsCode = '';
+      this.couponsUrl = '';
+      this.showScanUserInfoModal = true;
       document.onkeydown = (e) => {
         if (e.key !== 'Enter') {
           if (e.key !== 'Shift') {
-            this.couponsUrl += e.key
+            this.couponsUrl += e.key;
           }
         } else {
-          const urlList = this.couponsUrl.split('?')
-          let paramsList = []
+          const urlList = this.couponsUrl.split('?');
+          let paramsList = [];
           if (urlList[1]) {
-            paramsList = urlList[1].split('&')
+            paramsList = urlList[1].split('&');
           }
           paramsList.map((val) => {
-            const key = val.split('=')[0]
-            const value = val.split('=')[1]
+            const key = val.split('=')[0];
+            const value = val.split('=')[1];
             if (key === 'couponsCode') {
-              this.couponsCode = value
+              this.couponsCode = value;
             }
             if (key === 'uid') {
-              this.uid = Number(value)
+              this.uid = Number(value);
             }
-          })
-          this.closeScanUserInfoModal()
+          });
+          this.closeScanUserInfoModal();
           if (!this.couponsCode) {
-            this.$message.error('未读取到优惠券码')
-            return
+            this.$message.error('未读取到优惠券码');
+            return;
           }
           if (!this.uid) {
-            this.$message.error('未读取到用户uid')
-            return
+            this.$message.error('未读取到用户uid');
+            return;
           }
-          this.getUserCoupons()
+          this.getUserCoupons();
         }
-      }
+      };
     },
     // 关闭弹窗
     closeScanUserInfoModal() {
-      document.onkeydown = null
-      this.showScanUserInfoModal = false
+      document.onkeydown = null;
+      this.showScanUserInfoModal = false;
     },
     // 查询优惠券信息
     getUserCoupons() {
       if (!this.couponsCode) {
-        this.$message.error('未读取到优惠券码')
-        return
+        this.$message.error('未读取到优惠券码');
+        return;
       }
       if (!this.uid) {
-        this.$message.error('未读取到用户uid')
-        return
+        this.$message.error('未读取到用户uid');
+        return;
       }
-      this.loading = true
+      this.loading = true;
       this.$api
         .getCouponsInfo({ code: this.couponsCode, uid: this.uid })
         .then((res) => {
-          console.log(res)
-          this.coinNum = res.body.couponsInfo.coinNum + res.body.couponsInfo.awardCoinNum
+          console.log(res);
+          this.coinNum = res.body.couponsInfo.coinNum + res.body.couponsInfo.awardCoinNum;
         })
         .catch(() => {
-          this.couponsCode = ''
-          this.coinNum = 0
+          this.couponsCode = '';
+          this.coinNum = 0;
         })
         .finally((f) => {
-          this.loading = false
-        })
+          this.loading = false;
+        });
     },
     // 确认核销
     sureUseCoupons() {
       if (!this.couponsCode) {
-        this.$message.error('未读取到优惠券码')
-        return
+        this.$message.error('未读取到优惠券码');
+        return;
       }
       if (!this.uid) {
-        this.$message.error('未读取到用户uid')
-        return
+        this.$message.error('未读取到用户uid');
+        return;
       }
-      this.loading = true
+      this.loading = true;
       this.$api
         .useCoupons({ code: this.couponsCode, uid: this.uid })
         .then((res) => {
-          this.$message.success('核销成功')
+          this.$message.success('核销成功');
           if (this.coinNum > 0) {
-            this.$root.$children[0].sendCoin(this.coinNum)
+            this.$root.$children[0].sendCoin(this.coinNum);
           }
         })
         .finally((f) => {
-          this.loading = false
-        })
-    }
-  }
-}
+          this.loading = false;
+        });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -172,8 +180,7 @@ export default {
 
 .user-consume-page {
   padding: 20px;
-  min-height: 880px;
-
+  width: 100%;
   .pkg-box {
     @include flex(flex-start, center, row);
     flex-wrap: wrap;

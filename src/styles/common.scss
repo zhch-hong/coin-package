@@ -93,7 +93,7 @@ div:focus {
 // 扫描vip卡的图片
 .scan-card-image {
   width: 184px;
-  margin: 45px 0;
+  margin: 68px 0 45px 0;
 }
 
 // 按钮样式[点击扫描核销二维码]
@@ -134,6 +134,9 @@ div:focus {
 .custom-frame-cancel {
   color: #4194fe;
   border-color: #4194fe;
+  border-radius: 10px;
+  width: 90px;
+  padding: 10px 0;
 }
 
 .sub-page-flex {

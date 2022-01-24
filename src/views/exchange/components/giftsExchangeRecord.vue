@@ -1,11 +1,16 @@
 <template>
   <div class="store-manage">
-    <vcard padding flex style="background-color: #f0f2f5">
+    <vcard padding flex style="background: bottom">
       <el-form class="el-form-search" ref="searchForm" :inline="true" :model="searchForm" label-width="120px">
         <el-row justify="space-between" align="center">
           <el-col :span="8">
             <el-form-item label="用户ID:" prop="uid">
-              <el-input v-model.number="searchForm.uid" size="mini" style="width: 200px" placeholder="请输入"></el-input>
+              <el-input
+                v-model.number="searchForm.uid"
+                size="mini"
+                style="width: 200px"
+                placeholder="请输入"
+              ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -43,25 +48,20 @@
             </el-form-item>
           </el-col>
           <el-col :span="7" :offset="1" style="textalign: right">
-            <el-button type="primary" size="mini" style="width: 120px" @click="search">查 询</el-button>
-            <el-button size="mini" style="width: 120px" @click="reset">重 置</el-button>
+            <el-button type="primary" size="mini" style="border-radius: 10px; width: 120px" @click="search"
+              >查 询</el-button
+            >
+            <el-button size="mini" type="primary" plain style="border-radius: 10px; width: 120px" @click="reset"
+              >重 置</el-button
+            >
           </el-col>
         </el-row>
       </el-form>
     </vcard>
-    <vcard style="background-color: #f0f2f5; margin-bottom: 0px">
-      <el-row class="list-container" type="flex" align="middle">
-        <el-col :span="12">
-          <div class="el-col-title">兑换记录</div>
-        </el-col>
-      </el-row>
+    <div class="bc-title" style="margin: 20px 0 20px 35px">收支明细</div>
+    <vcard style="background: bottom">
       <div class="el-form-table">
-        <el-table
-          :data="tableData"
-          style="width: 100%"
-          :header-row-style="{ backgroundColor: '#fff', borderRadius: '10px' }"
-          :cell-style="{ backgroundColor: '#f0f2f5', borderBottom: '1px solid #e2e4e8' }"
-        >
+        <el-table :data="tableData" style="width: 100%">
           <el-table-column
             v-for="(col, index) in dataColumn"
             :key="index"
@@ -88,7 +88,9 @@
             ></el-pagination>
           </el-col>
           <el-col :span="3">
-            <el-button type="primary" size="mini" icon="el-icon-document" :loading="loading" @click="exportXlSX">导出数据 </el-button>
+            <el-button type="primary" size="mini" icon="el-icon-document" :loading="loading" @click="exportXlSX"
+              >导出数据
+            </el-button>
           </el-col>
         </el-row>
       </div>
@@ -97,8 +99,8 @@
 </template>
 
 <script>
-import { paramsFilter, clearObject } from '@/utils/tools'
-import exportTable from '@/utils/outputExcel'
+import { paramsFilter, clearObject } from '@/utils/tools';
+import exportTable from '@/utils/outputExcel';
 
 export default {
   name: 'store',
@@ -112,7 +114,7 @@ export default {
         phone: '',
         title: '',
         times: '',
-        nickName: ''
+        nickName: '',
       },
       pageNum: 1,
       showNum: 10,
@@ -125,87 +127,95 @@ export default {
         { prop: 'title', label: '参入活动主题', width: 120 },
         { prop: 'time', label: '活动时间', width: 180 },
         { prop: 'type', label: '中奖种类名称', width: 120 },
-        { prop: 'name', label: '奖项物品名称', width: 120 }
+        { prop: 'name', label: '奖项物品名称', width: 120 },
       ],
       tableData: [],
       // 新增
       showAddModal: false,
       // 编辑
-      showEditModal: false
-    }
+      showEditModal: false,
+    };
   },
   created() {
-    this.getInfo()
+    this.getInfo();
   },
   methods: {
     reset() {
-      this.$refs.searchForm.resetFields()
-      this.pageNum = 1
-      this.getInfo()
+      this.$refs.searchForm.resetFields();
+      this.pageNum = 1;
+      this.getInfo();
     },
     search() {
-      this.pageNum = 1
-      this.getInfo()
+      this.pageNum = 1;
+      this.getInfo();
     },
     // 翻页
     changePage(val) {
-      this.getInfo()
+      this.getInfo();
     },
     getInfo() {
       // 默认参数
-      const params = { ...this.searchForm }
+      const params = { ...this.searchForm };
       if (params.times && params.times.length) {
-        params.startTime = params.times[0]
-        params.endTime = params.times[1]
+        params.startTime = params.times[0];
+        params.endTime = params.times[1];
       } else {
-        params.startTime = ''
-        params.endTime = ''
+        params.startTime = '';
+        params.endTime = '';
       }
-      delete params.times
-      params.pageNum = this.pageNum
-      params.showNum = this.showNum
-      this.loading = true
+      delete params.times;
+      params.pageNum = this.pageNum;
+      params.showNum = this.showNum;
+      this.loading = true;
       this.$api
         .getExchangeDetail(params)
         .then((res) => {
-          this.tableData = res.body.items
-          this.count = res.body.count
+          this.tableData = res.body.items;
+          this.count = res.body.count;
         })
         .finally((result) => {
-          this.loading = false
-        })
+          this.loading = false;
+        });
     },
     // 导出表格
     exportXlSX() {
-      this.loading = true
-      const params = { ...this.searchForm }
+      this.loading = true;
+      const params = { ...this.searchForm };
       if (params.times && params.times.length) {
-        params.startTime = params.times[0]
-        params.endTime = params.times[1]
+        params.startTime = params.times[0];
+        params.endTime = params.times[1];
       } else {
-        params.startTime = ''
-        params.endTime = ''
+        params.startTime = '';
+        params.endTime = '';
       }
-      delete params.times
-      params.pageNum = 1
-      params.showNum = this.count
+      delete params.times;
+      params.pageNum = 1;
+      params.showNum = this.count;
       this.$api.getExchangeDetail(params).then(
         (res) => {
           const data = res.body.items.map((val) => {
-            return [val.uid, val.nickName, val.phone, val.title, val.time, val.type, val.name]
-          })
-          const tHeader = ['用户ID', '微信昵称', '电话号码', '参与活动主题', '活动时间', '中奖种类名称', '奖项物品名称']
+            return [val.uid, val.nickName, val.phone, val.title, val.time, val.type, val.name];
+          });
+          const tHeader = [
+            '用户ID',
+            '微信昵称',
+            '电话号码',
+            '参与活动主题',
+            '活动时间',
+            '中奖种类名称',
+            '奖项物品名称',
+          ];
           exportTable(tHeader, data, '兑换记录').then(() => {
-            this.loading = false
-          })
+            this.loading = false;
+          });
         },
         (err) => {
-          this.loading = false
+          this.loading = false;
         }
-      )
-    }
-  }
-}
+      );
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -241,5 +251,14 @@ export default {
 .el-form-table {
   padding: 0 14px;
   box-sizing: border-box;
+}
+/deep/ .el-table__header-wrapper {
+  border-radius: 10px;
+  background: white;
+}
+/deep/ .el-table {
+  .thead {
+    color: red;
+  }
 }
 </style>

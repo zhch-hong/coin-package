@@ -14,7 +14,6 @@
       style="width: 100%"
       @selection-change="handleOnSelectionChange"
       @sort-change="handleOnSortChange"
-      :header-cell-style="{ backgroundColor: '#ffffff' }"
       :span-method="config.spanMethod"
       :show-summary="config.showSummary"
       :summary-method="config.getSum"
@@ -175,13 +174,22 @@ export default {
 
     .count-text {
       font-size: 14px;
-      color: #606266;
+      color: #000;
       font-weight: bold;
     }
   }
 
   .bottom-contain {
     padding: 16px 0;
+  }
+}
+/deep/ .el-table__header-wrapper {
+  border-radius: 10px;
+  background: white;
+}
+/deep/ .el-table {
+  .thead {
+    color: red;
   }
 }
 </style>
