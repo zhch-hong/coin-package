@@ -94,7 +94,13 @@
             >
               点击扫码查询会员信息
             </div>
-            <el-input v-show="!isScanPay" size="mini" style="width: 200px" v-model="uid" placeholder="手动输入ID">
+            <el-input
+              v-show="!isScanPay"
+              size="mini"
+              style="width: 200px; border: 1px solid rgb(191, 191, 191); border-radius: 10px"
+              v-model="uid"
+              placeholder="手动输入ID"
+            >
               <el-button slot="append" @click="searchUserInfo">查询</el-button>
             </el-input>
             <div v-if="getUserResult">
@@ -163,7 +169,14 @@
           <div style="display: flex; align-items: center; margin: 30px 0">
             <span>购买数量：</span>
 
-            <el-input-number v-model="count" size="large" :precision="0" :step="1" :min="1"></el-input-number>
+            <el-input-number
+              style="border: 1px solid rgb(191, 191, 191); border-radius: 10px"
+              v-model="count"
+              size="large"
+              :precision="0"
+              :step="1"
+              :min="1"
+            ></el-input-number>
           </div>
 
           <div
