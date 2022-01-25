@@ -1,5 +1,4 @@
 import { remote } from 'electron';
-import router from '@/router';
 
 const { screen, BrowserWindow } = remote;
 
@@ -7,11 +6,15 @@ let window = null;
 
 export default async () => {
   if (window !== null) return;
-  // const key = localStorage.getItem('moduleKey');
-  // router.push({ path: '/ad-view', query: { key } });
+
   const displays = screen.getAllDisplays();
-  console.log(displays);
-  const extend = displays.find(({ bounds }) => bounds.x === 0);
+
+  // 排序取最后一个屏
+  displays.sort((current, prev) => {
+    return current.bounds.x - prev.bounds.x;
+  });
+
+  const extend = displays[displays.length - 1];
   const config = {
     x: extend.bounds.x,
     y: extend.bounds.y,
