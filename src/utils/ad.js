@@ -8,16 +8,18 @@ export default async () => {
   if (window !== null) return;
 
   const displays = screen.getAllDisplays();
+  console.log(displays);
 
   // 单屏不显示
   if (displays.length < 2) return;
 
-  // 排序取最后一个屏
+  // 排序取最后一个屏，顺序会因为系统设置或显卡插口而改变，所以这里使用绝对值进行排序
   displays.sort((current, prev) => {
-    return current.bounds.x - prev.bounds.x;
+    return Math.abs(current.bounds.x) - Math.abs(prev.bounds.x);
   });
 
   const extend = displays[displays.length - 1];
+  console.log('广告屏', extend);
   const config = {
     x: extend.bounds.x,
     y: extend.bounds.y,
