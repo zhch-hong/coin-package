@@ -16,7 +16,7 @@ export default {
   mounted() {
     setTimeout(() => {
       this.$emit('complete');
-    }, 3000);
+    }, 10000);
   },
 };
 </script>
