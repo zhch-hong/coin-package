@@ -653,6 +653,7 @@ $light_gray: #eee;
   }
 
   .scan-login-box {
+    padding-left: 104px;
     @include flex(center, center, row);
   }
 }

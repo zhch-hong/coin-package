@@ -105,7 +105,10 @@
               <div class="item_bottom_fonst">{{ i.offValue | MIXIN_Points2Yuan }}元</div>
               <div class="item_bottom_fonst1">{{ i.coinValue }}积分</div>
             </div>
-            <div><img src="@/assets/package-sale/cart-icon.png" style="width: 26px" /></div>
+            <div>
+              <div class="item_bottom_fonst2">库存</div>
+              <div class="item_bottom_fonst2">{{ i.inventory }}</div>
+            </div>
           </div>
           <!-- <div class="item-name flex-center">{{ i.prizeName }}</div>
           <div style="font-size: 18px; color: #848484; margin-top: 18px; padding-left: 24px">
@@ -757,7 +760,7 @@ export default {
 
     padding: 20px;
 
-    height: calc(100vh - 115px);
+    // height: calc(100vh - 115px);
 
     overflow-y: auto;
 
@@ -770,7 +773,7 @@ export default {
     .gifts-list {
       display: grid;
       grid-gap: 20px;
-      height: 43vh;
+      height: 42vh;
       /* 屏幕小于1400px */
       @media screen and (max-width: 1400px) {
         grid-template-columns: repeat(auto-fill, 190px);
@@ -812,7 +815,7 @@ export default {
           }
           padding: 6px;
           overflow: hidden;
-          background-color: #60a5ae;
+          background-color: #8f91f2;
           word-break: break-all;
           color: #ffffff;
           font-weight: bold;
@@ -858,10 +861,10 @@ export default {
 }
 .item_bottom_fonst {
   font-size: 18px;
-  color: #848484;
+  color: #3f6af5;
 }
 .item_bottom_fonst1 {
-  color: #a3a3a3;
+  color: #3f6af5;
   font-size: 14px;
   line-height: 23px;
 }
@@ -869,5 +872,10 @@ export default {
   align-content: center;
   padding: 12px 12px 0 12px;
   box-sizing: border-box;
+}
+.item_bottom_fonst2 {
+  color: #848484;
+  font-size: 14px;
+  line-height: 23px;
 }
 </style>

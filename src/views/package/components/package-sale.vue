@@ -130,7 +130,7 @@
             <h3 style="color: #7a7a7a">单价：{{ currentPkg.price | MIXIN_Points2Yuan }}元</h3>
 
             <div v-show="packageList.length > 0" class="package-list">
-              <el-carousel
+              <!-- <el-carousel
                 trigger="click"
                 height="100px"
                 indicator-position="none"
@@ -147,7 +147,16 @@
                     </el-row>
                   </div>
                 </el-carousel-item>
-              </el-carousel>
+              </el-carousel> -->
+              <el-select v-model="value1" placeholder="请选择" style="width: 200px">
+                <el-option
+                  v-for="(item, index) in packageList"
+                  :key="index"
+                  :label="item.giftName"
+                  :value="item.giftName"
+                >
+                </el-option>
+              </el-select>
             </div>
           </div>
 
@@ -306,6 +315,7 @@ export default {
       isManual: false,
 
       isScanPay: false, // 仅扫码购买
+      value1: '', // 组合套餐仅显示用
     };
   },
 
@@ -318,21 +328,29 @@ export default {
       deep: true,
       immediate: true,
       handler(array) {
+        console.log(array, '0000000000000');
+        // if (array instanceof Array) {
+        //   const packageList = [];
+        //   const split = (value) => {
+        //     if (value.length > 4) {
+        //       const s = value.splice(0, 4);
+        //       packageList.push(s);
+        //       split(value);
+        //     } else {
+        //       packageList.push(value);
+        //     }
+        //   };
+        //   split(array);
+        //   this.packageList = packageList;
+        // } else {
+        //   this.packageList = [];
+        // }
         if (array instanceof Array) {
-          const packageList = [];
-          const split = (value) => {
-            if (value.length > 4) {
-              const s = value.splice(0, 4);
-              packageList.push(s);
-              split(value);
-            } else {
-              packageList.push(value);
-            }
-          };
-          split(array);
-          this.packageList = packageList;
+          this.packageList = array;
+          this.value1 = array[0].giftName;
         } else {
           this.packageList = [];
+          this.value1 = '';
         }
       },
     },
@@ -588,12 +606,11 @@ export default {
     },
 
     searchUserInfo() {
+      // console.log(this.packageList, 'packageList');
+      // return false;
       this.loading = true;
-
       this.$api
-
         .getUserInfo({ uid: this.uid })
-
         .then((res) => {
           this.uid = res.body.uid;
           this.userStarCoin = res.body.starCoinNum;
@@ -800,9 +817,11 @@ export default {
 }
 
 .package-list {
-  height: 100px;
   color: #1890ff;
-
+  /deep/ .el-input__inner {
+    border: 1px solid #ffffff;
+    border-bottom: 1px solid #4194fe;
+  }
   .carousel-package {
     height: 100px;
     display: flex;

@@ -1,13 +1,15 @@
 <template>
   <el-container class="confirm-order" style="height: 100%">
     <el-header class="flex-start" style="background-color: #ffffff">
-      <el-button type="danger" @click="$router.back()">取消购买</el-button>
+      <el-button type="danger" @click="$router.back()" style="border-radius: 10px; width: 100">取消购买</el-button>
     </el-header>
-    <el-main style="background-color: #f0f2f5; flex: 1; padding: 24px; display: flex; flex-direction: column">
+    <el-main style="flex: 1; padding: 24px; display: flex; flex-direction: column">
       <div class="flex-between" style="align-items: flex-start; flex: 1">
         <div class="order-detail flex-column" style="flex-basis: 48%; height: 100%">
           <div class="bc-title">订单详情</div>
-          <div style="flex: 1; width: 100%; height: 100%; margin-top: 24px; background-color: #ffffff; border-radius: 10px">
+          <div
+            style="flex: 1; width: 100%; height: 100%; margin-top: 24px; background-color: #ffffff; border-radius: 10px"
+          >
             <table class="package-list" style="width: 100%; text-align: center" cellspacing="0" cellpadding="0">
               <thead>
                 <tr>
@@ -40,7 +42,16 @@
         </div>
         <div class="coupons-detail flex-column" style="flex-basis: 48%; height: 100%">
           <div class="bc-title">优惠券详情</div>
-          <div style="border-top: 1px solid #a0a0a0; height: 0; margin: 24px 0; width: 100%; flex: 1 auto; overflow: auto">
+          <div
+            style="
+              border-top: 1px solid #a0a0a0;
+              max-height: 305px;
+              margin: 24px 0;
+              width: 100%;
+              flex: 1 auto;
+              overflow: auto;
+            "
+          >
             <div
               class="coupons-item flex-start"
               v-for="i in couponsList"
@@ -62,7 +73,7 @@
                     i.type === 3
                       ? require('../../../assets/package-confirm-order/coupons-bg.png')
                       : require('../../../assets/package-confirm-order/coupons-bg-2.png')
-                  })`
+                  })`,
                 }"
               >
                 <div v-if="i.type === 3">
@@ -102,7 +113,9 @@
                     alt="select"
                   />
                 </div>
-                <div v-if="i.type === 4" style="margin-top: 12px">最大折扣金额：{{ i.cutRMB | MIXIN_Points2Yuan }}元</div>
+                <div v-if="i.type === 4" style="margin-top: 12px">
+                  最大折扣金额：{{ i.cutRMB | MIXIN_Points2Yuan }}元
+                </div>
                 <div style="margin-top: 12px">{{ i.endTime ? `有效期至${i.endTime}` : '不过期' }}</div>
               </div>
             </div>
@@ -118,7 +131,7 @@
               box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.08);
             "
           >
-            已优惠￥{{ totalDiscountMoney | MIXIN_Points2Yuan }}
+            已优惠<span style="color: #f56c6c">￥{{ totalDiscountMoney | MIXIN_Points2Yuan }}</span>
           </div>
         </div>
       </div>
@@ -126,7 +139,9 @@
         <span style="font-size: 20px; font-weight: bold; color: #343434">合计：</span>
         <span style="font-size: 20px; font-weight: bold; color: #ff3d2a">{{ totalPayPrice | MIXIN_Points2Yuan }}</span>
         <span style="font-size: 16px">（{{ totalPayIntegral }}积分）</span>
-        <el-button type="primary" style="width: 122px; margin-left: 42px" :loading="loading" @click="handlePayment"> 去支付 </el-button>
+        <el-button type="primary" style="width: 122px; margin-left: 42px" :loading="loading" @click="handlePayment">
+          去支付
+        </el-button>
       </div>
     </el-main>
   </el-container>
@@ -143,46 +158,46 @@ export default {
       memberPrice: 0,
       couponsList: [],
       selectedCoupon: {},
-      discountMoney: 0
-    }
+      discountMoney: 0,
+    };
   },
   computed: {
     totalDiscountMoney() {
       if (this.selectedCoupon.id) {
-        return this.discountMoney > this.memberPrice ? this.memberPrice : this.discountMoney
+        return this.discountMoney > this.memberPrice ? this.memberPrice : this.discountMoney;
       }
-      return 0
+      return 0;
     },
     totalPayPrice() {
       if (this.selectedCoupon.id) {
-        const result = this.$calc.Subtr(this.memberPrice, this.calcDiscountMoney())
-        return result < 0 ? 0 : result
+        const result = this.$calc.Subtr(this.memberPrice, this.calcDiscountMoney());
+        return result < 0 ? 0 : result;
       }
-      return this.memberPrice
+      return this.memberPrice;
     },
     totalPayIntegral() {
       const memberIntegral = this.MIXIN_CeilIntegral(
         this.$calc.accMul(this.MIXIN_Points2StarCoin(this.orderInfo.totalPrice), this.orderInfo.buyDiscount)
-      )
+      );
       if (this.selectedCoupon.id) {
-        const result = this.$calc.Subtr(memberIntegral, this.$calc.accMul(this.discountMoney, 0.33))
-        return result < 0 ? 0 : result
+        const result = this.$calc.Subtr(memberIntegral, this.$calc.accMul(this.discountMoney, 0.33));
+        return result < 0 ? 0 : result;
       }
-      return memberIntegral
-    }
+      return memberIntegral;
+    },
   },
   methods: {
     formatRate(val) {
-      return this.$calc.accDiv(val, 10)
+      return this.$calc.accDiv(val, 10);
     },
     handlePayment() {
-      this.loading = true
+      this.loading = true;
       const params = {
         prizeList: this.prizeList.map((item) => ({ prizeId: item.prizeId, count: item.count })),
-        uid: Number(this.orderInfo.uid)
-      }
+        uid: Number(this.orderInfo.uid),
+      };
       if (this.selectedCoupon.id) {
-        params.useCouponsId = this.selectedCoupon.id
+        params.useCouponsId = this.selectedCoupon.id;
       }
       this.$api
         .userBuyPrize(params)
@@ -194,19 +209,19 @@ export default {
               prizeList: this.prizeList,
               buyDiscount: this.buyDiscount,
               useCoupons: !!this.selectedCoupon.id,
-              discountMoney: this.totalDiscountMoney
-            }
-          })
+              discountMoney: this.totalDiscountMoney,
+            },
+          });
         })
         .finally(() => {
-          this.loading = false
-        })
+          this.loading = false;
+        });
     },
     handleSelectCoupon(item) {
       if (item.id === this.selectedCoupon.id) {
-        this.selectedCoupon = {}
+        this.selectedCoupon = {};
       } else {
-        this.selectedCoupon = item
+        this.selectedCoupon = item;
       }
     },
     /**
@@ -216,75 +231,81 @@ export default {
      * 比如：一张优惠券只支持公仔和零食，那么香烟就不会参与到优惠计算当中
      */
     calcDiscountMoney(coupon = this.selectedCoupon) {
-      let canDiscountPrice = 0 // 可以被打折的总金额
-      let discountMoney = 0 // 优惠的金额
+      let canDiscountPrice = 0; // 可以被打折的总金额
+      let discountMoney = 0; // 优惠的金额
       this.prizeList.forEach((prize) => {
         if (coupon.prizeTypeList.includes(prize.prizeType)) {
-          canDiscountPrice += this.$calc.accMul(this.$calc.accMul(prize.offValue, prize.count), this.orderInfo.buyDiscount)
+          canDiscountPrice += this.$calc.accMul(
+            this.$calc.accMul(prize.offValue, prize.count),
+            this.orderInfo.buyDiscount
+          );
         }
-      })
-      canDiscountPrice = Math.ceil(canDiscountPrice)
+      });
+      canDiscountPrice = Math.ceil(canDiscountPrice);
       // 抵用券
       if (coupon.type === 3) {
-        discountMoney = canDiscountPrice > coupon.cutRMB ? coupon.cutRMB : canDiscountPrice
+        discountMoney = canDiscountPrice > coupon.cutRMB ? coupon.cutRMB : canDiscountPrice;
       }
       // 折扣券
       if (coupon.type === 4) {
-        discountMoney = this.$calc.accMul(canDiscountPrice, this.$calc.accDiv(this.$calc.Subtr(100, coupon.cutRate), 100))
+        discountMoney = this.$calc.accMul(
+          canDiscountPrice,
+          this.$calc.accDiv(this.$calc.Subtr(100, coupon.cutRate), 100)
+        );
         // 如果参与打折的这部分金额当中，折前金额 - 折后金额 > 这张优惠券能打折的最大金额，则直接取最大金额
         if (discountMoney > coupon.cutRMB) {
-          discountMoney = coupon.cutRMB
+          discountMoney = coupon.cutRMB;
         }
       }
-      this.discountMoney = Math.floor(discountMoney)
-      return this.discountMoney
+      this.discountMoney = Math.floor(discountMoney);
+      return this.discountMoney;
     },
     setDefaultCoupon() {
       // 找到优惠力度最大的的券
-      let defaultCoupon = {}
-      let discountMoney = null // 初始值，代表还没有参与计算
+      let defaultCoupon = {};
+      let discountMoney = null; // 初始值，代表还没有参与计算
       this.couponsList.forEach((coupon) => {
         if (discountMoney === null) {
-          defaultCoupon = coupon
-          discountMoney = this.calcDiscountMoney(coupon)
+          defaultCoupon = coupon;
+          discountMoney = this.calcDiscountMoney(coupon);
         } else {
-          const currentCouponDiscountMoney = this.calcDiscountMoney(coupon)
+          const currentCouponDiscountMoney = this.calcDiscountMoney(coupon);
           if (currentCouponDiscountMoney > discountMoney) {
-            defaultCoupon = coupon
-            discountMoney = currentCouponDiscountMoney
+            defaultCoupon = coupon;
+            discountMoney = currentCouponDiscountMoney;
           }
         }
-      })
-      return defaultCoupon
+      });
+      return defaultCoupon;
     },
     getCanUseCoupons() {
-      this.loading = true
+      this.loading = true;
       const params = {
         type: 2, // 1 套餐 |  2 物品
         uid: this.orderInfo.uid || '',
         buyPrizeTypeList: JSON.stringify([...new Set(this.prizeList.map((item) => item.prizeType))]),
-        price: this.orderInfo.totalPrice
-      }
+        price: this.orderInfo.totalPrice,
+      };
       this.$api
         .getCanUseCoupons(params)
         .then((res) => {
           if (res.body.items.length) {
-            this.couponsList = res.body.items
-            this.handleSelectCoupon(this.setDefaultCoupon())
+            this.couponsList = res.body.items;
+            this.handleSelectCoupon(this.setDefaultCoupon());
           }
         })
         .finally(() => {
-          this.loading = false
-        })
-    }
+          this.loading = false;
+        });
+    },
   },
   created() {
-    this.orderInfo = this.$route.params
-    this.prizeList = this.orderInfo.prizeList
-    this.memberPrice = Math.ceil(this.$calc.accMul(this.orderInfo.totalPrice, this.orderInfo.buyDiscount))
-    this.getCanUseCoupons()
-  }
-}
+    this.orderInfo = this.$route.params;
+    this.prizeList = this.orderInfo.prizeList;
+    this.memberPrice = Math.ceil(this.$calc.accMul(this.orderInfo.totalPrice, this.orderInfo.buyDiscount));
+    this.getCanUseCoupons();
+  },
+};
 </script>
 
 <style lang="scss" scoped>

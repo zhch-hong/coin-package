@@ -48,10 +48,8 @@
               >
               <el-button
                 size="small"
-                plain
-                type="primary"
                 @click="handleReset"
-                style="border-radius: 10px; width: 120px"
+                style="border-radius: 10px; width: 120px; border-color: #4194fe; color: #4194fe"
                 >重置</el-button
               >
             </el-form-item>
