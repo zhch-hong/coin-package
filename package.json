@@ -3,7 +3,6 @@
   "version": "3.10.2",
   "description": "GFAdmin Cashier",
   "author": "TANGIMING",
-  "main": "background.js",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -15,6 +14,7 @@
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
   },
+  "main": "background.js",
   "dependencies": {
     "adm-zip": "^0.4.16",
     "axios": "^0.19.2",

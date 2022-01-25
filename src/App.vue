@@ -118,7 +118,7 @@ export default {
       sendCoinBack: null,
       showSendCoinsModal: false,
       isSendCoins: false,
-      isDev: process.env.NODE_ENV === 'development',
+      isDev: process.env.VUE_APP_ENV === 'development',
       showSelectPortModal: false,
       portsList: [],
       orderId: '',

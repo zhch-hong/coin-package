@@ -36,10 +36,11 @@ Vue.use(ElementUI);
 Vue.mixin(mixin);
 Number.prototype.toFixed = toFixed;
 Vue.prototype.$calc = calc;
-Vue.prototype.$isDev = process.env.NODE_ENV === 'development';
+Vue.prototype.$isDev = process.env.VUE_APP_ENV === 'development';
 Vue.prototype.$api = api;
 Vue.prototype.$db = db;
 Vue.config.productionTip = false;
+console.log('当前环境:', process.env.VUE_APP_ENV);
 
 new Vue({
   el: '#app',
