@@ -54,7 +54,11 @@ export default {
       }
     },
 
-    onCarouselChange(index) {
+    async onCarouselChange(index) {
+      // 防止组件复用，连续相同类型的资源只播放第一个，后面的相同类型的资源被跳过
+      this.currentComponent = null;
+      await this.$nextTick();
+
       let url = this.carouselData[index];
       url = url.toLowerCase();
       if (url.endsWith('.jpg') || url.endsWith('.jpeg') || url.endsWith('.png')) {

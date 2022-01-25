@@ -39,6 +39,10 @@ export default async () => {
   window = new BrowserWindow(config);
   const key = localStorage.getItem('moduleKey');
 
+  if (process.env.VUE_APP_ENV !== 'production') {
+    window.webContents.openDevTools();
+  }
+
   if (process.env.VUE_APP_ENV === 'development') {
     window.loadURL(`http://127.0.0.1:9310/GFAdmin_cashier/#/ad-view?key=${key}`);
   } else {
