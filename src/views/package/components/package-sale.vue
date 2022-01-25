@@ -1,24 +1,24 @@
 <template>
   <div class="package-sale">
     <bc-type-menu v-model="currentType" :type-list="giftTypeList" @change="changeType" />
-
-    <div class="gifts-list" v-loading="loading">
-      <div class="item" v-for="(item, i) in giftList" :key="i" @click="handItem(item)">
-        <div class="item-name flex-center" :style="styleFormat(item)">
-          {{ item.giftName }}
-        </div>
-
-        <div class="flex-between">
-          <div>
-            <div class="item_bottom_fonst">{{ item.price | MIXIN_Points2Yuan }}元</div>
-            <div class="item_bottom_fonst1">({{ item.price | MIXIN_Points2StarCoin }}积分)</div>
+    <div style="padding: 20px 0">
+      <div class="gifts-list" v-loading="loading">
+        <div class="item" v-for="(item, i) in giftList" :key="i" @click="handItem(item)">
+          <div class="item-name flex-center" :style="styleFormat(item)">
+            {{ item.giftName }}
           </div>
-          <div>
-            <img src="../../../assets/package-sale/cart-icon.png" style="width: 26px" />
-          </div>
-        </div>
 
-        <!-- <div class="flex-between" style="margin: 16px 0 0 24px">
+          <div class="flex-between">
+            <div>
+              <div class="item_bottom_fonst">{{ item.price | MIXIN_Points2Yuan }}元</div>
+              <div class="item_bottom_fonst1">({{ item.price | MIXIN_Points2StarCoin }}积分)</div>
+            </div>
+            <div>
+              <img src="../../../assets/package-sale/cart-icon.png" style="width: 26px" />
+            </div>
+          </div>
+
+          <!-- <div class="flex-between" style="margin: 16px 0 0 24px">
           <el-button
             v-if="item.onlyScanBuy"
             type="primary"
@@ -42,6 +42,7 @@
 
           <img src="../../../assets/package-sale/cart-icon.png" style="width: 26px" />
         </div> -->
+        </div>
       </div>
     </div>
 
@@ -94,13 +95,7 @@
             >
               点击扫码查询会员信息
             </div>
-            <el-input
-              v-show="!isScanPay"
-              size="mini"
-              style="width: 200px; border: 1px solid rgb(191, 191, 191); border-radius: 10px"
-              v-model="uid"
-              placeholder="手动输入ID"
-            >
+            <el-input v-show="!isScanPay" size="mini" style="width: 200px" v-model="uid" placeholder="手动输入ID">
               <el-button slot="append" @click="searchUserInfo">查询</el-button>
             </el-input>
             <div v-if="getUserResult">
@@ -169,14 +164,7 @@
           <div style="display: flex; align-items: center; margin: 30px 0">
             <span>购买数量：</span>
 
-            <el-input-number
-              style="border: 1px solid rgb(191, 191, 191); border-radius: 10px"
-              v-model="count"
-              size="large"
-              :precision="0"
-              :step="1"
-              :min="1"
-            ></el-input-number>
+            <el-input-number v-model="count" size="large" :precision="0" :step="1" :min="1"></el-input-number>
           </div>
 
           <div
@@ -831,10 +819,6 @@ export default {
 
 .package-list {
   color: #1890ff;
-  /deep/ .el-input__inner {
-    border: 1px solid #ffffff;
-    border-bottom: 1px solid #4194fe;
-  }
   .carousel-package {
     height: 100px;
     display: flex;
@@ -858,7 +842,6 @@ export default {
   .gifts-list {
     flex: 1 auto;
     height: 0;
-    padding: 20px 0;
     display: grid;
     grid-row-gap: 20px;
     grid-column-gap: 20px;

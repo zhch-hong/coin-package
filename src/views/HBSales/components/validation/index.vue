@@ -1,7 +1,7 @@
 <template>
   <div class="validation">
     <el-row>
-      <el-col class="validation-el-col" :span="8">
+      <el-col class="validation-el-col" :span="9">
         <div class="flex-center"><img src="@/assets/hb-exclusive.png" class="hb-exclusive" /></div>
         <div class="flex-center">
           <div class="hb-button-style" @click="handleOpenScanModal">点击扫描嗨呗核销二维码</div>
@@ -52,7 +52,7 @@
           </div>
         </template>
       </el-col>
-      <el-col :span="16" style="padding: 24px 24px 0 63px; box-sizing: border-box">
+      <el-col :span="15" style="padding: 24px 24px 0 63px; box-sizing: border-box">
         <template v-if="showPackageDetail">
           <div class="bc-title">核销码绑定套餐包括：</div>
           <div class="flex-start writing-style" v-if="showCoinTypeRadio">
@@ -63,8 +63,8 @@
               <el-radio :label="2">电子币</el-radio>
             </el-radio-group>
           </div>
-          <div class="flex-start" v-for="(item, index) in pkgDetail" :key="index">
-            <div class="flex-start">
+          <div class="flex-start flex-warp1" v-for="(item, index) in pkgDetail" :key="index">
+            <div class="flex-start flex-warp1">
               <h2>{{ item.name }}</h2>
               <div>（{{ useCount }}份）：</div>
             </div>
@@ -441,5 +441,8 @@ export default {
   line-height: 42px;
   font-size: 16px;
   color: white;
+}
+.flex-warp1 {
+  flex-wrap: wrap;
 }
 </style>

@@ -1,14 +1,18 @@
 <template>
   <div>
     <el-dialog
-      title="清币"
       :visible.sync="showModal"
       :show-close="false"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
       @opened="onOpened"
+      custom-class="success-dialog"
       :width="getdefaultScreenSize > 1400 ? '50%' : '60%'"
     >
+      <div class="el-dialog-title-box">
+        <div><img class="login_logo" src="@/assets/login_logo.png" alt="" /></div>
+        <!-- <div><img class="close-windows-icon" src="@/assets/close-windows-icon.png" @click="closeModal" /></div> -->
+      </div>
       <div class="el-dialog-top-box">
         <img class="gold-icon" src="@/assets/gold-icon.png" alt="" />
         <div>清 币</div>
@@ -164,5 +168,32 @@ export default {
   width: 37px;
   height: 36px;
   margin-right: 18px;
+}
+.el-dialog-title-box {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 18px 10px 32px;
+  box-sizing: border-box;
+  background: #f5f7fa;
+  border-bottom: 1px solid #cccccc;
+  .close-windows-icon {
+    width: 17px;
+    height: 17px;
+    margin-top: 7px;
+  }
+  .login_logo {
+    width: 111px;
+    height: 32px;
+  }
+}
+/deep/ .success-dialog {
+  /deep/ .el-dialog__header {
+    padding: 0;
+  }
+
+  .el-dialog__body {
+    padding: 0;
+  }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="user-consume-page sub-page-flex" v-loading="loading">
     <el-row style="height: 100%">
-      <el-col :span="12" style="padding: 40px 60px 0 60px">
+      <el-col :span="12">
         <div class="bc-title">会员信息</div>
         <div class="flex-start">
           <div @click="openScanUserInfoModal(1)">
@@ -21,7 +21,7 @@
               点击扫码查询会员信息
             </div>
           </div>
-          <div @click="openScanUserInfoModal(2)" style="margin-left: 120px">
+          <div @click="openScanUserInfoModal(2)" style="margin-left: 100px">
             <img src="@/assets/discount-icon.png" alt="" style="width: 184px; margin: 60px 0 60px 0" />
             <div
               style="
@@ -78,7 +78,9 @@
               <el-input v-model="useTimes" type="number" placeholder="请输入消费次数" style="width: 256px"></el-input>
             </h4>
             <div style="font-size: 18px; color: #545050">
-              已消费:<span style="color: #f72727; font-size: 24px; font-weight: bold">{{ currentPkg.checkNum || 0 }}次</span>
+              已消费:<span style="color: #f72727; font-size: 24px; font-weight: bold"
+                >{{ currentPkg.checkNum || 0 }}次</span
+              >
             </div>
             <div style="font-size: 18px; color: #545050">
               剩余可消费次数/时间:<span style="color: #f72727; font-size: 24px; font-weight: bold">{{
@@ -86,7 +88,11 @@
               }}</span>
             </div>
           </div>
-          <el-button type="primary" style="width: 128px; background-color: #4194fe" :disabled="!currentPkg.id" @click="handlePlaceOrder"
+          <el-button
+            type="primary"
+            style="width: 128px; background-color: #4194fe"
+            :disabled="!currentPkg.id"
+            @click="handlePlaceOrder"
             >确认
           </el-button>
         </div>
@@ -100,11 +106,23 @@
       :close-on-click-modal="false"
       width="30%"
     >
-      <div style="text-align: center; padding: 18px 0; font-size: 24px; font-weight: bold; border-bottom: 1px solid #cccccc">提示</div>
+      <div
+        style="
+          text-align: center;
+          padding: 18px 0;
+          font-size: 24px;
+          font-weight: bold;
+          border-bottom: 1px solid #cccccc;
+        "
+      >
+        提示
+      </div>
       <div class="flex-center" style="margin: 40px 0">
         <img src="@/assets/scan-icon.png" style="width: 54px; margin-right: 24px" />
         <div>
-          <div style="font-size: 23px; font-weight: bold; color: #616161">请扫描{{ scanType === 1 ? '用户' : '核销' }}二维码......</div>
+          <div style="font-size: 23px; font-weight: bold; color: #616161">
+            请扫描{{ scanType === 1 ? '用户' : '核销' }}二维码......
+          </div>
           <div style="font-size: 23px; font-weight: bold; color: #616161">扫描中请不要触碰键盘按键</div>
         </div>
       </div>
@@ -116,10 +134,10 @@
 </template>
 
 <script>
-import moment from 'moment'
-import { parseQuery } from '@/utils/tools'
-import { isPositiveInt } from '../../../utils/validate'
-import { getToken } from '../../../utils/auth'
+import moment from 'moment';
+import { parseQuery } from '@/utils/tools';
+import { isPositiveInt } from '../../../utils/validate';
+import { getToken } from '../../../utils/auth';
 
 export default {
   name: 'userConsume',
@@ -136,171 +154,171 @@ export default {
       currentPkg: {
         useTimeList: [],
         type: 2,
-        endTime: '---'
+        endTime: '---',
       },
       ticketHeight: 0,
       scanType: null,
-      validateCodeInfo: {}
-    }
+      validateCodeInfo: {},
+    };
   },
   methods: {
     getSelectStyle(item) {
       if (item.id === this.currentPkg.id) {
-        return { backgroundColor: '#ffffff', color: '#4194FE' }
+        return { backgroundColor: '#ffffff', color: '#4194FE' };
       }
     },
     getHeight() {
-      this.ticketHeight += 25
-      return this.ticketHeight
+      this.ticketHeight += 25;
+      return this.ticketHeight;
     },
     printTicket(callback) {
       if (!LODOP) {
-        this.$message.error('未安装打印控件，请先安装控件后重新启动系统')
-        return
+        this.$message.error('未安装打印控件，请先安装控件后重新启动系统');
+        return;
       }
-      const printFlag = sessionStorage.getItem('printFlag')
+      const printFlag = sessionStorage.getItem('printFlag');
       if (printFlag) {
         this.$api.getStorePrint({ code: 'USER_EXPENSE' }).then(async (res) => {
-          const p = res.body.printInfo
+          const p = res.body.printInfo;
           if (p.printFlag) {
-            LODOP.PRINT_INIT('')
+            LODOP.PRINT_INIT('');
             // LODOP.ADD_PRINT_RECT(0, 0, 180, 240, 3, 1);
-            LODOP.SET_PRINT_STYLE('FontSize', 8)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.title)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.theme)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `交易分店：${p.storeName}`)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `========== 商品信息 =========`)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `用户编号：${this.uid}`)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `套餐名称：${this.currentPkg.name}`)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `消费次数：${this.useTimes}`)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `操作用户：${getToken()}`)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `操作时间：${moment().format('YYYY-MM-DD HH:mm:ss')}`)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.endTheme)
+            LODOP.SET_PRINT_STYLE('FontSize', 8);
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.title);
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.theme);
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `交易分店：${p.storeName}`);
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `========== 商品信息 =========`);
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `用户编号：${this.uid}`);
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `套餐名称：${this.currentPkg.name}`);
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `消费次数：${this.useTimes}`);
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `操作用户：${getToken()}`);
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `操作时间：${moment().format('YYYY-MM-DD HH:mm:ss')}`);
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.endTheme);
             // LODOP.PREVIEW()
-            LODOP.PRINT()
-            this.ticketHeight = 0
-            callback && callback()
+            LODOP.PRINT();
+            this.ticketHeight = 0;
+            callback && callback();
           } else {
-            callback && callback()
+            callback && callback();
           }
-        })
+        });
       }
     },
     handlePlaceOrder() {
-      console.log(this.useTimes)
+      console.log(this.useTimes);
       const params = {
-        id: this.currentPkg.id
-      }
+        id: this.currentPkg.id,
+      };
       if (this.currentPkg.type === 3) {
         if (!isPositiveInt.test(this.useTimes)) {
-          this.$message.error('请输入正确的消费次数')
-          return
+          this.$message.error('请输入正确的消费次数');
+          return;
         }
-        params.num = this.useTimes
+        params.num = this.useTimes;
       }
-      this.loading = true
+      this.loading = true;
       this.$api
         .checkUserGift(params)
         .then((res) => {
           this.$alert('核销成功', '成功', {
             type: 'success',
-            showClose: false
+            showClose: false,
           }).then(() => {
             this.printTicket(() => {
-              this.showPhoto = false
-              this.phone = ''
-              this.uid = ''
-              this.items = []
-              this.useTimes = '1'
+              this.showPhoto = false;
+              this.phone = '';
+              this.uid = '';
+              this.items = [];
+              this.useTimes = '1';
               this.currentPkg = {
                 useTimeList: [],
                 type: 2,
-                endTime: '---'
-              }
-            })
-          })
+                endTime: '---',
+              };
+            });
+          });
         })
         .finally((f) => {
-          this.loading = false
-        })
+          this.loading = false;
+        });
     },
     selectPkg(pkg) {
-      console.log(pkg)
-      this.currentPkg = pkg
+      console.log(pkg);
+      this.currentPkg = pkg;
       if (pkg.type === 2) {
-        this.showPhoto = true
+        this.showPhoto = true;
       } else {
-        this.showPhoto = false
+        this.showPhoto = false;
       }
     },
     // 打开扫描用户信息二维码弹窗
     openScanUserInfoModal(type) {
-      this.scanType = type
-      this.uid = ''
-      let qrcode = ''
-      this.showScanUserInfoModal = true
+      this.scanType = type;
+      this.uid = '';
+      let qrcode = '';
+      this.showScanUserInfoModal = true;
       document.onkeydown = (e) => {
         if (e.key !== 'Enter') {
           if (type === 1) {
-            this.uid += e.key
+            this.uid += e.key;
           } else {
-            qrcode += e.key
+            qrcode += e.key;
           }
         } else {
-          this.closeScanUserInfoModal()
+          this.closeScanUserInfoModal();
           if (type === 1) {
             // 查询会员信息
-            this.uid = this.uid.replace(/\s+/g, '')
+            this.uid = this.uid.replace(/\s+/g, '');
             if (!this.uid || this.uid.length !== 8) {
-              this.$message.error('请输入正确的会员ID')
-              return
+              this.$message.error('请输入正确的会员ID');
+              return;
             }
-            this.getUserGiftData(1)
+            this.getUserGiftData(1);
           } else {
             // 扫描核销二维码
-            qrcode = qrcode.replace(/Shift/g, '')
-            this.validateCodeInfo = parseQuery(qrcode.split('?')[1])
-            this.getUserGiftData(3)
+            qrcode = qrcode.replace(/Shift/g, '');
+            this.validateCodeInfo = parseQuery(qrcode.split('?')[1]);
+            this.getUserGiftData(3);
           }
         }
-      }
+      };
     },
     closeScanUserInfoModal() {
-      document.onkeydown = null
-      this.showScanUserInfoModal = false
+      document.onkeydown = null;
+      this.showScanUserInfoModal = false;
     },
     getUserGiftData(type) {
-      this.loading = true
-      const params = { type }
+      this.loading = true;
+      const params = { type };
       if (type === 1) {
-        params.uid = this.uid
+        params.uid = this.uid;
       } else if (type === 2) {
-        params.phone = this.phone
+        params.phone = this.phone;
       } else if (type === 3) {
-        params.code = this.validateCodeInfo.couponsCode
-        params.uid = this.validateCodeInfo.uid
-        this.uid = this.validateCodeInfo.uid
+        params.code = this.validateCodeInfo.couponsCode;
+        params.uid = this.validateCodeInfo.uid;
+        this.uid = this.validateCodeInfo.uid;
       }
       this.$api
         .getUserTimeNumGift(params)
         .then((res) => {
-          this.items = res.body.items
-          this.photoList = res.body.photoList
-          this.$message.success('查询成功')
+          this.items = res.body.items;
+          this.photoList = res.body.photoList;
+          this.$message.success('查询成功');
         })
         .finally((f) => {
-          this.loading = false
-        })
+          this.loading = false;
+        });
     },
     getUserGiftByPhone() {
       if (!this.phone) {
-        this.$message.error('请输入正确的手机号')
-        return
+        this.$message.error('请输入正确的手机号');
+        return;
       }
-      this.getUserGiftData(2)
-    }
-  }
-}
+      this.getUserGiftData(2);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -321,16 +339,21 @@ export default {
   height: 100%;
 
   .pkg-box {
-    display: grid;
+    // display: grid;
+    // width: 100%;
+    // grid-gap: 20px;
+    // grid-template-columns: auto auto auto;
+    // flex: 1;
+    // flex-basis: auto;
+    // max-height: 400px;
+    // overflow-y: auto;
+    // padding: 0 40px;
+    display: flex;
     width: 100%;
-    grid-gap: 20px;
-    grid-template-columns: auto auto auto;
-    flex: 1;
-    flex-basis: auto;
-    height: 0;
-    overflow-y: auto;
     padding: 0 40px;
-
+    box-sizing: border-box;
+    justify-content: space-around;
+    flex-wrap: wrap;
     .pkg-item {
       width: 192px;
       border: 1px solid #4194fe;
@@ -342,6 +365,7 @@ export default {
       background-color: #4194fe;
       border-radius: 20px;
       font-size: 20px;
+      margin-bottom: 20px;
     }
   }
 }
