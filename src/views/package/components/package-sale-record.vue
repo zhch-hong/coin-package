@@ -13,7 +13,7 @@
             v-model.number="searchForm.uid"
             clearable
             size="mini"
-            style="width: 240px"
+            style="width: 200px"
             placeholder="请输入"
           ></el-input>
         </el-form-item>
@@ -22,12 +22,12 @@
             v-model="searchForm.giftName"
             clearable
             size="mini"
-            style="width: 240px"
+            style="width: 200px"
             placeholder="请输入"
           ></el-input>
         </el-form-item>
         <el-form-item label="人民币支付方式:" prop="valuePayType">
-          <el-select v-model="searchForm.valuePayType" clearable size="mini" style="width: 240px" placeholder="请选择">
+          <el-select v-model="searchForm.valuePayType" clearable size="mini" style="width: 200px" placeholder="请选择">
             <el-option
               v-for="item in payTypeList"
               :key="item.value"
@@ -37,7 +37,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="取币类型:" prop="coinType">
-          <el-select v-model="searchForm.coinType" clearable size="mini" style="width: 240px" placeholder="请选择">
+          <el-select v-model="searchForm.coinType" clearable size="mini" style="width: 200px" placeholder="请选择">
             <el-option
               v-for="item in coinTypeList"
               :key="item.value"
@@ -51,12 +51,12 @@
             v-model="searchForm.name"
             clearable
             size="mini"
-            style="width: 240px"
+            style="width: 200px"
             placeholder="请输入"
           ></el-input>
         </el-form-item>
         <el-form-item label="订单状态:" prop="status">
-          <el-select v-model="searchForm.status" style="width: 240px" clearable size="mini" placeholder="请选择">
+          <el-select v-model="searchForm.status" style="width: 200px" clearable size="mini" placeholder="请选择">
             <el-option v-for="item in statusList" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
@@ -65,7 +65,7 @@
             v-model="searchForm.times"
             unlink-panels
             format="yyyy-MM-dd"
-            style="width: 240px"
+            style="width: 200px"
             value-format="yyyy-MM-dd HH:mm:ss"
             range-separator="至"
             start-placeholder="开始日期"
@@ -78,7 +78,7 @@
           ></el-date-picker>
         </el-form-item>
         <el-form-item label="是否作废:" prop="invalidFlag">
-          <el-select v-model="searchForm.invalidFlag" clearable size="mini" style="width: 240px" placeholder="请选择">
+          <el-select v-model="searchForm.invalidFlag" clearable size="mini" style="width: 200px" placeholder="请选择">
             <el-option label="已作废" :value="1"></el-option>
             <el-option label="未作废" :value="0"></el-option>
           </el-select>
@@ -88,13 +88,22 @@
             v-model="searchForm.invalidAuditor"
             clearable
             size="mini"
-            style="width: 240px"
+            style="width: 200px"
             placeholder="请输入"
           ></el-input>
         </el-form-item>
-        <el-form-item label=" ">
-          <el-button type="primary" size="mini" style="width: 120px" @click="search">查 询</el-button>
-          <el-button size="mini" style="width: 120px; border-color: #4194fe; color: #4194fe" @click="reset"
+        <el-form-item label="">
+          <el-button
+            type="primary"
+            size="mini"
+            style="width: 120px; border-radius: 10px; margin-left: 120px"
+            @click="search"
+            >查 询</el-button
+          >
+          <el-button
+            size="mini"
+            style="width: 120px; border-color: #4194fe; color: #4194fe; border-radius: 10px"
+            @click="reset"
             >重 置
           </el-button>
         </el-form-item>
@@ -751,5 +760,12 @@ export default {
   li {
     margin: 20px 0;
   }
+}
+/deep/ .el-form-item {
+  margin-bottom: 10px;
+}
+/deep/ .el-table__header-wrapper {
+  border-radius: 10px;
+  background: white;
 }
 </style>

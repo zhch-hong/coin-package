@@ -16,7 +16,7 @@
         :model="searchForm"
       >
         <el-row>
-          <el-col :span="12">
+          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
             <el-form-item label="物品名称:">
               <el-input
                 v-model="searchForm.prizeName"
@@ -28,11 +28,13 @@
             </el-form-item>
 
             <el-form-item>
-              <el-button type="primary" size="mini" style="width: 96px" @click="handleSearch">物品查询</el-button>
+              <el-button type="primary" size="mini" style="width: 120px; border-radius: 10px" @click="handleSearch"
+                >物品查询</el-button
+              >
             </el-form-item>
           </el-col>
 
-          <el-col :span="12">
+          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
             <el-form-item label="条形码下单:">
               <el-input
                 v-model="searchForm.prizeCode"
@@ -46,11 +48,17 @@
             </el-form-item>
 
             <el-form-item>
-              <el-button type="primary" size="mini" style="width: 96px" @click="handleAddGoodsByCode">下单</el-button>
+              <el-button
+                type="primary"
+                size="mini"
+                style="width: 120px; border-radius: 10px"
+                @click="handleAddGoodsByCode"
+                >下单</el-button
+              >
             </el-form-item>
           </el-col>
 
-          <el-col :span="12" v-if="!$store.state.offline">
+          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12" v-if="!$store.state.offline">
             <template>
               <el-form-item label="会员信息:">
                 <el-input
@@ -63,16 +71,21 @@
               </el-form-item>
 
               <el-form-item>
-                <el-button type="primary" size="mini" style="width: 96px" @click="userSearch">会员查询</el-button>
+                <el-button type="primary" size="mini" style="width: 120px; border-radius: 10px" @click="userSearch"
+                  >会员查询</el-button
+                >
 
-                <el-button size="mini" style="width: 96px; border-color: #4194fe; color: #4194fe" @click="resetSearch"
+                <el-button
+                  size="mini"
+                  style="width: 120px; border-radius: 10px; border-color: #4194fe; color: #4194fe"
+                  @click="resetSearch"
                   >重 置
                 </el-button>
               </el-form-item>
             </template>
           </el-col>
 
-          <el-col :span="12" v-if="searchNickName">
+          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12" v-if="searchNickName">
             <template>
               <el-form-item label="会员昵称:">
                 <el-input v-model="searchNickName" size="mini" readonly style="width: 200px"></el-input>
@@ -87,17 +100,21 @@
       <div class="gifts-list" v-loading="loading">
         <div class="item" v-for="i in prizeList" :key="i.prizeId" @click="addPrize(i)">
           <div class="item-name flex-center">{{ i.prizeName }}</div>
-
+          <div class="flex-between">
+            <div>
+              <div class="item_bottom_fonst">{{ i.offValue | MIXIN_Points2Yuan }}元</div>
+              <div class="item_bottom_fonst1">{{ i.coinValue }}积分</div>
+            </div>
+            <div><img src="@/assets/package-sale/cart-icon.png" style="width: 26px" /></div>
+          </div>
+          <!-- <div class="item-name flex-center">{{ i.prizeName }}</div>
           <div style="font-size: 18px; color: #848484; margin-top: 18px; padding-left: 24px">
             ￥{{ i.offValue | MIXIN_Points2Yuan }}元
           </div>
-
           <div style="font-size: 18px; color: #a3a3a3; margin-top: 6px; padding-left: 24px">{{ i.coinValue }}积分</div>
-
           <div style="font-size: 18px; color: #a3a3a3; margin-top: 6px; padding-left: 24px">
             库存：{{ i.inventory }}
           </div>
-
           <div class="flex-between" style="margin: 16px 0 0 24px">
             <el-button
               type="primary"
@@ -106,9 +123,8 @@
             >
               购 买
             </el-button>
-
             <img src="@/assets/package-sale/cart-icon.png" style="width: 26px" />
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -753,47 +769,53 @@ export default {
 
     .gifts-list {
       display: grid;
-
       grid-gap: 20px;
-
-      grid-template-columns: repeat(auto-fill, 270px);
-
+      height: 43vh;
+      /* 屏幕小于1400px */
+      @media screen and (max-width: 1400px) {
+        grid-template-columns: repeat(auto-fill, 190px);
+      }
+      /* 屏幕大于1400px */
+      @media screen and (min-width: 1401px) {
+        grid-template-columns: repeat(auto-fill, 270px);
+      }
       overflow-y: auto;
-
       .item {
-        width: 270px;
-
-        height: 340px;
-
+        /* 屏幕小于1400px */
+        @media screen and (max-width: 1400px) {
+          width: 195px;
+          padding: 14px 19px 0 19px;
+          height: 167px;
+        }
+        /* 屏幕大于1400px */
+        @media screen and (min-width: 1401px) {
+          width: 270px;
+          padding: 19px 28px 0;
+          height: 222px;
+        }
         box-sizing: border-box;
-
-        padding: 19px 28px 0;
-
         background-color: #ffffff;
-
         border-radius: 1px 1px 1px 1px;
-
         box-shadow: 0px 2px 0px 0px rgba(204, 204, 204, 0.15);
-
+        border-radius: 10px;
         .item-name {
           text-align: center;
-
+          /* 屏幕小于1400px */
+          @media screen and (max-width: 1400px) {
+            font-size: 17px;
+            height: 93px;
+          }
+          /* 屏幕大于1400px */
+          @media screen and (min-width: 1401px) {
+            font-size: 20px;
+            height: 143px;
+          }
           padding: 6px;
-
           overflow: hidden;
-
           background-color: #60a5ae;
-
-          height: 151px;
-
           word-break: break-all;
-
           color: #ffffff;
-
-          font-size: 20px;
-
           font-weight: bold;
-
           border-radius: 20px;
         }
       }
@@ -807,7 +829,7 @@ export default {
 
     border-left: 1px solid #dcdfe6;
 
-    width: 22vw;
+    // width: 22vw;
 
     height: calc(100vh - 115px);
 
@@ -833,5 +855,19 @@ export default {
       }
     }
   }
+}
+.item_bottom_fonst {
+  font-size: 18px;
+  color: #848484;
+}
+.item_bottom_fonst1 {
+  color: #a3a3a3;
+  font-size: 14px;
+  line-height: 23px;
+}
+.flex-between {
+  align-content: center;
+  padding: 12px 12px 0 12px;
+  box-sizing: border-box;
 }
 </style>

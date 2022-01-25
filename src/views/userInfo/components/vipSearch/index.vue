@@ -11,22 +11,41 @@
         <el-input v-model="searchForm.uid" size="mini" clearable style="width: 200px" placeholder="请输入"></el-input>
       </el-form-item>
       <el-form-item label="会员姓名:" prop="nickName">
-        <el-input v-model="searchForm.nickName" size="mini" clearable style="width: 200px" placeholder="请输入"></el-input>
+        <el-input
+          v-model="searchForm.nickName"
+          size="mini"
+          clearable
+          style="width: 200px"
+          placeholder="请输入"
+        ></el-input>
       </el-form-item>
       <el-form-item label="会员电话:" prop="phone">
         <el-input v-model="searchForm.phone" size="mini" clearable style="width: 200px" placeholder="请输入"></el-input>
       </el-form-item>
       <el-form-item label="会员等级:" prop="vipName">
-        <el-input v-model="searchForm.vipName" size="mini" clearable style="width: 200px" placeholder="请输入"></el-input>
+        <el-input
+          v-model="searchForm.vipName"
+          size="mini"
+          clearable
+          style="width: 200px"
+          placeholder="请输入"
+        ></el-input>
       </el-form-item>
       <el-form-item label="状态:" prop="status">
         <el-select v-model="searchForm.status" style="width: 200px" clearable size="mini" placeholder="请选择">
           <el-option v-for="item in statusList" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label=" ">
-        <el-button type="primary" size="mini" style="width: 120px" @click="search">查 询</el-button>
-        <el-button size="mini" style="width: 120px; border-color: #4194fe; color: #4194fe" @click="reset">重 置 </el-button>
+      <el-form-item label="" style="padding-left: 48px">
+        <el-button type="primary" size="mini" style="width: 120px; border-radius: 10px" @click="search"
+          >查 询</el-button
+        >
+        <el-button
+          size="mini"
+          style="width: 120px; border-color: #4194fe; color: #4194fe; border-radius: 10px"
+          @click="reset"
+          >重 置
+        </el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -40,7 +59,11 @@
         <template slot-scope="scope">
           <div>
             <span>{{ scope.row.uid }}</span>
-            <i class="el-icon-document-copy copy-name" :data-clipboard-text="scope.row.uid" @click="copyUid(scope.row.uid)"></i>
+            <i
+              class="el-icon-document-copy copy-name"
+              :data-clipboard-text="scope.row.uid"
+              @click="copyUid(scope.row.uid)"
+            ></i>
           </div>
         </template>
       </el-table-column>
@@ -76,22 +99,22 @@
 </template>
 
 <script>
-import { paramsFilter } from '@/utils/tools'
-import VipDetail from './components/vipDetial'
+import { paramsFilter } from '@/utils/tools';
+import VipDetail from './components/vipDetial';
 
-const clipboard = require('electron').clipboard
+const clipboard = require('electron').clipboard;
 
 export default {
   name: 'store',
   components: {
-    VipDetail
+    VipDetail,
   },
   data() {
     return {
       loading: false,
       statusList: [
         { label: '正常', value: 0 },
-        { label: '禁用', value: 1 }
+        { label: '禁用', value: 1 },
       ],
       // 查询、翻页
       searchForm: {
@@ -99,7 +122,7 @@ export default {
         nickName: '',
         phone: '',
         vipName: '',
-        status: ''
+        status: '',
       },
       pageNum: 1,
       showNum: 10,
@@ -107,63 +130,63 @@ export default {
       // 表格数据
       tableData: [],
       // 会员详情
-      currentUser: {}
-    }
+      currentUser: {},
+    };
   },
   filters: {
     formatType(val) {
       switch (val) {
         case 1:
-          return '提币'
+          return '提币';
         case 2:
-          return '补游戏币'
+          return '补游戏币';
         case 3:
-          return '补积分'
+          return '补积分';
         default:
-          return '其他'
+          return '其他';
       }
-    }
+    },
   },
   methods: {
     // 查看详情
     showDetail(row) {
-      this.currentUser = row
+      this.currentUser = row;
     },
     // 复制
     copyUid(uid) {
-      clipboard.writeText(uid.toString())
+      clipboard.writeText(uid.toString());
     },
     reset() {
-      this.pageNum = 1
-      this.$refs.searchForm.resetFields()
-      this.getInfo()
+      this.pageNum = 1;
+      this.$refs.searchForm.resetFields();
+      this.getInfo();
     },
     search() {
-      this.pageNum = 1
-      this.getInfo()
+      this.pageNum = 1;
+      this.getInfo();
     },
     getInfo() {
       // 默认参数
       const params = {
-        ...this.searchForm
-      }
+        ...this.searchForm,
+      };
       if (params.time && params.time.length) {
-        params.startTime = params.time[0]
-        params.endTime = params.time[1]
+        params.startTime = params.time[0];
+        params.endTime = params.time[1];
       } else {
-        params.startTime = ''
-        params.endTime = ''
+        params.startTime = '';
+        params.endTime = '';
       }
       if (params.uid) {
-        params.uid = Number(params.uid)
+        params.uid = Number(params.uid);
       }
       if (params.phone) {
-        params.phone = Number(params.phone)
+        params.phone = Number(params.phone);
       }
-      delete params.time
-      params.pageNum = this.pageNum
-      params.showNum = this.showNum
-      this.loading = true
+      delete params.time;
+      params.pageNum = this.pageNum;
+      params.showNum = this.showNum;
+      this.loading = true;
       this.$api
         .getUserList(params)
         .then((res) => {
@@ -179,40 +202,40 @@ export default {
               sendCoin: item.sendCoin || 0,
               starCoin: item.starCoin || 0,
               status: item.status === 0 ? '正常' : '禁用',
-              endTime: item.endTime === 0 ? '无期限' : item.endTime
-            }
-          })
-          this.count = res.body.count
+              endTime: item.endTime === 0 ? '无期限' : item.endTime,
+            };
+          });
+          this.count = res.body.count;
         })
         .finally((result) => {
-          this.loading = false
-        })
+          this.loading = false;
+        });
     },
     // 导出表格
     exportXlSX() {
-      this.loading = true
+      this.loading = true;
       const obj = {
         pageNum: 1,
         showNum: this.count,
-        ...paramsFilter(this.searchForm)
-      }
+        ...paramsFilter(this.searchForm),
+      };
       this.$api.redCoinDetail.getRedCoinDetail(obj).then(
         (res) => {
           const data = res.body.items.map((val) => {
-            return [val.playerInPut, val.playerOutPut, val.date]
-          })
-          const tHeader = ['用户投入(红包币)', '用户产出(红包币)', '变动日期']
+            return [val.playerInPut, val.playerOutPut, val.date];
+          });
+          const tHeader = ['用户投入(红包币)', '用户产出(红包币)', '变动日期'];
           exportTable(tHeader, data, '集团列表').then(() => {
-            this.loading = false
-          })
+            this.loading = false;
+          });
         },
         (err) => {
-          this.loading = false
+          this.loading = false;
         }
-      )
-    }
-  }
-}
+      );
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -260,5 +283,12 @@ export default {
       height: 240px;
     }
   }
+}
+/deep/ .el-form-item {
+  margin-bottom: 10px;
+}
+/deep/ .el-table__header-wrapper {
+  border-radius: 10px;
+  background: white;
 }
 </style>

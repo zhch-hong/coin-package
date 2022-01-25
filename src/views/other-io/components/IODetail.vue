@@ -262,9 +262,4 @@ export default {
   border-radius: 10px;
   background: white;
 }
-/deep/ .el-table {
-  .thead {
-    color: red;
-  }
-}
 </style>

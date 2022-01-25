@@ -8,7 +8,7 @@
       label-width="120px"
     >
       <el-row justify="space-between" align="center">
-        <el-col :span="8" :gutter="20">
+        <el-col :span="8">
           <el-form-item label="会员ID:" prop="uid">
             <el-input
               v-model="searchForm.uid"
@@ -32,7 +32,7 @@
         </el-col>
         <el-col :span="8" class="flex-end">
           <el-form-item label="类型" prop="type">
-            <el-select v-model="searchForm.type">
+            <el-select v-model="searchForm.type" size="mini">
               <el-option
                 v-for="item in statusList"
                 :label="item.label"
@@ -44,7 +44,7 @@
         </el-col>
       </el-row>
       <el-row type="flex" justify="space-between">
-        <el-col :span="8">
+        <el-col :span="9">
           <el-form-item label="消费时间:" prop="time">
             <el-date-picker
               v-model="searchForm.time"

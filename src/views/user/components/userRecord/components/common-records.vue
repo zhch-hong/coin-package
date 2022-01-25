@@ -11,7 +11,7 @@
       "
       :inline="true"
       :model="searchForm"
-      label-width="120px"
+      label-width="80px"
     >
       <el-row justify="space-between" align="center">
         <el-col :span="8">
@@ -25,7 +25,7 @@
             ></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="7">
           <el-form-item label="操作类型:" prop="type">
             <el-select v-model="searchForm.type" style="width: 200px" clearable size="mini" placeholder="请选择">
               <el-option
@@ -37,7 +37,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="8" class="flex-end">
+        <el-col :span="9" class="flex-end">
           <el-form-item label="操作时间:" prop="time">
             <el-date-picker
               v-model="searchForm.time"

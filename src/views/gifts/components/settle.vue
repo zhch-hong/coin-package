@@ -3,19 +3,23 @@
     <div class="overview-box">
       <div>
         <h3 style="color: #333333">订单号：{{ orderInfo.orderId }}</h3>
+      </div>
+      <div>
         <h3 style="color: #333333">
-          金额：{{ orderInfo.offValueSum | MIXIN_CeilIntegral | MIXIN_Points2Yuan }} （{{ orderInfo.coinValueSum | MIXIN_NumFixed }}积分） （{{
-            orderInfo.gameCoinSum
-          }}游戏币）
+          金额：{{ orderInfo.offValueSum | MIXIN_CeilIntegral | MIXIN_Points2Yuan }} （{{
+            orderInfo.coinValueSum | MIXIN_NumFixed
+          }}积分） （{{ orderInfo.gameCoinSum }}游戏币）
         </h3>
       </div>
-      <el-button type="danger" @click="$router.replace('/gifts/index')">取消购买</el-button>
+      <el-button type="danger" style="width: 100px; border-radius: 10px" @click="$router.replace('/gifts/index')"
+        >取消购买</el-button
+      >
     </div>
     <el-row>
-      <el-col :span="6" v-if="!$store.state.offline">
+      <el-col :span="8" v-if="!$store.state.offline">
         <div class="star-coin-container" v-if="prizeBuyRule.includes(2) || prizeBuyRule.includes(3)">
           <div class="bc-title">消耗积分/游戏币</div>
-          <img src="@/assets/scan-user.png" style="width: 184px; margin: 45px 0" />
+          <img src="@/assets/scan-user.png" class="scan-card-image" />
           <div class="scan-title" @click="openScanUserInfoModal">扫码识别会员信息</div>
           <div v-if="uid">
             <p>
@@ -44,12 +48,14 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="18">
+      <el-col :span="26">
         <div class="right-container" v-if="prizeBuyRule.includes(1)">
           <div class="bc-title">支付金额</div>
           <div class="left-total flex-center">
             <div style="font-size: 18px; color: #333333; font-weight: 500">待支付金额:</div>
-            <div style="color: #f32525; font-size: 35px; font-weight: bold; margin-top: 6px">￥{{ leftTotalFee | MIXIN_Points2Yuan }}元</div>
+            <div style="color: #f32525; font-size: 35px; font-weight: bold; margin-top: 6px">
+              ￥{{ leftTotalFee | MIXIN_Points2Yuan }}元
+            </div>
           </div>
           <div class="bc-title">支付方式</div>
           <div class="pay-way">
@@ -73,7 +79,17 @@
       :close-on-click-modal="false"
       width="30%"
     >
-      <div style="text-align: center; padding: 18px 0; font-size: 24px; font-weight: bold; border-bottom: 1px solid #cccccc">提示</div>
+      <div
+        style="
+          text-align: center;
+          padding: 18px 0;
+          font-size: 24px;
+          font-weight: bold;
+          border-bottom: 1px solid #cccccc;
+        "
+      >
+        提示
+      </div>
       <div class="flex-center" style="margin: 40px 0">
         <img src="@/assets/scan-icon.png" style="width: 54px; margin-right: 24px" />
         <div>
@@ -111,7 +127,17 @@
       :close-on-click-modal="false"
       width="30%"
     >
-      <div style="text-align: center; padding: 18px 0; font-size: 24px; font-weight: bold; border-bottom: 1px solid #cccccc">提示</div>
+      <div
+        style="
+          text-align: center;
+          padding: 18px 0;
+          font-size: 24px;
+          font-weight: bold;
+          border-bottom: 1px solid #cccccc;
+        "
+      >
+        提示
+      </div>
       <div class="flex-center" style="margin: 40px 0">
         <img src="@/assets/scan-icon.png" style="width: 54px; margin-right: 24px" />
         <div>
@@ -123,7 +149,13 @@
         <el-button @click="closeScanModal">取 消</el-button>
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="showSuccessModal" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false" width="30%">
+    <el-dialog
+      :visible.sync="showSuccessModal"
+      :show-close="false"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      :width="getdefaultScreenSize > 1400 ? '30%' : '40%'"
+    >
       <div style="text-align: center">
         <i class="el-icon-success" style="color: #4194fe; font-size: 108px"></i>
         <div style="font-size: 28px; font-weight: bold; margin-top: 36px">购买成功</div>
@@ -139,6 +171,7 @@
             padding: 12px 0;
             color: #ffffff;
             background-color: #4194fe;
+            border-radius: 10px;
           "
         >
           返回
@@ -149,10 +182,10 @@
 </template>
 
 <script>
-import moment from 'moment'
-import { isPositiveFloat } from '../../../utils/validate'
-import { COIN_RMB_RATE, to } from '../../../utils/tools'
-import { getToken } from '../../../utils/auth'
+import moment from 'moment';
+import { isPositiveFloat } from '../../../utils/validate';
+import { COIN_RMB_RATE, to } from '../../../utils/tools';
+import { getToken } from '../../../utils/auth';
 
 export default {
   name: 'settle',
@@ -162,7 +195,7 @@ export default {
       orderInfo: {
         orderId: '',
         offValueSum: '',
-        coinValueSum: ''
+        coinValueSum: '',
       },
       ticketHeight: 0,
       prizeList: [],
@@ -186,158 +219,183 @@ export default {
       // 是否可以现金支付
       cashPayments: true,
       prizeBuyRule: [], // 支付模式,包含1可以现金支付，包含2可以积分支付
-      showSuccessModal: false
-    }
+      showSuccessModal: false,
+    };
+  },
+  computed: {
+    getdefaultScreenSize() {
+      return this.$store.state.defaultScreenSize;
+    },
   },
   methods: {
     getHeight() {
-      this.ticketHeight += 25
-      return this.ticketHeight
+      this.ticketHeight += 25;
+      return this.ticketHeight;
     },
     onPayFocus(index) {
       if (index == 2 && this.orderInfo.gameCoinSum == 0) {
-        return
+        return;
       }
-      this.payIndex = index.toString()
+      this.payIndex = index.toString();
     },
     async printTicket(callback) {
       if (!LODOP) {
-        this.$message.error('未安装打印控件，请先安装控件后重新启动系统')
-        return
+        this.$message.error('未安装打印控件，请先安装控件后重新启动系统');
+        return;
       }
-      const printFlag = Number(sessionStorage.getItem('printFlag'))
+      const printFlag = Number(sessionStorage.getItem('printFlag'));
       if (printFlag) {
-        let p
+        let p;
         if (this.$store.state.offline) {
-          const db = await this.$db.openDB('offlineDB')
-          const printInfo = await this.$db.getDataByIndex(db, 'printFormat', 'code', 'PRIZE_SALE')
+          const db = await this.$db.openDB('offlineDB');
+          const printInfo = await this.$db.getDataByIndex(db, 'printFormat', 'code', 'PRIZE_SALE');
           if (printInfo) {
-            p = printInfo
+            p = printInfo;
           }
         } else {
-          const [err, res] = await to(this.$api.getStorePrint({ code: 'PRIZE_SALE' }))
+          const [err, res] = await to(this.$api.getStorePrint({ code: 'PRIZE_SALE' }));
           if (res) {
-            p = res.body.printInfo
+            p = res.body.printInfo;
           }
         }
         if (p.printFlag) {
-          LODOP.PRINT_INIT('')
+          LODOP.PRINT_INIT('');
           // LODOP.ADD_PRINT_RECT(0, 0, 180, 240, 3, 1);
-          LODOP.SET_PRINT_STYLE('FontSize', 8)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.title)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.theme)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `订单编号：${this.orderInfo.orderId}`)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `交易分店：${p.storeName}`)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `========== 商品信息 =========`)
+          LODOP.SET_PRINT_STYLE('FontSize', 8);
+          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.title);
+          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.theme);
+          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `订单编号：${this.orderInfo.orderId}`);
+          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `交易分店：${p.storeName}`);
+          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `========== 商品信息 =========`);
           this.prizeList.forEach((item) => {
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `商品：${item.prizeName}`)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `数量：${item.count}`)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `单价：￥${this.MIXIN_Points2Yuan(item.offValue)}`)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `小计：￥${this.MIXIN_Points2Yuan(this.$calc.accMul(item.offValue, item.count))}`)
-            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `----------------------`)
-          })
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `已优惠金额：${this.MIXIN_Points2Yuan(this.orderInfo.discountMoney)}`)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `总计：${this.MIXIN_Points2Yuan(this.orderInfo.offValueSum)}`)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `操作用户：${getToken()}`)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `操作时间：${moment().format('YYYY-MM-DD HH:mm:ss')}`)
-          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.endTheme)
-          LODOP.PRINT()
-          this.ticketHeight = 0
-          callback && callback()
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `商品：${item.prizeName}`);
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `数量：${item.count}`);
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `单价：￥${this.MIXIN_Points2Yuan(item.offValue)}`);
+            LODOP.ADD_PRINT_TEXT(
+              this.getHeight(),
+              0,
+              180,
+              25,
+              `小计：￥${this.MIXIN_Points2Yuan(this.$calc.accMul(item.offValue, item.count))}`
+            );
+            LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `----------------------`);
+          });
+          LODOP.ADD_PRINT_TEXT(
+            this.getHeight(),
+            0,
+            180,
+            25,
+            `已优惠金额：${this.MIXIN_Points2Yuan(this.orderInfo.discountMoney)}`
+          );
+          LODOP.ADD_PRINT_TEXT(
+            this.getHeight(),
+            0,
+            180,
+            25,
+            `总计：${this.MIXIN_Points2Yuan(this.orderInfo.offValueSum)}`
+          );
+          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `操作用户：${getToken()}`);
+          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, `操作时间：${moment().format('YYYY-MM-DD HH:mm:ss')}`);
+          LODOP.ADD_PRINT_TEXT(this.getHeight(), 0, 180, 25, p.endTheme);
+          LODOP.PRINT();
+          this.ticketHeight = 0;
+          callback && callback();
         } else {
-          callback && callback()
+          callback && callback();
         }
       }
     },
     // 关闭扫描用户二维码弹窗
     closeScanUserInfoModal() {
-      document.onkeydown = null
-      this.showScanUserInfoModal = false
+      document.onkeydown = null;
+      this.showScanUserInfoModal = false;
     },
     // 打开扫描用户信息二维码弹窗
     openScanUserInfoModal() {
-      this.uid = ''
-      this.showScanUserInfoModal = true
+      this.uid = '';
+      this.showScanUserInfoModal = true;
       document.onkeydown = (e) => {
         if (e.key !== 'Enter') {
-          this.uid += e.key
+          this.uid += e.key;
         } else {
-          this.uid = this.uid.replace(/\s+/g, '')
-          this.uid = this.uid.replace(/shift|capslock/gi, '')
-          document.onkeydown = null
-          this.loading = true
+          this.uid = this.uid.replace(/\s+/g, '');
+          this.uid = this.uid.replace(/shift|capslock/gi, '');
+          document.onkeydown = null;
+          this.loading = true;
           this.$api
             .getUserInfo({ uid: this.uid })
             .then((res) => {
-              this.uid = res.body.uid
-              this.userStarCoin = res.body.starCoinNum
-              this.userGameCoin = res.body.coin
+              this.uid = res.body.uid;
+              this.userStarCoin = res.body.starCoinNum;
+              this.userGameCoin = res.body.coin;
             })
             .catch((e) => {
-              this.userStarCoin = '0'
-              this.userGameCoin = '0'
-              this.uid = ''
+              this.userStarCoin = '0';
+              this.userGameCoin = '0';
+              this.uid = '';
             })
             .finally(() => {
-              this.showScanUserInfoModal = false
-              this.loading = false
-            })
+              this.showScanUserInfoModal = false;
+              this.loading = false;
+            });
         }
-      }
+      };
     },
     // 支付积分
     handlePayStarCoin() {
-      this.loading = true
+      this.loading = true;
       this.$api
         .userPayStarCoin({
           orderId: this.orderInfo.orderId,
           uid: this.uid,
-          payNum: Number(this.payNum)
+          payNum: Number(this.payNum),
         })
         .then((res) => {
           if (Number(this.payNum) === Number(this.orderInfo.coinValueSum)) {
             // 积分支付完成
-            this.printTicket()
-            this.showSuccessModal = true
+            this.printTicket();
+            this.showSuccessModal = true;
           } else {
             if (!this.prizeBuyRule.includes(1)) {
               this.$alert('积分不足，购买失败', '购买失败', {
                 type: 'error',
-                showClose: false
+                showClose: false,
               }).then(() => {
-                this.$router.replace('/gifts/index')
-              })
-              return
+                this.$router.replace('/gifts/index');
+              });
+              return;
             }
             // 还需要补现金
-            this.leftTotalFee = Math.ceil(this.$calc.Subtr(this.orderInfo.offValueSum, this.MIXIN_Integral2PointsFloor(this.payNum)))
-            this.userStarCoin = this.$calc.Subtr(this.userStarCoin, this.payNum)
-            this.payNum = ''
-            this.showConfirmUserStartCoinModal = false
-            this.$message.info('积分扣除成功，请继续支付剩余金额')
-            this.cashPayments = false
+            this.leftTotalFee = Math.ceil(
+              this.$calc.Subtr(this.orderInfo.offValueSum, this.MIXIN_Integral2PointsFloor(this.payNum))
+            );
+            this.userStarCoin = this.$calc.Subtr(this.userStarCoin, this.payNum);
+            this.payNum = '';
+            this.showConfirmUserStartCoinModal = false;
+            this.$message.info('积分扣除成功，请继续支付剩余金额');
+            this.cashPayments = false;
           }
         })
         .finally((f) => {
-          this.loading = false
-        })
+          this.loading = false;
+        });
     },
     // 支付现金 ，支付类型： type  1 现金支付  2 扫码支付
     userPayRMB() {
       document.onkeydown = (e) => {
         if (e.key == 'Enter') {
-          return false
+          return false;
         }
-      }
+      };
       this.$confirm('确认已收到现金?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         showClose: false,
-        type: 'warning'
+        type: 'warning',
       })
         .then(async () => {
           if (this.$store.state.offline) {
-            const db = await this.$db.openDB('offlineDB')
+            const db = await this.$db.openDB('offlineDB');
             const orderInfo = {
               orderPrize: this.prizeList.map((item) => {
                 return {
@@ -346,8 +404,8 @@ export default {
                   prizeType: item.prizeType,
                   coinValue: item.coinValue,
                   offValue: item.offValue,
-                  count: item.count
-                }
+                  count: item.count,
+                };
               }),
               moduleId: sessionStorage.getItem('moduleId'),
               moduleName: sessionStorage.getItem('moduleName'),
@@ -360,79 +418,79 @@ export default {
               payCoin: 0,
               payValue: this.orderInfo.offValueSum,
               name: sessionStorage.getItem('staffName'),
-              auditor: ''
-            }
-            await this.$db.addData(db, 'prizeRecord', orderInfo)
-            this.printTicket()
-            this.showSuccessModal = true
+              auditor: '',
+            };
+            await this.$db.addData(db, 'prizeRecord', orderInfo);
+            this.printTicket();
+            this.showSuccessModal = true;
           } else {
-            this.loading = true
+            this.loading = true;
             this.$api
               .userPayRMB({
                 orderId: this.orderInfo.orderId,
-                type: 1
+                type: 1,
               })
               .then((res) => {
-                this.showSuccessModal = true
-                this.printTicket()
+                this.showSuccessModal = true;
+                this.printTicket();
               })
               .finally(() => {
-                this.loading = false
-              })
+                this.loading = false;
+              });
           }
         })
-        .catch(() => {})
+        .catch(() => {});
     },
     closeScanModal() {
       this.$confirm('是否确认取消支付?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         showClose: false,
-        type: 'warning'
+        type: 'warning',
       })
         .then(() => {
-          document.onkeydown = null
-          this.showScanModal = false
-          this.loading = false
+          document.onkeydown = null;
+          this.showScanModal = false;
+          this.loading = false;
         })
-        .catch(() => {})
+        .catch(() => {});
     },
     // 扫支付宝、微信
     openUserPayByScanModal() {
-      this.userPayId = ''
-      this.showScanModal = true
+      this.userPayId = '';
+      this.showScanModal = true;
       document.onkeydown = (e) => {
         if (e.key !== 'Enter') {
-          this.userPayId += e.key
+          this.userPayId += e.key;
         } else {
-          this.userPayId = this.userPayId.replace(/\s+/g, '')
-          this.userPayId = this.userPayId.replace(/shift|capslock/gi, '')
-          document.onkeydown = null
-          this.loading = true
+          this.userPayId = this.userPayId.replace(/\s+/g, '');
+          this.userPayId = this.userPayId.replace(/shift|capslock/gi, '');
+          document.onkeydown = null;
+          this.loading = true;
           this.$api
             .userPayRMB({
               orderId: this.orderInfo.orderId,
               type: 2,
-              authNo: this.userPayId
+              authNo: this.userPayId,
             })
             .then((res) => {
               if (res.body.status === 1) {
-                this.showSuccessModal = true
-                this.showScanModal = false
-                this.printTicket()
+                this.showSuccessModal = true;
+                this.showScanModal = false;
+                this.printTicket();
               } else {
                 this.timer = setInterval(() => {
-                  this.queryOrder()
-                }, 5000)
+                  this.queryOrder();
+                }, 5000);
               }
-              this.loading = false
+              this.loading = false;
             })
             .catch((e) => {
-              this.showScanModal = false
-              this.loading = false
-            })
+              this.showScanModal = false;
+              this.loading = false;
+            });
         }
-      }
+      };
     },
     // 支付宝、微信支付，查询订单支付状态  flag: 0 :未支付 , 1:已支付
     queryOrder() {
@@ -440,88 +498,88 @@ export default {
         .queryOrder({ outTradeNo: this.orderInfo.orderId })
         .then((res) => {
           if (res.body.flag === 1) {
-            clearInterval(this.timer)
-            this.showSuccessModal = true
-            this.showScanModal = false
-            this.loading = false
-            this.printTicket()
+            clearInterval(this.timer);
+            this.showSuccessModal = true;
+            this.showScanModal = false;
+            this.loading = false;
+            this.printTicket();
           }
         })
         .catch((e) => {
-          this.showScanModal = false
-          this.loading = false
-          clearInterval(this.timer)
-        })
+          this.showScanModal = false;
+          this.loading = false;
+          clearInterval(this.timer);
+        });
     },
     openConfirmModal() {
       if (this.payIndex == 1) {
         if (!isPositiveFloat.test(this.payNum)) {
-          this.$message.error('请输入正确的数字')
-          return
+          this.$message.error('请输入正确的数字');
+          return;
         }
         if (Number(this.payNum) <= 0) {
-          this.$message.error('请输入正确的正数')
-          return
+          this.$message.error('请输入正确的正数');
+          return;
         }
         if (Number(this.payNum) > this.userStarCoin) {
-          this.$message.error('输入数量大于玩家剩余积分数')
-          return
+          this.$message.error('输入数量大于玩家剩余积分数');
+          return;
         }
         if (Number(this.payNum) > this.orderInfo.coinValueSum) {
-          this.$message.error('输入数量大于订单总额')
-          return
+          this.$message.error('输入数量大于订单总额');
+          return;
         }
         if (this.prizeBuyRule.length === 2) {
           // 既可以现金又可以积分
-          this.showConfirmUserStartCoinModal = true
+          this.showConfirmUserStartCoinModal = true;
         } else {
-          this.handlePayStarCoin()
+          this.handlePayStarCoin();
         }
       } else if (this.payIndex == 2) {
         if (Number(this.userGameCoin) < this.orderInfo.gameCoinSum) {
-          this.$message.error('玩家游戏币数量不足')
-          return
+          this.$message.error('玩家游戏币数量不足');
+          return;
         }
-        this.loading = true
+        this.loading = true;
         this.$api
           .userPayPrizeGameCoin({
             uid: this.uid,
             orderId: this.orderInfo.orderId,
-            payNum: this.payIconNum
+            payNum: this.payIconNum,
           })
           .then((res) => {
-            this.loading = false
-            this.showSuccessModal = true
-            this.printTicket()
+            this.loading = false;
+            this.showSuccessModal = true;
+            this.printTicket();
           })
           .catch(() => {
-            this.loading = false
-          })
+            this.loading = false;
+          });
       }
-    }
+    },
   },
   created() {
-    const params = this.$route.params
-    console.log(params)
+    const params = this.$route.params;
+    console.log(params);
     if (params.orderId && params.offValueSum) {
-      this.orderInfo = params
-      this.leftTotalFee = params.offValueSum
-      this.prizeList = params.prizeList
-      this.prizeBuyRule = JSON.parse(params.prizeList[0].prizeBuyRule)
-      this.buyDiscount = Number(params.buyDiscount) || 1
-      this.payIconNum = this.orderInfo.gameCoinSum
+      this.orderInfo = params;
+      this.leftTotalFee = params.offValueSum;
+      this.prizeList = params.prizeList;
+      this.prizeBuyRule = JSON.parse(params.prizeList[0].prizeBuyRule);
+      this.buyDiscount = Number(params.buyDiscount) || 1;
+      this.payIconNum = this.orderInfo.gameCoinSum;
       if (!this.prizeBuyRule.includes(2)) {
-        this.payIndex = '2'
+        this.payIndex = '2';
       }
     } else {
-      this.$message.error('获取订单信息异常，请重新下单')
-      this.$router.replace('/gifts/index')
+      this.$message.error('获取订单信息异常，请重新下单');
+      this.$router.replace('/gifts/index');
     }
   },
   destroyed() {
-    clearTimeout(this.timer)
-  }
-}
+    clearTimeout(this.timer);
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -558,9 +616,8 @@ export default {
     padding: 20px 70px;
     display: flex;
     flex-direction: column;
-    height: 80vh;
+    // height: 80vh;
     margin-right: 20px;
-    border-right: 1px solid #cccccc;
 
     .scan-title {
       border-radius: 8px;
@@ -575,8 +632,8 @@ export default {
 
   .right-container {
     padding: 20px 0 0 80px;
-    height: 668px;
-
+    height: 500px;
+    border-left: 1px solid #cccccc;
     .left-total {
       margin-top: 41px;
       margin-bottom: 41px;

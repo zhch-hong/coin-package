@@ -3,14 +3,19 @@
     <bc-type-menu v-model="currentType" :type-list="giftTypeList" @change="changeType" />
 
     <div class="gifts-list" v-loading="loading">
-      <div class="item" v-for="(item, i) in giftList" :key="i">
+      <div class="item" v-for="(item, i) in giftList" :key="i" @click="handItem(item)">
         <div class="item-name flex-center" :style="styleFormat(item)">
           {{ item.giftName }}
         </div>
 
-        <div style="display: flex">
-          <div class="item_bottom_fonst">￥{{ item.price | MIXIN_Points2Yuan }}元</div>
-          <div class="item_bottom_fonst">({{ item.price | MIXIN_Points2StarCoin }}积分)</div>
+        <div class="flex-between">
+          <div>
+            <div class="item_bottom_fonst">{{ item.price | MIXIN_Points2Yuan }}元</div>
+            <div class="item_bottom_fonst1">({{ item.price | MIXIN_Points2StarCoin }}积分)</div>
+          </div>
+          <div>
+            <img src="../../../assets/package-sale/cart-icon.png" style="width: 26px" />
+          </div>
         </div>
 
         <!-- <div class="flex-between" style="margin: 16px 0 0 24px">
@@ -46,7 +51,7 @@
       :show-close="false"
       :close-on-press-escape="false"
       :close-on-click-modal="false"
-      width="40%"
+      :width="getdefaultScreenSize > 1400 ? '40%' : '50%'"
     >
       <div class="dialog-header flex-between">
         <img src="@/assets/logo_small.png" alt="logo" style="width: 110px" />
@@ -74,34 +79,24 @@
             </div>
 
             <img src="@/assets/scan-user.png" style="width: 184px; margin: 45px 0" />
-
             <div
               style="
                 margin: 40px 0 16px;
-
                 border-radius: 8px;
-
                 cursor: pointer;
-
                 width: 200px;
-
                 padding: 16px 0;
-
                 color: #ffffff;
-
                 text-align: center;
-
                 background-color: #1890ff;
               "
               @click="openScanUserInfoModal"
             >
               点击扫码查询会员信息
             </div>
-
             <el-input v-show="!isScanPay" size="mini" style="width: 200px" v-model="uid" placeholder="手动输入ID">
               <el-button slot="append" @click="searchUserInfo">查询</el-button>
             </el-input>
-
             <div v-if="getUserResult">
               <p>
                 <span>会员ID：</span>
@@ -188,7 +183,7 @@
       <div slot="footer">
         <template v-if="!$store.state.offline">
           <el-button
-            style="width: 122px"
+            style="width: 122px; border-radius: 10px"
             :loading="loading"
             v-if="currentPkg.type === 1"
             type="primary"
@@ -198,7 +193,7 @@
           </el-button>
 
           <el-button
-            style="width: 122px"
+            style="width: 122px; border-radius: 10px"
             :loading="loading"
             v-if="currentPkg.type === 2 || currentPkg.type === 3 || currentPkg.type === 4"
             type="primary"
@@ -208,7 +203,7 @@
           </el-button>
         </template>
 
-        <el-button style="width: 122px" type="info" @click="closeConfirmModal">取消</el-button>
+        <el-button style="width: 122px; border-radius: 10px" type="info" @click="closeConfirmModal">取消</el-button>
       </div>
     </el-dialog>
 
@@ -243,7 +238,10 @@
       </div>
 
       <div slot="footer" class="dialog-footer">
-        <el-button style="color: #4194fe; border-color: #4194fe" :loading="loading" @click="closeScanUserInfoModal"
+        <el-button
+          style="color: #4194fe; border-color: #4194fe; border-radius: 10px"
+          :loading="loading"
+          @click="closeScanUserInfoModal"
           >取 消
         </el-button>
       </div>
@@ -339,6 +337,11 @@ export default {
       },
     },
   },
+  computed: {
+    getdefaultScreenSize() {
+      return this.$store.state.defaultScreenSize;
+    },
+  },
 
   methods: {
     // 关闭确认弹窗
@@ -359,6 +362,15 @@ export default {
       this.getUserResult = false;
 
       this.isVirtual = false;
+    },
+    // 点击item
+    handItem(item) {
+      if (item.onlyScanBuy) {
+        // 仅扫码购买
+        this.scanPay(item);
+      } else {
+        this.pay(item);
+      }
     },
 
     handleOnGetCoinManual() {
@@ -815,7 +827,6 @@ export default {
     flex: 1 auto;
     height: 0;
     padding: 20px 0;
-    overflow-y: auto;
     display: grid;
     grid-row-gap: 20px;
     grid-column-gap: 20px;
@@ -830,15 +841,17 @@ export default {
     .item {
       /* 屏幕小于1400px */
       @media screen and (max-width: 1400px) {
-        width: 190px;
+        width: 195px;
+        padding: 14px 19px 0 19px;
+        height: 167px;
       }
       /* 屏幕大于1400px */
       @media screen and (min-width: 1401px) {
         width: 270px;
+        padding: 19px 28px 0;
+        height: 222px;
       }
-      height: 222px;
       box-sizing: border-box;
-      padding: 19px 28px 0;
       background-color: #ffffff;
       border-radius: 1px 1px 1px 1px;
       box-shadow: 0px 2px 0px 0px rgba(204, 204, 204, 0.15);
@@ -847,15 +860,16 @@ export default {
         padding: 6px;
         overflow: hidden;
         background-color: #41a3fe;
-        height: 151px;
         color: #ffffff;
         /* 屏幕小于1400px */
         @media screen and (max-width: 1400px) {
           font-size: 17px;
+          height: 93px;
         }
         /* 屏幕大于1400px */
         @media screen and (min-width: 1401px) {
           font-size: 20px;
+          height: 143px;
         }
         font-weight: bold;
         border-radius: 20px;
@@ -872,7 +886,15 @@ export default {
 .item_bottom_fonst {
   font-size: 18px;
   color: #848484;
-  margin-top: 18px;
-  padding-left: 24px;
+}
+.item_bottom_fonst1 {
+  color: #a3a3a3;
+  font-size: 14px;
+  line-height: 23px;
+}
+.flex-between {
+  align-content: center;
+  padding: 12px 12px 0 12px;
+  box-sizing: border-box;
 }
 </style>

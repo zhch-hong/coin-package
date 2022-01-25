@@ -1,9 +1,9 @@
 <template>
   <div class="store-manage">
-    <vcard padding flex v-if="!$store.state.offline">
+    <vcard padding flex v-if="!$store.state.offline" style="padding: 0; background: bottom">
       <el-form
         ref="searchForm"
-        style="width: 100%; background-color: #ffffff; border-radius: 10px; padding: 20px 0 10px"
+        style="width: 100%; background-color: #ffffff; border-radius: 10px; padding: 20px 0 10px; border-radius: 10px"
         :inline="true"
         :model="searchForm"
         label-width="120px"
@@ -40,19 +40,15 @@
           ></el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" size="mini" style="width: 96px" @click="handleSearch">查 询</el-button>
-          <el-button size="mini" style="width: 96px" @click="resetForm">重 置</el-button>
+          <el-button type="primary" size="mini" style="width: 120px; border-radius: 10px" @click="handleSearch"
+            >查 询</el-button
+          >
+          <el-button size="mini" style="width: 120px; border-radius: 10px" @click="resetForm">重 置</el-button>
         </el-form-item>
       </el-form>
     </vcard>
-    <div class="bc-title" style="margin: 20px 0">销售统计</div>
-    <el-table
-      :loading="loading"
-      :data="items"
-      style="width: 100%; flex: 1"
-      :header-cell-style="{ backgroundColor: '#ffffff' }"
-      :cell-style="{ backgroundColor: '#F0F2F5' }"
-    >
+    <div class="bc-title" style="margin: 20px 0 20px 35px">销售统计</div>
+    <el-table :loading="loading" :data="items" style="width: 100%; flex: 1">
       <el-table-column label="物品编号" prop="prizeId" align="center" min-width="120"></el-table-column>
       <el-table-column label="物品名称" prop="prizeName" align="center" min-width="160"></el-table-column>
       <el-table-column label="物品类型" prop="prizeType" align="center" min-width="120"> </el-table-column>
@@ -76,10 +72,10 @@
 </template>
 
 <script>
-import exportTable from '@/utils/outputExcel'
-import moment from 'moment'
-import { to } from '@/utils/tools'
-import { getToken } from '../../../utils/auth'
+import exportTable from '@/utils/outputExcel';
+import moment from 'moment';
+import { to } from '@/utils/tools';
+import { getToken } from '../../../utils/auth';
 
 export default {
   name: 'store',
@@ -91,98 +87,98 @@ export default {
         prizeName: '',
         prizeType: '',
         name: '',
-        time: []
+        time: [],
       },
       pageNum: 1,
       showNum: 10,
       count: 0,
-      items: []
-    }
+      items: [],
+    };
   },
   filters: {
     toFixed2(val) {
-      return val.toFixed(2)
+      return val.toFixed(2);
     },
     formatStatus(val) {
       switch (val) {
         case 0:
-          return '待支付'
+          return '待支付';
         case 1:
-          return '已支付'
+          return '已支付';
         case 2:
-          return '已退单'
+          return '已退单';
         default:
-          return '其他'
+          return '其他';
       }
-    }
+    },
   },
   methods: {
     // 查询
     handleSearch() {
-      this.pageNum = 1
-      this.getInfo()
+      this.pageNum = 1;
+      this.getInfo();
     },
     // 重置表单
     resetForm() {
-      this.$refs.searchForm.resetFields()
-      this.searchForm.prizeName = ''
-      this.searchForm.prizeType = ''
-      this.searchForm.name = ''
-      this.searchForm.time = []
-      this.pageNum = 1
-      this.getInfo()
+      this.$refs.searchForm.resetFields();
+      this.searchForm.prizeName = '';
+      this.searchForm.prizeType = '';
+      this.searchForm.name = '';
+      this.searchForm.time = [];
+      this.pageNum = 1;
+      this.getInfo();
     },
     // 格式化参数
     formatSearchParams() {
-      const result = { ...this.searchForm }
+      const result = { ...this.searchForm };
       if (result.time && result.time.length) {
-        result.startTime = result.time[0] || ''
-        result.endTime = result.time[1] || ''
-        delete result.time
+        result.startTime = result.time[0] || '';
+        result.endTime = result.time[1] || '';
+        delete result.time;
       }
-      result.pageNum = this.pageNum
-      result.showNum = this.showNum
-      return result
+      result.pageNum = this.pageNum;
+      result.showNum = this.showNum;
+      return result;
     },
     // 获取表格数据
     getInfo() {
       this.$refs.searchForm.validate((v) => {
         if (v) {
-          this.loading = true
+          this.loading = true;
           this.$api
             .getPrizeSalesDetail(this.formatSearchParams())
             .then((res) => {
-              this.items = res.body.items
-              this.count = res.body.count
+              this.items = res.body.items;
+              this.count = res.body.count;
             })
             .finally(() => {
-              this.loading = false
-            })
+              this.loading = false;
+            });
         }
-      })
+      });
     },
     getOrderStatus(status) {
       switch (status) {
         case 0:
-          return '待支付'
+          return '待支付';
         case 1:
-          return '已支付'
+          return '已支付';
         case 2:
-          return '已退单'
+          return '已退单';
         default:
-          return '其他'
+          return '其他';
       }
-    }
+    },
   },
   async mounted() {
     if (this.$store.state.offline) {
-      const db = await this.$db.openDB('offlineDB')
-      this.items = await this.$db.cursorGetData(db, 'prizeStatistical')
+      const db = await this.$db.openDB('offlineDB');
+      this.items = await this.$db.cursorGetData(db, 'prizeStatistical');
     } else {
-      this.getInfo()
+      this.getInfo();
     }
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -219,5 +215,12 @@ export default {
       width: 50%;
     }
   }
+}
+/deep/ .el-form-item {
+  margin-bottom: 10px;
+}
+/deep/ .el-table__header-wrapper {
+  border-radius: 10px;
+  background: white;
 }
 </style>
