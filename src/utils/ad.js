@@ -9,6 +9,9 @@ export default async () => {
 
   const displays = screen.getAllDisplays();
 
+  // 单屏不显示
+  if (displays.length < 2) return;
+
   // 排序取最后一个屏
   displays.sort((current, prev) => {
     return current.bounds.x - prev.bounds.x;
