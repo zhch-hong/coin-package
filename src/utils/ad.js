@@ -1,6 +1,6 @@
 import { remote } from 'electron';
 
-const { screen, BrowserWindow } = remote;
+const { BrowserWindow, getCurrentWindow, screen } = remote;
 
 let window = null;
 
@@ -12,6 +12,8 @@ export default async () => {
 
   // 单屏不显示
   if (displays.length < 2) return;
+
+  const current = getCurrentWindow();
 
   // 排序取最后一个屏，顺序会因为系统设置或显卡插口而改变，所以这里使用绝对值进行排序
   displays.sort((current, prev) => {
@@ -26,6 +28,7 @@ export default async () => {
     movable: false,
     fullscreen: true,
     frame: false,
+    parent: current,
     webPreferences: {
       nodeIntegration: true,
       webSecurity: false,

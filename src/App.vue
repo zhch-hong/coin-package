@@ -98,7 +98,7 @@ import { getToken, removeToken } from '@/utils/auth';
 import pauseSendCoinImg from './assets/pauseSendCoin.png';
 import sendCoinImg from './assets/sendCoin.png';
 
-const { dialog, app } = require('electron').remote;
+const { BrowserWindow, getCurrentWindow, dialog, app } = require('electron').remote;
 
 export default {
   name: 'electron-vue',
@@ -715,10 +715,18 @@ export default {
     },
   },
   async created() {
+    const current = getCurrentWindow();
+    const parent = current.getParentWindow();
+
+    // 广告窗口，无需继续执行
+    if (parent !== null) {
+      return;
+    }
+
     this.$store.dispatch('defaultScreenSize', window.screen.width);
     const that = this;
     ipcRenderer.on('getVersion', (event, arg) => {
-      if (process.env.NODE_ENV !== 'development') that.checkVersion(arg);
+      if (process.env.VUE_APP_ENV !== 'development') that.checkVersion(arg);
     });
     ipcRenderer.on('download', (event, arg) => {
       that.appLoadingInfo = `收银系统正在更新中 ${Number(arg.percent * 100).toFixed(2)}%` + `...`;
