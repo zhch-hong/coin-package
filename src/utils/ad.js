@@ -3,12 +3,15 @@ import router from '@/router';
 
 const { screen, BrowserWindow } = remote;
 
+let window = null;
+
 export default async () => {
+  if (window !== null) return;
   // const key = localStorage.getItem('moduleKey');
   // router.push({ path: '/ad-view', query: { key } });
   const displays = screen.getAllDisplays();
   console.log(displays);
-  const extend = displays[1];
+  const extend = displays.find(({ bounds }) => bounds.x === 0);
   const config = {
     x: extend.bounds.x,
     y: extend.bounds.y,
@@ -30,7 +33,7 @@ export default async () => {
     config.fullscreen = false;
   }
 
-  const window = new BrowserWindow(config);
+  window = new BrowserWindow(config);
   const key = localStorage.getItem('moduleKey');
 
   if (process.env.VUE_APP_ENV === 'development') {
