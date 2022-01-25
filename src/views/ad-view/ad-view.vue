@@ -61,7 +61,7 @@ export default {
 
       let url = this.carouselData[index];
       url = url.toLowerCase();
-      if (url.endsWith('.jpg') || url.endsWith('.jpeg') || url.endsWith('.png')) {
+      if (url.endsWith('.jpg') || url.endsWith('.jpeg') || url.endsWith('.png') || url.endsWith('.gif')) {
         this.currentComponent = CarouselImage;
       } else if (url.endsWith('.mp4')) {
         this.currentComponent = CarouselVideo;
