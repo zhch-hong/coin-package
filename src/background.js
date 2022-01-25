@@ -26,25 +26,37 @@ app.getNewVersion = function () {
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }]);
 
 function createWindow() {
-  // Create the browser window.
-  win = new BrowserWindow({
+  console.log(`NODE_ENV=================================${process.env.NODE_ENV}`);
+
+  const config = {
     icon: `${__static}/icon64.ico`,
-    // frame: false,
     webPreferences: {
       nodeIntegration: true,
       webSecurity: false,
       allowRunningInsecureContent: true,
       webviewTag: true,
     },
-  });
+  };
+
+  if (process.env.NODE_ENV === 'development') {
+    config.width = 1600;
+    config.height = 900;
+  }
+
+  win = new BrowserWindow(config);
+
   app.win = function () {
     return win;
   };
-  win.maximize(); // 窗口最大化
+
+  if (process.env.NODE_ENV === 'production') {
+    win.maximize(); // 窗口最大化
+  }
+
   Menu.setApplicationMenu(null); // 隐藏所有菜单
   // 控制台
   // win.webContents.openDevTools();
-  if (process.env.VUE_APP_ENV !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     win.webContents.openDevTools();
   }
   if (process.env.WEBPACK_DEV_SERVER_URL) {

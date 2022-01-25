@@ -425,7 +425,7 @@ export default {
 
     handlePay(authData = {}) {
       if (!this.isManual) {
-        if (process.env.VUE_APP_ENV === 'production' && !this.$store.state.connectPort) {
+        if (process.env.NODE_ENV === 'production' && !this.$store.state.connectPort) {
           this.$message.error('没有连接机台，无法购买');
 
           return;
