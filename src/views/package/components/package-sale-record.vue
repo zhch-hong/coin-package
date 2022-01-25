@@ -197,7 +197,7 @@
       <el-table-column label="收银员姓名" prop="name" align="center" min-width="120"></el-table-column>
       <el-table-column label="退单审核员" prop="auditor" align="center" min-width="120"></el-table-column>
       <el-table-column label="是否作废" prop="invalidFlag" :formatter="invalidFormat"></el-table-column>
-      <el-table-column label="作废审核员" prop="invalidAuditor"></el-table-column>
+      <el-table-column label="作废审核员" prop="invalidAuditor" min-width="100"></el-table-column>
       <el-table-column label="操作" v-if="!this.$store.state.offline" align="center" min-width="120">
         <template slot-scope="scope">
           <el-button type="text" @click="openAuthModal(scope.row)">退单</el-button>

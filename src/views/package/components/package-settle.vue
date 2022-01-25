@@ -6,10 +6,12 @@
         金额：{{ orderInfo.offValueSum | MIXIN_CeilIntegral | MIXIN_Points2Yuan }} （{{ orderInfo.coinValueSum }}积分）
         （{{ orderInfo.gameCoinSum }}游戏币）
       </h3>
-      <el-button type="danger" @click="$router.replace('/package/package-sales')">取消购买</el-button>
+      <el-button type="danger" @click="$router.replace('/package/package-sales')" style="border-radius: 10px"
+        >取消购买</el-button
+      >
     </div>
     <el-row>
-      <el-col :span="6" v-if="orderInfo.starPayFlag === 1 || orderInfo.cionPayFlag === 1">
+      <el-col :span="8" v-if="orderInfo.starPayFlag === 1 || orderInfo.cionPayFlag === 1">
         <div class="star-coin-container">
           <div class="bc-title">消耗积分/游戏币</div>
           <img src="@/assets/scan-user.png" style="width: 184px; margin: 45px 0" />
@@ -41,7 +43,7 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="18">
+      <el-col :span="16">
         <div class="right-container">
           <div class="bc-title">支付金额</div>
           <div class="left-total flex-center">
@@ -103,7 +105,7 @@
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button :loading="loading" @click="closeScanUserInfoModal">取 消</el-button>
+        <el-button :loading="loading" @click="closeScanUserInfoModal" style="border-radius: 10px">取 消</el-button>
       </div>
     </el-dialog>
     <el-dialog
@@ -116,8 +118,12 @@
     >
       <h4>确定使用{{ payNum }}积分支付订单吗？<br /><br />如果消耗积分不足以支付订单，则剩余金额需使用现金支付</h4>
       <div slot="footer" class="dialog-footer">
-        <el-button :loading="loading" @click="showConfirmUserStartCoinModal = false">取 消</el-button>
-        <el-button type="primary" :loading="loading" @click="handlePayStarCoin">确 定</el-button>
+        <el-button :loading="loading" @click="showConfirmUserStartCoinModal = false" style="border-radius: 10px"
+          >取 消</el-button
+        >
+        <el-button type="primary" :loading="loading" @click="handlePayStarCoin" style="border-radius: 10px"
+          >确 定</el-button
+        >
       </div>
     </el-dialog>
     <el-dialog
@@ -147,7 +153,7 @@
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="closeScanModal">取 消</el-button>
+        <el-button @click="closeScanModal" style="border-radius: 10px">取 消</el-button>
       </div>
     </el-dialog>
     <el-dialog
@@ -155,7 +161,7 @@
       :show-close="false"
       :close-on-press-escape="false"
       :close-on-click-modal="false"
-      width="30%"
+      :width="getdefaultScreenSize > 1400 ? '30%' : '40%'"
     >
       <div style="text-align: center">
         <i class="el-icon-success" style="color: #4194fe; font-size: 108px"></i>
@@ -172,6 +178,7 @@
             padding: 12px 0;
             color: #ffffff;
             background-color: #4194fe;
+            border-radius: 10px;
           "
         >
           返回
@@ -224,6 +231,11 @@ export default {
       uid1: '', // 从上个页面来的uid
       isScanCode: false, // 显示扫码
     };
+  },
+  computed: {
+    getdefaultScreenSize() {
+      return this.$store.state.defaultScreenSize;
+    },
   },
   methods: {
     getHeight(value) {

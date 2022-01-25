@@ -1,9 +1,9 @@
 <template>
   <el-container class="confirm-order" style="height: 100%">
     <el-header class="flex-start" style="background-color: #ffffff">
-      <el-button type="danger" @click="$router.back()">取消购买</el-button>
+      <el-button type="danger" @click="$router.back()" style="border-radius: 10px">取消购买</el-button>
     </el-header>
-    <el-main style="background-color: #f0f2f5; flex: 1; padding: 24px; display: flex; flex-direction: column">
+    <el-main style="flex: 1; padding: 24px; display: flex; flex-direction: column">
       <div class="flex-between" style="align-items: flex-start; flex: 1">
         <div class="order-detail flex-column" style="flex-basis: 48%; height: 100%">
           <div class="bc-title">订单详情</div>
@@ -43,7 +43,14 @@
         <div class="coupons-detail flex-column" style="flex-basis: 48%; height: 100%">
           <div class="bc-title">优惠券详情</div>
           <div
-            style="border-top: 1px solid #a0a0a0; height: 0; margin: 24px 0; width: 100%; flex: 1 auto; overflow: auto"
+            style="
+              border-top: 1px solid #a0a0a0;
+              max-height: 305px;
+              margin: 24px 0;
+              width: 100%;
+              flex: 1 auto;
+              overflow: auto;
+            "
           >
             <div
               class="coupons-item flex-start"
@@ -132,7 +139,12 @@
         <span style="font-size: 20px; font-weight: bold; color: #343434">合计：</span>
         <span style="font-size: 20px; font-weight: bold; color: #ff3d2a">{{ totalPayPrice | MIXIN_Points2Yuan }}</span>
         <span style="font-size: 16px">（{{ totalPayIntegral }}积分）</span>
-        <el-button type="primary" style="width: 122px; margin-left: 42px" :loading="loading" @click="handlePayment">
+        <el-button
+          type="primary"
+          style="width: 122px; margin-left: 42px; border-radius: 10px"
+          :loading="loading"
+          @click="handlePayment"
+        >
           去支付
         </el-button>
       </div>
