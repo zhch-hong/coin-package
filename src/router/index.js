@@ -174,7 +174,7 @@ export const constantRoutes = [
     path: '/other-io',
     component: Layout,
     redirect: '/other-io/index',
-    meta: { title: '其他收支', icon: 'other-io', offline: true },
+    meta: { title: '其他收支', icon: 'other-io', offline: false },
     children: [
       {
         path: 'index',
