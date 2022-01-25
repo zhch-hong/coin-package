@@ -26,22 +26,24 @@ app.getNewVersion = function () {
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }]);
 
 function createWindow() {
-  // Create the browser window.
-  win = new BrowserWindow({
+  const config = {
     icon: `${__static}/icon64.ico`,
-    // frame: false,
     webPreferences: {
       nodeIntegration: true,
       webSecurity: false,
       allowRunningInsecureContent: true,
       webviewTag: true,
     },
-  });
+  };
+  win = new BrowserWindow(config);
+
   app.win = function () {
     return win;
   };
+
   win.maximize(); // 窗口最大化
   Menu.setApplicationMenu(null); // 隐藏所有菜单
+
   // 控制台
   // win.webContents.openDevTools();
   if (process.env.VUE_APP_ENV !== 'production') {
