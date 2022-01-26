@@ -20,15 +20,23 @@
   </div>
 </template>
 <script>
+import fs from 'fs';
+import request from 'request';
+import electron from 'electron';
 import $api from '@/api';
+import { writeFile } from '@utils/ad';
 
 import CarouselImage from './components/CarouselImage.vue';
 import CarouselVideo from './components/CarouselVideo.vue';
 
+const { remote } = electron;
+
+const { app } = remote;
+
 export default {
   data() {
     return {
-      isDefault: true,
+      isDefault: false,
       carouselData: [],
       currentComponent: null,
     };
@@ -50,8 +58,14 @@ export default {
           this.carouselData = body.resUrlList;
           await this.$nextTick();
           this.onCarouselChange(0);
+          body.resUrlList.forEach((url) => writeFile(url));
         }
       }
+      // this.carouselData = [
+      //   'ad_resources/03478_sandycay_1920x1080_1643089849183.jpg',
+      //   'ad_resources/video(3)_1643099896906.MP4',
+      // ];
+      // this.onCarouselChange(0);
     },
 
     async onCarouselChange(index) {

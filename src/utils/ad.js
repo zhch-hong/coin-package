@@ -1,9 +1,56 @@
+import fs from 'fs';
+import request from 'request';
 import { remote } from 'electron';
 
-const { BrowserWindow, getCurrentWindow, screen } = remote;
-
+const { app, BrowserWindow, getCurrentWindow, screen } = remote;
+const docPath = app.getPath('documents');
+const appPath = app.getAppPath();
+const adDirectory = `${appPath}\\static\\ad_resources`;
 let window = null;
 
+/**
+ * 判断是否存在广告资源文件夹，如果不存在就创建文件夹
+ * 文档/GFCashier
+ */
+function createWriteDirectory() {
+  console.log(__dirname, 'dirname');
+  if (!fs.existsSync(adDirectory)) {
+    console.log('广告文件夹目录不存在，创建目录');
+    fs.mkdirSync(adDirectory);
+  }
+}
+
+/**
+ * 写入广告文件的名称
+ * @param {string} url - 广告资源的服务器地址
+ * @returns
+ */
+function getFileName(url) {
+  const index = url.lastIndexOf('/');
+  const name = url.slice(index + 1);
+  return name.replace(/\s/g, '');
+}
+
+/**
+ * 读取广告文件
+ * @param {string} url - 广告资源的服务器地址
+ * @returns
+ */
+function readFile(url) {}
+
+/**
+ * 从url下载广告文件并写入本地
+ * @param {*} url
+ */
+export function writeFile(url) {
+  const fileName = getFileName(url);
+  createWriteDirectory();
+  request(url).pipe(fs.createWriteStream(`${adDirectory}/${fileName}`));
+}
+
+/**
+ * 打开广告屏
+ */
 export default async () => {
   if (window !== null) return;
 
