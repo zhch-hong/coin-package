@@ -47,7 +47,16 @@ export default {
         this.isDefault = resUrlList.length === 0;
         await this.$nextTick();
         if (!this.isDefault) {
-          this.carouselData = body.resUrlList;
+          /**
+           * 当广告资源只有两个时，第二个播放完毕后会回退到第一个
+           * 所以这里做了一下重复操作，保证列表里的资源至少在2个以上
+           */
+          const list = [...body.resUrlList];
+          if (list.length === 2) {
+            list.push(...body.resUrlList);
+          }
+
+          this.carouselData = list;
           await this.$nextTick();
           this.onCarouselChange(0);
         }
@@ -55,6 +64,9 @@ export default {
     },
 
     async onCarouselChange(index) {
+      // 当广告资源只有一个时，并且组件已经被渲染，则不做处理了，图片就保持不动，视频将会从头开始播放
+      if (this.carouselData.length === 1 && this.currentComponent !== null) return;
+
       // 防止组件复用，连续相同类型的资源只播放第一个，后面的相同类型的资源被跳过
       this.currentComponent = null;
       await this.$nextTick();
