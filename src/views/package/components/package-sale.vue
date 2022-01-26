@@ -812,8 +812,8 @@ export default {
 
   background-color: #f5f7fa;
 
-  padding: 0 32px;
-
+  padding: 0 20px !important;
+  box-sizing: border-box;
   border-bottom: 1px solid #cccccc;
 }
 
