@@ -47,10 +47,17 @@ export default {
         this.isDefault = resUrlList.length === 0;
         await this.$nextTick();
         if (!this.isDefault) {
+          /**
+           * 直接将返回结果赋值给carouselData会有两个问题
+           * 1、当广告资源只有一个视频时，播放完后便停止了，没有循环播放
+           * 2、当广告只有两个时，第二个播放完毕后会回退到第一个
+           * 所以这里做了一下重复操作，保证列表里的资源至少在3个以上
+           */
           const list = [...body.resUrlList];
           if (list.length <= 2) {
             list.push(...body.resUrlList, ...body.resUrlList);
           }
+
           this.carouselData = list;
           await this.$nextTick();
           this.onCarouselChange(0);
