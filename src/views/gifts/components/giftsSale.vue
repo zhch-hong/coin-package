@@ -756,7 +756,14 @@ export default {
   @include flex(space-between, flex-start, row);
 
   .gifts-list-container {
-    width: 63vw;
+    /* 屏幕小于1400px */
+    @media screen and (max-width: 1400px) {
+      width: 63vw;
+    }
+    /* 屏幕大于1400px */
+    @media screen and (min-width: 1401px) {
+      width: 69vw;
+    }
 
     padding: 20px;
 
@@ -870,12 +877,13 @@ export default {
 }
 .flex-between {
   align-content: center;
-  padding: 12px 12px 0 12px;
+  padding: 12px 0 0 0;
   box-sizing: border-box;
 }
 .item_bottom_fonst2 {
   color: #848484;
   font-size: 14px;
   line-height: 23px;
+  text-align: right;
 }
 </style>

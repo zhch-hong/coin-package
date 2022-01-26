@@ -27,7 +27,7 @@
         </el-col>
         <el-col :span="7">
           <el-form-item label="操作类型:" prop="type">
-            <el-select v-model="searchForm.type" style="width: 200px" clearable size="mini" placeholder="请选择">
+            <el-select v-model="searchForm.type" style="width: 180px" clearable size="mini" placeholder="请选择">
               <el-option
                 v-for="item in statusList"
                 :key="item.value"
