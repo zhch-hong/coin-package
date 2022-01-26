@@ -48,14 +48,12 @@ export default {
         await this.$nextTick();
         if (!this.isDefault) {
           /**
-           * 直接将返回结果赋值给carouselData会有两个问题
-           * 1、当广告资源只有一个视频时，播放完后便停止了，没有循环播放
-           * 2、当广告只有两个时，第二个播放完毕后会回退到第一个
-           * 所以这里做了一下重复操作，保证列表里的资源至少在3个以上
+           * 当广告资源只有两个时，第二个播放完毕后会回退到第一个
+           * 所以这里做了一下重复操作，保证列表里的资源至少在2个以上
            */
           const list = [...body.resUrlList];
-          if (list.length <= 2) {
-            list.push(...body.resUrlList, ...body.resUrlList);
+          if (list.length === 2) {
+            list.push(...body.resUrlList);
           }
 
           this.carouselData = list;
@@ -66,6 +64,9 @@ export default {
     },
 
     async onCarouselChange(index) {
+      // 当广告资源只有一个时，并且组件已经被渲染，则不做处理了，图片就保持不动，视频将会从头开始播放
+      if (this.carouselData.length === 1 && this.currentComponent !== null) return;
+
       // 防止组件复用，连续相同类型的资源只播放第一个，后面的相同类型的资源被跳过
       this.currentComponent = null;
       await this.$nextTick();

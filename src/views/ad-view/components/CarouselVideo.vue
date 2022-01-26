@@ -1,5 +1,5 @@
 <template>
-  <video ref="carouselVideo" width="100%" height="100%" autoplay muted :src="url"></video>
+  <video ref="carouselVideo" width="100%" height="100%" autoplay muted loop :src="url"></video>
 </template>
 <script>
 export default {
