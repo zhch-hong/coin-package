@@ -14,6 +14,7 @@ export default {
   },
 
   mounted() {
+    console.log('mounted image');
     setTimeout(() => {
       this.$emit('complete');
     }, 10000);
