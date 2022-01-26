@@ -909,7 +909,7 @@ export default {
 }
 .flex-between {
   align-content: center;
-  padding: 12px 12px 0 12px;
+  padding: 12px 0 0 0;
   box-sizing: border-box;
 }
 </style>

@@ -97,7 +97,8 @@ export default {
     box-sizing: border-box;
     font-size: 14px;
     font-weight: 400;
-    color: #e6e6e6;
+    color: white;
+    font-family: aCustomFontNameForFree;
 
     .menu-icon {
       width: 38px;

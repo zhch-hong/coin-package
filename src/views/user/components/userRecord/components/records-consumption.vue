@@ -5,10 +5,10 @@
       style="width: 100%; background-color: #ffffff; padding: 20px 20px 0 20px; border-radius: 10px"
       :inline="true"
       :model="searchForm"
-      label-width="120px"
+      label-width="100px"
     >
       <el-row justify="space-between" align="center">
-        <el-col :span="8">
+        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="5">
           <el-form-item label="会员ID:" prop="uid">
             <el-input
               v-model="searchForm.uid"
@@ -19,7 +19,7 @@
             ></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="5">
           <el-form-item label="套餐名称:" prop="giftName">
             <el-input
               v-model="searchForm.giftName"
@@ -30,9 +30,9 @@
             ></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="8" class="flex-end">
+        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="6" class="flex-end">
           <el-form-item label="类型" prop="type">
-            <el-select v-model="searchForm.type" size="mini">
+            <el-select v-model="searchForm.type" size="mini" style="width: 180px">
               <el-option
                 v-for="item in statusList"
                 :label="item.label"
@@ -44,7 +44,7 @@
         </el-col>
       </el-row>
       <el-row type="flex" justify="space-between">
-        <el-col :span="9">
+        <el-col :xs="9" :sm="9" :md="9" :lg="9" :xl="6">
           <el-form-item label="消费时间:" prop="time">
             <el-date-picker
               v-model="searchForm.time"
@@ -63,7 +63,7 @@
             ></el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="8" class="flex-end">
+        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="6" class="flex-end">
           <el-form-item>
             <el-button type="primary" size="mini" style="border-radius: 10px; width: 120px" @click="search"
               >查 询</el-button
