@@ -49,7 +49,7 @@ export default {
         if (!this.isDefault) {
           const list = [...body.resUrlList];
           if (list.length <= 2) {
-            list.concat(...body.resUrlList, ...body.resUrlList);
+            list.push(...body.resUrlList, ...body.resUrlList);
           }
           this.carouselData = list;
           await this.$nextTick();
