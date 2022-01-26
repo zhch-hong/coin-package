@@ -27,7 +27,7 @@
             </div>
           </div>
           <div @click="openScanUserInfoModal(2)">
-            <img src="@/assets/discount-icon1.png" alt="" style="width: 192px" />
+            <img src="@/assets/discount-icon1.png" alt="" style="width: 192px; margin: 59px 0" />
 
             <div
               style="

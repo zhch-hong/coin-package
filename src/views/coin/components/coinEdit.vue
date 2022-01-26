@@ -1,14 +1,8 @@
 <template>
   <div class="store-manage">
-    <vcard style="background-color: #f0f2f5; margin-bottom: 0px">
+    <vcard style="background: bottom; margin-bottom: 0px">
       <div class="padding-table">
-        <el-table
-          :data="tableData"
-          :loading="loading"
-          style="width: 100%"
-          :header-row-style="{ backgroundColor: '#fff', borderRadius: '10px' }"
-          :cell-style="{ backgroundColor: '#f0f2f5', borderBottom: '1px solid #e2e4e8' }"
-        >
+        <el-table :data="tableData" :loading="loading" style="width: 100%">
           <el-table-column label="操作" width="250px" align="center">
             <template slot-scope="scope">
               <div class="table-button-box">
@@ -194,6 +188,10 @@ export default {
   background: white;
   border-radius: 10px;
   border: 1px solid #4194fe;
+}
+/deep/ .el-table__header-wrapper {
+  border-radius: 10px;
+  background: white;
 }
 </style>
 <style>

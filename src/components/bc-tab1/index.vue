@@ -7,18 +7,22 @@
       :key="index"
       @click="selectTab(tab, index)"
     >
-      {{ tab }}
+      {{ tab.value }}
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'bc-tab',
+  name: 'bc-tab-a',
   props: {
     tabs: {
       type: Array,
       required: true,
+    },
+    type: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
@@ -38,13 +42,13 @@ export default {
 <style lang="scss" scoped>
 .menu-wrap {
   width: 100%;
-  background-color: #ffffff;
-  padding: 16px 20px 12px;
+  padding: 0 20px 12px;
+  box-sizing: border-box;
 
   .menu-item {
     border-top-left-radius: 32px;
     border-top-right-radius: 32px;
-    background-image: url('../../assets/components-img/tab-default.png');
+    background-image: url('../../assets/components-img/tab-default1.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-position: center;
@@ -57,7 +61,7 @@ export default {
   }
 
   .menu-item_active {
-    background-image: url('../../assets/components-img/tab-active.png');
+    background-image: url('../../assets/components-img/tab-active1.png');
     color: #ffffff;
     position: relative;
   }

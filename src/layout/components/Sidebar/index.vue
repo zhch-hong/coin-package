@@ -109,9 +109,11 @@ export default {
 }
 
 .item-active {
-  background-color: #528eff;
+  // background-color: #528eff;
   // box-shadow: 0 4px 9px 0 rgba(0, 0, 0, 0.35) inset;
-  box-shadow: 0px 4px 9px 0px rgba(140, 132, 249, 0.35) inset;
-  border-radius: 16px;
+  // box-shadow: 0px 4px 9px 0px rgba(140, 132, 249, 0.35) inset;
+  background-image: url('../../../assets/layout/menuIcon/select-item.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
 }
 </style>
