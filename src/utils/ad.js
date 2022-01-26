@@ -35,8 +35,9 @@ function getFileName(url) {
  */
 export function writeFile(url) {
   const fileName = getFileName(url);
-  createWriteDirectory();
-  request(url).pipe(fs.createWriteStream(`${adDirectory}/${fileName}`));
+  return new Promise((resolve) => {
+    request(url, resolve).pipe(fs.createWriteStream(path.resolve(adDirectory, fileName)));
+  });
 }
 
 /**
@@ -45,28 +46,25 @@ export function writeFile(url) {
  * @returns
  */
 export function readFile(url) {
+  createWriteDirectory();
   const fileName = getFileName(url);
   const result = fs.readdirSync(adDirectory).find((p) => p === fileName);
-  if (typeof result === 'undefined') {
-    writeFile(url);
-  }
-  // const filePath = path.resolve(adDirectory, fileName);
-  const filePath = path.resolve(adDirectory, 'mmexport1642832202042_1643185502843.mp4');
-  console.log(filePath);
-  let content = null;
-  try {
-    content = fs.readFileSync(filePath);
-    const f = new Blob([content], { type: 'video/mp4' });
-    content = URL.createObjectURL(f);
-    debugger;
-    // const b = new Blob(content, { encoding: 'binary', type: 'video/mp4' });
-    // content = new Blob(content);
-
-    // console.log('content', typeof content, content.length);
-  } catch (error) {
-    console.error(error);
-  }
-  return content;
+  return new Promise(async (resolve) => {
+    if (typeof result === 'undefined') {
+      console.log('request', url);
+      await writeFile(url);
+    }
+    const filePath = path.resolve(adDirectory, fileName);
+    let content = null;
+    try {
+      content = fs.readFileSync(filePath);
+      const blob = new Blob([content], { type: 'video/mp4' });
+      content = URL.createObjectURL(blob);
+    } catch (error) {
+      console.error(error);
+    }
+    resolve(content);
+  });
 }
 
 /**
@@ -78,7 +76,9 @@ export default async () => {
   const displays = screen.getAllDisplays();
 
   // 单屏不显示广告
-  if (displays.length < 2) return;
+  if (process.env.VUE_APP_ENV !== 'development') {
+    if (displays.length < 2) return;
+  }
 
   const current = getCurrentWindow();
 
@@ -104,9 +104,10 @@ export default async () => {
   };
 
   if (process.env.VUE_APP_ENV === 'development') {
-    config.width = 1600;
-    config.height = 900;
+    config.width = 1200;
+    config.height = 675;
     config.frame = true;
+    config.movable = true;
     config.fullscreen = false;
   }
 

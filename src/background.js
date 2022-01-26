@@ -35,17 +35,22 @@ function createWindow() {
       webviewTag: true,
     },
   };
+
+  if (process.env.VUE_APP_ENV === 'development') {
+    config.width = 1600;
+    config.height = 900;
+  }
+
   win = new BrowserWindow(config);
 
-  app.win = function () {
-    return win;
-  };
+  app.win = () => win;
 
-  win.maximize(); // 窗口最大化
+  if (process.env.VUE_APP_ENV !== 'development') {
+    win.maximize(); // 窗口最大化
+  }
+
   Menu.setApplicationMenu(null); // 隐藏所有菜单
 
-  // 控制台
-  // win.webContents.openDevTools();
   if (process.env.VUE_APP_ENV !== 'production') {
     win.webContents.openDevTools();
   }

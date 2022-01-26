@@ -4,12 +4,12 @@
 <script>
 export default {
   props: {
-    url: String,
+    src: String,
   },
 
   computed: {
     image() {
-      return `url('${this.url}')`;
+      return `url('${this.src}')`;
     },
   },
 
@@ -17,7 +17,7 @@ export default {
     console.log('mounted image');
     setTimeout(() => {
       this.$emit('complete');
-    }, 10000);
+    }, 5000);
   },
 };
 </script>
