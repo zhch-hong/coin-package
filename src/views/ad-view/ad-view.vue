@@ -47,7 +47,11 @@ export default {
         this.isDefault = resUrlList.length === 0;
         await this.$nextTick();
         if (!this.isDefault) {
-          this.carouselData = body.resUrlList;
+          const list = [...body.resUrlList];
+          if (list.length <= 2) {
+            list.concat(...body.resUrlList, ...body.resUrlList);
+          }
+          this.carouselData = list;
           await this.$nextTick();
           this.onCarouselChange(0);
         }
