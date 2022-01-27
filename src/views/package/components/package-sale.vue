@@ -812,8 +812,8 @@ export default {
 
   background-color: #f5f7fa;
 
-  padding: 0 32px;
-
+  padding: 0 20px !important;
+  box-sizing: border-box;
   border-bottom: 1px solid #cccccc;
 }
 
@@ -909,7 +909,7 @@ export default {
 }
 .flex-between {
   align-content: center;
-  padding: 12px 12px 0 12px;
+  padding: 12px 0 0 0;
   box-sizing: border-box;
 }
 </style>

@@ -24,16 +24,11 @@
       <div class="lock-screen" v-if="$isDev" @click="handleOnReload">
         <i class="el-icon-refresh-left"></i>
       </div>
-      <div class="lock-screen" @click="$root.$children[0].sendCoin(30)" v-if="$isDev">
+      <!-- <div class="lock-screen" @click="$root.$children[0].sendCoin(30)" v-if="$isDev">
         <i class="el-icon-star-off"></i>
-      </div>
-      <div class="lock-screen" @click="logout">
-        <i class="el-icon-lock"></i>
-      </div>
+      </div> -->
       <el-popover placement="bottom" width="200" trigger="click">
-        <div class="lock-screen" slot="reference">
-          <i class="el-icon-setting"></i>
-        </div>
+        <div class="lock-screen" slot="reference"><i class="el-icon-setting"></i></div>
         <div class="flex-center" style="flex-direction: column">
           <el-button size="mini" style="width: 128px" @click="handleShowUpdatePasswordModal">修改密码</el-button>
           <el-button
@@ -46,6 +41,11 @@
           </el-button>
         </div>
       </el-popover>
+      <div class="lock-screen" @click="logout">
+        <!-- <i class="el-icon-lock"></i> -->
+        <img src="@/assets/passwordIcon1.png" alt="" style="width: 20px" />
+      </div>
+
       <el-dialog
         title="修改密码"
         :visible.sync="showUpdatePasswordModal"
@@ -55,12 +55,29 @@
         :close-on-press-escape="false"
         :close-on-click-modal="false"
       >
-        <el-form ref="updatePassword" :model="updatePasswordForm" :rules="updatePasswordRules" inline label-width="80px" label-position="left">
+        <el-form
+          ref="updatePassword"
+          :model="updatePasswordForm"
+          :rules="updatePasswordRules"
+          inline
+          label-width="80px"
+          label-position="left"
+        >
           <el-form-item label="新密码" prop="pwd">
-            <el-input v-model="updatePasswordForm.pwd" :maxlength="32" style="vertical-align: sub" placeholder="请输入新密码"></el-input>
+            <el-input
+              v-model="updatePasswordForm.pwd"
+              :maxlength="32"
+              style="vertical-align: sub"
+              placeholder="请输入新密码"
+            ></el-input>
           </el-form-item>
           <el-form-item label="确认密码" prop="confirmPwd">
-            <el-input v-model="updatePasswordForm.confirmPwd" :maxlength="32" style="vertical-align: sub" placeholder="请再次输入新密码"></el-input>
+            <el-input
+              v-model="updatePasswordForm.confirmPwd"
+              :maxlength="32"
+              style="vertical-align: sub"
+              placeholder="请再次输入新密码"
+            ></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -73,23 +90,23 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { removeToken } from '../../utils/auth'
+import { mapGetters } from 'vuex';
+import { removeToken } from '../../utils/auth';
 
 export default {
   data() {
     const validatePwd = (rule, value, callback) => {
       if (!value || value.length < 6) {
-        callback(new Error('请输入6-32位密码，'))
+        callback(new Error('请输入6-32位密码，'));
       }
-      callback()
-    }
+      callback();
+    };
     const validateConfirmPwd = (rule, value, callback) => {
       if (value !== this.updatePasswordForm.pwd) {
-        callback(new Error('两次密码不一致'))
+        callback(new Error('两次密码不一致'));
       }
-      callback()
-    }
+      callback();
+    };
     return {
       avatar: '',
       userName: '',
@@ -98,67 +115,67 @@ export default {
       showUpdatePasswordModal: false,
       updatePasswordForm: {
         pwd: '',
-        confirmPwd: ''
+        confirmPwd: '',
       },
       updatePasswordRules: {
         pwd: { required: true, validator: validatePwd },
-        confirmPwd: { required: true, validator: validateConfirmPwd }
-      }
-    }
+        confirmPwd: { required: true, validator: validateConfirmPwd },
+      },
+    };
   },
   computed: {
-    ...mapGetters(['sidebar'])
+    ...mapGetters(['sidebar']),
   },
   watch: {
     $route() {
       if (!this.$store.state.offline) {
-        this.$store.dispatch('getMachineCoinNum')
+        this.$store.dispatch('getMachineCoinNum');
       }
-    }
+    },
   },
   methods: {
     handleOnConfirmUpdatePassword() {
       this.$refs.updatePassword.validate((v) => {
         if (v) {
           this.$api.updateStaffPwd({ pwd: this.updatePasswordForm.pwd }).then(() => {
-            this.$message.success('修改成功')
-            this.handleCloseModal()
-          })
+            this.$message.success('修改成功');
+            this.handleCloseModal();
+          });
         }
-      })
+      });
     },
     handleCloseModal() {
-      this.$refs.updatePassword.resetFields()
-      this.showUpdatePasswordModal = false
+      this.$refs.updatePassword.resetFields();
+      this.showUpdatePasswordModal = false;
     },
     handleShowUpdatePasswordModal() {
-      this.showUpdatePasswordModal = true
+      this.showUpdatePasswordModal = true;
     },
     handleOnReload() {
-      window.location.reload()
+      window.location.reload();
     },
     toggleSideBar() {
-      this.$store.dispatch('toggleSideBar')
+      this.$store.dispatch('toggleSideBar');
     },
     async logout() {
       if (this.$store.state.offline) {
-        removeToken()
-        sessionStorage.clear()
-        await this.$router.replace({ path: '/login' })
+        removeToken();
+        sessionStorage.clear();
+        await this.$router.replace({ path: '/login' });
       } else {
         this.$api.cashLoginOut({}).finally((f) => {
-          removeToken()
-          this.$router.replace({ path: '/login' })
-        })
+          removeToken();
+          this.$router.replace({ path: '/login' });
+        });
       }
-    }
+    },
   },
   created() {
-    this.userName = sessionStorage.getItem('cashier_token')
-    this.moduleName = sessionStorage.getItem('moduleName')
-    this.staffName = sessionStorage.getItem('staffName')
-  }
-}
+    this.userName = sessionStorage.getItem('cashier_token');
+    this.moduleName = sessionStorage.getItem('moduleName');
+    this.staffName = sessionStorage.getItem('staffName');
+  },
+};
 </script>
 
 <style lang="scss" scoped>

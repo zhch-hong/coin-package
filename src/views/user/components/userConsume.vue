@@ -1,11 +1,11 @@
 <template>
   <div class="user-consume-page sub-page-flex" v-loading="loading">
     <el-row style="height: 100%">
-      <el-col :span="12">
+      <el-col :span="12" style="padding-left: 20px">
         <div class="bc-title">会员信息</div>
-        <div class="flex-start">
+        <div style="display: flex">
           <div @click="openScanUserInfoModal(1)">
-            <img src="@/assets/scan-user.png" alt="" style="width: 184px; margin: 60px 0 60px 0" />
+            <img src="@/assets/scan-user.png" alt="" style="width: 160px; margin: 67px 0 45px 0" />
             <div
               style="
                 margin: 40px 0;
@@ -21,8 +21,14 @@
               点击扫码查询会员信息
             </div>
           </div>
-          <div @click="openScanUserInfoModal(2)" style="margin-left: 100px">
-            <img src="@/assets/discount-icon.png" alt="" style="width: 184px; margin: 60px 0 60px 0" />
+          <div style="padding: 0 30px; box-sizing: border-box">
+            <div>
+              <img src="@/assets/or.png" alt="" style="width: 22px; height: 233px; margin: 59px 0" />
+            </div>
+          </div>
+          <div @click="openScanUserInfoModal(2)">
+            <img src="@/assets/discount-icon1.png" alt="" style="width: 192px; margin: 59px 0" />
+
             <div
               style="
                 margin: 40px 0;

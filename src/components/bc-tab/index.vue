@@ -18,21 +18,21 @@ export default {
   props: {
     tabs: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
-      activeIndex: 0
-    }
+      activeIndex: 0,
+    };
   },
   methods: {
     selectTab(tab, index) {
-      this.activeIndex = index
-      this.$emit('select', tab)
-    }
-  }
-}
+      this.activeIndex = index;
+      this.$emit('select', tab);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

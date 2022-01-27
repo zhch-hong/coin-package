@@ -11,7 +11,7 @@
 </template>
 <script>
 import $api from '@/api';
-import { ioFrom, staffAuth } from '../components-call';
+import { ioFrom, staffAuth, utputSuccess } from '../components-call';
 import TypeItem from './TypeItem.vue';
 
 export default {
@@ -70,7 +70,9 @@ export default {
         }
         const { errCode } = await $api.createOtherIOOrder(data);
         if (errCode === 0) {
-          this.$message.success({ message: '操作成功', duration: 1500 });
+          utputSuccess();
+        } else {
+          this.$message.warning({ message: '操作失败', duration: 1500 });
         }
       }
     },
@@ -81,5 +83,9 @@ export default {
 .other-output {
   display: flex;
   flex-wrap: wrap;
+}
+/deep/ .el-table__header-wrapper {
+  border-radius: 10px;
+  background: white;
 }
 </style>

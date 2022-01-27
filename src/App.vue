@@ -767,4 +767,7 @@ export default {
 .el-table {
   color: #000;
 }
+body {
+  font-family: aCustomFontNameForFree !important;
+}
 </style>

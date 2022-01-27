@@ -7,6 +7,7 @@ import StaffAuth from '@/components/StaffAuth.vue';
 import ReceivePanel from '@/components/ReceivePanel.vue';
 import IOFrom from './IOFrom.vue';
 import InputSuccess from './InputSuccess.vue';
+import outputSuccess from './outputSuccess.vue';
 
 function mountDOM(instance) {
   const div = document.createElement('div');
@@ -74,6 +75,21 @@ export function inputSuccess() {
   const instance = new Vue({
     render(h) {
       return h(InputSuccess, {
+        on: {
+          closed() {
+            unmountDOM(instance);
+          },
+        },
+      });
+    },
+  });
+  mountDOM(instance);
+}
+
+export function utputSuccess() {
+  const instance = new Vue({
+    render(h) {
+      return h(outputSuccess, {
         on: {
           closed() {
             unmountDOM(instance);
