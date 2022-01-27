@@ -21,7 +21,7 @@
               点击扫码查询会员信息
             </div>
           </div>
-          <div style="padding: 0 4%; box-sizing: border-box">
+          <div style="padding: 0 30px; box-sizing: border-box">
             <div>
               <img src="@/assets/or.png" alt="" style="width: 22px; height: 233px; margin: 59px 0" />
             </div>

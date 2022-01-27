@@ -6,12 +6,17 @@
       <div
         class="app-main-menu-item"
         :class="{ 'item-active': currentRoute.path === route.path }"
-        v-if="route.meta"
         v-for="route in routes"
+        v-if="route.meta"
         :key="route.path"
         @click="clickMenu(route)"
       >
-        <img class="menu-icon" :src="require('@/assets/layout/menuIcon/' + route.meta.icon + '.png')" alt="icon" />
+        <img
+          class="menu-icon"
+          :src="require('@/assets/layout/menuIcon/' + route.meta.icon + '.png')"
+          alt="icon"
+          :style="route.meta.icon == 'memberManage' ? 'width:42px;height:38px' : ''"
+        />
         {{ route.meta.title }}
       </div>
     </div>
