@@ -51,7 +51,6 @@ export function readFile(url) {
   const result = fs.readdirSync(adDirectory).find((p) => p === fileName);
   return new Promise(async (resolve) => {
     if (typeof result === 'undefined') {
-      console.log('request', url);
       await writeFile(url);
     }
     const filePath = path.resolve(adDirectory, fileName);
@@ -114,7 +113,7 @@ export default async () => {
   window = new BrowserWindow(config);
 
   if (process.env.VUE_APP_ENV !== 'production') {
-    window.webContents.openDevTools();
+    // window.webContents.openDevTools();
   }
 
   const key = localStorage.getItem('moduleKey');

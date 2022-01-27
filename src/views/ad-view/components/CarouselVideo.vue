@@ -1,5 +1,14 @@
 <template>
-  <video ref="carouselVideo" style="display: block" width="100%" height="100%" autoplay muted :src="source"></video>
+  <video
+    ref="carouselVideo"
+    class="carousel-video"
+    width="100%"
+    height="100%"
+    autoplay
+    muted
+    :loop="isLoop"
+    :src="source"
+  ></video>
 </template>
 <script>
 import { readFile } from '@utils/ad';
@@ -9,6 +18,10 @@ export default {
     src: {
       type: String,
       default: '',
+    },
+    isLoop: {
+      type: Boolean,
+      default: true,
     },
   },
 
@@ -21,28 +34,20 @@ export default {
   watch: {
     src: {
       immediate: true,
-      handler: 'read',
+      handler: 'complete',
     },
   },
 
   async mounted() {
-    console.log('video mounted');
     await this.$nextTick();
     const video = this.$refs.carouselVideo;
     video.addEventListener('ended', () => {
       this.$emit('complete');
-      this.timer = setTimeout(() => {
-        video.play();
-      }, 20);
     });
   },
 
-  beforeDestroy() {
-    clearTimeout(this.timer);
-  },
-
   methods: {
-    async read() {
+    async complete() {
       if (this.src === '') return;
 
       const source = await readFile(this.src);
@@ -51,3 +56,10 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.carousel-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+</style>
