@@ -3,46 +3,7 @@
     <bc-type-menu v-model="currentType" :type-list="giftTypeList" @change="changeType" />
     <div style="padding: 20px 0">
       <div class="gifts-list" v-loading="loading">
-        <div class="item" v-for="(item, i) in giftList" :key="i" @click="handItem(item)">
-          <div class="item-name flex-center" :style="styleFormat(item)">
-            {{ item.giftName }}
-          </div>
-
-          <div class="flex-between">
-            <div>
-              <div class="item_bottom_fonst">{{ item.price | MIXIN_Points2Yuan }}元</div>
-              <div class="item_bottom_fonst1">({{ item.price | MIXIN_Points2StarCoin }}积分)</div>
-            </div>
-            <div>
-              <img src="../../../assets/package-sale/cart-icon.png" style="width: 26px" />
-            </div>
-          </div>
-
-          <!-- <div class="flex-between" style="margin: 16px 0 0 24px">
-          <el-button
-            v-if="item.onlyScanBuy"
-            type="primary"
-            size="mini"
-            style="width: 138px; height: 43px"
-            :style="{ 'background-color': item.type === 3 ? '#7D74F6' : '#4194FE' }"
-            @click="scanPay(item)"
-            >仅扫码购买
-          </el-button>
-
-          <el-button
-            v-else
-            type="primary"
-            size="mini"
-            style="width: 138px; height: 43px"
-            :style="{ 'background-color': item.type === 3 ? '#7D74F6' : '#4194FE' }"
-            @click="pay(item)"
-          >
-            购 买
-          </el-button>
-
-          <img src="../../../assets/package-sale/cart-icon.png" style="width: 26px" />
-        </div> -->
-        </div>
+        <SellPackageItem v-for="item in giftList" :key="item.giftId" :item="item" @click="handItem(item)" />
       </div>
     </div>
 
@@ -265,7 +226,9 @@
 /* eslint-disable object-shorthand */
 
 import Cookies from 'js-cookie';
+import { ipcRenderer } from 'electron';
 import { to } from '@/utils/tools';
+import SellPackageItem from '@/components/SellPackageItem.vue';
 
 import staffAuth from '../../../components/StaffAuth';
 
@@ -274,6 +237,7 @@ export default {
 
   components: {
     staffAuth,
+    SellPackageItem,
   },
 
   data() {
@@ -353,6 +317,11 @@ export default {
           this.packageList = [];
           this.value1 = '';
         }
+      },
+    },
+    'giftList': {
+      handler(array) {
+        ipcRenderer.send('package-list-change', array);
       },
     },
   },
@@ -722,21 +691,6 @@ export default {
         }
       }
     },
-
-    styleFormat(object) {
-      const { bgColor, textColor, type } = object;
-      const style = {};
-      if (bgColor !== '') {
-        style['background-color'] = bgColor;
-      } else {
-        style['background-color'] = type === 3 ? '#7D74F6' : '#4194FE';
-      }
-
-      if (textColor !== '') {
-        style.color = textColor;
-      }
-      return style;
-    },
   },
 
   // 有线模式下同步套餐数据到本地数据库，用于离线模式
@@ -853,43 +807,6 @@ export default {
     @media screen and (min-width: 1401px) {
       grid-template-columns: repeat(auto-fill, 270px);
     }
-    .item {
-      /* 屏幕小于1400px */
-      @media screen and (max-width: 1400px) {
-        width: 195px;
-        padding: 14px 19px 0 19px;
-        height: 167px;
-      }
-      /* 屏幕大于1400px */
-      @media screen and (min-width: 1401px) {
-        width: 270px;
-        padding: 19px 28px 0;
-        height: 222px;
-      }
-      box-sizing: border-box;
-      background-color: #ffffff;
-      border-radius: 1px 1px 1px 1px;
-      box-shadow: 0px 2px 0px 0px rgba(204, 204, 204, 0.15);
-      .item-name {
-        text-align: center;
-        padding: 6px;
-        overflow: hidden;
-        background-color: #41a3fe;
-        color: #ffffff;
-        /* 屏幕小于1400px */
-        @media screen and (max-width: 1400px) {
-          font-size: 17px;
-          height: 93px;
-        }
-        /* 屏幕大于1400px */
-        @media screen and (min-width: 1401px) {
-          font-size: 20px;
-          height: 143px;
-        }
-        font-weight: bold;
-        border-radius: 20px;
-      }
-    }
   }
 
   .star-coin-container {
@@ -897,19 +814,5 @@ export default {
 
     border-right: 1px solid #e4e7ed;
   }
-}
-.item_bottom_fonst {
-  font-size: 18px;
-  color: #848484;
-}
-.item_bottom_fonst1 {
-  color: #a3a3a3;
-  font-size: 14px;
-  line-height: 23px;
-}
-.flex-between {
-  align-content: center;
-  padding: 12px 0 0 0;
-  box-sizing: border-box;
 }
 </style>

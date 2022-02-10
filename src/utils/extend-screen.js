@@ -1,12 +1,65 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable no-async-promise-executor */
+
 import fs from 'fs';
 import path from 'path';
 import request from 'request';
+import Vue from 'vue';
 import { remote } from 'electron';
 
-const { app, BrowserWindow, getCurrentWindow, screen } = remote;
+const { app, BrowserWindow, getCurrentWindow, ipcMain, screen } = remote;
 const docPath = app.getPath('documents');
 const adDirectory = `${docPath}\\GFCashier\\ad_files`;
-let window = null;
+/**
+ * ad 广告，in 数据
+ */
+const observable = Vue.observable({ mode: 'ad' });
+
+let type = 'package'; // package 套餐，goods 物品
+let packageList = [];
+let goodsList = [];
+
+let extendWindow = null;
+
+const vm = new Vue({
+  computed: {
+    mode() {
+      return observable.mode;
+    },
+  },
+  watch: {
+    mode: {
+      handler(value) {
+        if (value === 'ad') {
+          extendWindow.webContents.send('redirect-adview');
+        }
+
+        if (value === 'in') {
+          extendWindow.webContents.send('redirect-custview');
+          setTimeout(() => {
+            if (type === 'package') extendWindow.webContents.send('package-list-change', packageList);
+            if (type === 'goods') extendWindow.webContents.send('goods-list-change', goodsList);
+          }, 500);
+        }
+      },
+    },
+  },
+});
+
+ipcMain.on('package-list-change', (event, value) => {
+  if (!extendWindow) return;
+
+  type = 'package';
+  packageList = value;
+  extendWindow.webContents.send('package-list-change', value);
+});
+ipcMain.on('goods-list-change', (event, value) => {
+  if (!extendWindow) return;
+
+  type = 'goods';
+  goodsList = value;
+  extendWindow.webContents.send('goods-list-change', value);
+});
 
 /**
  * 判断是否存在广告资源文件夹，如果不存在就创建文件夹
@@ -70,7 +123,7 @@ export function readFile(url) {
  * 打开广告屏
  */
 export default async () => {
-  if (window !== null) return;
+  if (extendWindow !== null) return;
 
   const displays = screen.getAllDisplays();
 
@@ -110,16 +163,18 @@ export default async () => {
     config.fullscreen = false;
   }
 
-  window = new BrowserWindow(config);
+  extendWindow = new BrowserWindow(config);
 
   if (process.env.VUE_APP_ENV !== 'production') {
-    // window.webContents.openDevTools();
+    extendWindow.webContents.openDevTools();
   }
 
   const key = localStorage.getItem('moduleKey');
   if (process.env.VUE_APP_ENV === 'development') {
-    window.loadURL(`http://127.0.0.1:9310/GFAdmin_cashier/#/ad-view?key=${key}`);
+    extendWindow.loadURL(`http://127.0.0.1:9310/GFAdmin_cashier/#/ad-view?key=${key}`);
   } else {
-    window.loadURL(`app://./index.html#/ad-view?key=${key}`);
+    extendWindow.loadURL(`app://./index.html#/ad-view?key=${key}`);
   }
 };
+
+export { observable };

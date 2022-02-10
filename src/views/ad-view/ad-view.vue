@@ -55,6 +55,7 @@ export default {
   methods: {
     async fetchAdList() {
       const { key } = this.$route.query;
+      localStorage.setItem('moduleKey', key);
       const { body, errCode } = await $api.readModuleAd(key);
       if (errCode === 0) {
         const { resUrlList } = body;

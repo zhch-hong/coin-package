@@ -16,7 +16,9 @@
     </div>
     <div class="right-menu">
       <div class="flex-center" style="margin-right: 16px">
-        <div>当前模式：</div>
+        <el-button size="mini" @click="switchExtend">{{ extendControlText }}</el-button
+        >&nbsp;&nbsp;
+        <div>当前模式:&nbsp;&nbsp;</div>
         <div class="mode-text" :style="{ backgroundColor: $store.state.offline ? '#F56C6C' : '#36F00B' }">
           {{ $store.state.offline ? '离线' : '在线' }}
         </div>
@@ -92,6 +94,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { removeToken } from '../../utils/auth';
+import { observable } from '@utils/extend-screen';
 
 export default {
   data() {
@@ -125,6 +128,9 @@ export default {
   },
   computed: {
     ...mapGetters(['sidebar']),
+    extendControlText() {
+      return observable.mode === 'ad' ? '隐藏广告' : '显示广告';
+    },
   },
   watch: {
     $route() {
@@ -168,6 +174,9 @@ export default {
           this.$router.replace({ path: '/login' });
         });
       }
+    },
+    switchExtend() {
+      observable.mode = observable.mode === 'ad' ? 'in' : 'ad';
     },
   },
   created() {

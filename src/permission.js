@@ -1,7 +1,7 @@
 import { getToken } from '@/utils/auth'; // get token from cookie
 import router from './router';
 
-const whiteList = ['/login', '/wxAuth', '/ad-view']; // no redirect whitelist
+const whiteList = ['/login', '/wxAuth', '/ad-view', '/cust-view']; // no redirect whitelist
 
 router.beforeEach(async (to, from, next) => {
   if (getToken()) {

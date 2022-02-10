@@ -113,7 +113,7 @@
 import md5 from 'md5';
 
 import { to } from '@/utils/tools';
-import startAd from '@utils/ad';
+import startAd from '@/utils/extend-screen';
 import { setToken } from '../../utils/auth';
 
 export default {
@@ -221,7 +221,6 @@ export default {
           localStorage.setItem('moduleKey', this.moduleKey);
           this.initWebview();
           this.closeModal();
-          startAd();
         })
 
         .finally(() => {

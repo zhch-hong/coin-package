@@ -11,7 +11,7 @@
   ></video>
 </template>
 <script>
-import { readFile } from '@utils/ad';
+import { readFile } from '@/utils/extend-screen';
 
 export default {
   props: {
@@ -44,6 +44,12 @@ export default {
     video.addEventListener('ended', () => {
       this.$emit('complete');
     });
+  },
+
+  activated() {
+    // 因为做了缓存，当从商品列表页切换到广告时，视频是处于暂停状态的，所以需要调用播放
+    const video = this.$refs.carouselVideo;
+    video.play();
   },
 
   methods: {

@@ -5,7 +5,9 @@
     element-loading-background="rgba(0, 0, 0, 0.7)"
     :element-loading-text="appLoadingInfo"
   >
-    <router-view />
+    <keep-alive>
+      <router-view />
+    </keep-alive>
     <!--        测试出币用-->
     <el-dialog
       title="选择收银吐币机"
@@ -718,8 +720,15 @@ export default {
     const current = getCurrentWindow();
     const parent = current.getParentWindow();
 
-    // 广告窗口，无需继续执行
+    // 广告窗口
     if (parent !== null) {
+      ipcRenderer.on('redirect-adview', () => {
+        const key = localStorage.getItem('moduleKey');
+        this.$router.push(`/ad-view?key=${key}`);
+      });
+      ipcRenderer.on('redirect-custview', () => {
+        this.$router.push('/cust-view');
+      });
       return;
     }
 

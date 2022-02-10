@@ -40,6 +40,10 @@ export const constantRoutes = [
     component: () => import('@/views/ad-view/ad-view.vue'),
   },
   {
+    path: '/cust-view',
+    component: () => import('@/views/cust-view/cust-view.vue'),
+  },
+  {
     path: '/package',
     component: Layout,
     redirect: '/package/package-sales',
