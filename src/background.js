@@ -5,6 +5,7 @@ import {
   /* installVueDevtools */
 } from 'vue-cli-plugin-electron-builder/lib';
 import versionManage from '@/versionManage';
+import extendScreen from './ipcMain/extend-screen';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const isWin7 = os.release().startsWith('6.1');
@@ -147,6 +148,7 @@ app.on('ready', async () => {
     win.webContents.openDevTools();
   });
   createWindow();
+  extendScreen();
 });
 
 // Exit cleanly on request from parent process in development mode.
