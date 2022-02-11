@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import { observable } from '@utils/extend-screen';
 
 /* Layout */
 import Layout from '@/layout';
@@ -244,5 +245,17 @@ export function resetRouter() {
   const newRouter = createRouter();
   router.matcher = newRouter.matcher; // reset router
 }
+
+/**
+ * 需要在扩展屏展示销售列表的页面，除了这些页面，其他页面只能展示广告
+ */
+export const contentIncludePath = ['/package/package-sales', '/gifts/index', '/user/index'];
+router.beforeEach((to, from, next) => {
+  const { path } = to;
+  if (!contentIncludePath.includes(path)) {
+    observable.mode = 'ad';
+  }
+  next();
+});
 
 export default router;

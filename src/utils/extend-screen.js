@@ -15,9 +15,10 @@ const adDirectory = `${docPath}\\GFCashier\\ad_files`;
  */
 const observable = Vue.observable({ mode: 'ad' });
 
-let type = 'package'; // package 套餐，goods 物品
+let type = 'package'; // package 套餐，goods 物品，haspackage 已购买套餐
 let packageList = [];
 let goodsList = [];
+let haspackageList = [];
 
 let extendWindow = null;
 
@@ -39,6 +40,7 @@ const vm = new Vue({
           setTimeout(() => {
             if (type === 'package') extendWindow.webContents.send('package-list-change', packageList);
             if (type === 'goods') extendWindow.webContents.send('goods-list-change', goodsList);
+            if (type === 'haspackage') extendWindow.webContents.send('haspackage-list-change', haspackageList);
           }, 500);
         }
       },
@@ -59,6 +61,13 @@ ipcMain.on('goods-list-change', (event, value) => {
   type = 'goods';
   goodsList = value;
   extendWindow.webContents.send('goods-list-change', value);
+});
+ipcMain.on('haspackage-list-change', (event, value) => {
+  if (!extendWindow) return;
+
+  type = 'haspackage';
+  haspackageList = value;
+  extendWindow.webContents.send('haspackage-list-change', value);
 });
 
 /**

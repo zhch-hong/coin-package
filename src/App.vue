@@ -5,9 +5,11 @@
     element-loading-background="rgba(0, 0, 0, 0.7)"
     :element-loading-text="appLoadingInfo"
   >
-    <keep-alive>
-      <router-view />
-    </keep-alive>
+    <transition name="root-fade" appear>
+      <keep-alive>
+        <router-view />
+      </keep-alive>
+    </transition>
     <!--        测试出币用-->
     <el-dialog
       title="选择收银吐币机"
@@ -778,5 +780,17 @@ export default {
 }
 body {
   font-family: aCustomFontNameForFree !important;
+}
+</style>
+<style lang="scss" scoped>
+.root-fade-enter-active,
+.root-fade-leave-active {
+  transition: all 300ms;
+}
+.root-fade-enter {
+  transform: translateX(100vw);
+}
+.root-fade-leave-to {
+  transform: translateX(-100vw);
 }
 </style>

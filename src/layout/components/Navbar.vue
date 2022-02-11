@@ -95,6 +95,7 @@
 import { mapGetters } from 'vuex';
 import { removeToken } from '../../utils/auth';
 import { observable } from '@utils/extend-screen';
+import { contentIncludePath } from '@/router';
 
 export default {
   data() {
@@ -176,6 +177,7 @@ export default {
       }
     },
     switchExtend() {
+      if (!contentIncludePath.includes(this.$router.currentRoute.path)) return;
       observable.mode = observable.mode === 'ad' ? 'in' : 'ad';
     },
   },

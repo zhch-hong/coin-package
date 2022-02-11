@@ -65,16 +65,13 @@
         <el-divider></el-divider>
         <div style="padding-left: 40px; color: #828385; padding-bottom: 40px">消费套餐</div>
         <div class="pkg-box">
-          <div
-            class="pkg-item flex-center"
+          <SellHaspackageItem
             v-for="(item, index) in items"
             :key="index"
+            :item="item"
+            :package-id="currentPkg.id"
             @click="selectPkg(item)"
-            v-if="item.useNum > 0"
-            :style="getSelectStyle(item)"
-          >
-            {{ item.name }}
-          </div>
+          />
         </div>
         <el-divider></el-divider>
         <div class="flex-between" style="padding: 0 40px 40px; width: 100%">
@@ -144,9 +141,14 @@ import moment from 'moment';
 import { parseQuery } from '@/utils/tools';
 import { isPositiveInt } from '../../../utils/validate';
 import { getToken } from '../../../utils/auth';
+import { ipcRenderer } from 'electron';
+import SellHaspackageItem from '@/components/SellHaspackageItem.vue';
 
 export default {
   name: 'userConsume',
+
+  components: { SellHaspackageItem },
+
   data() {
     return {
       showPhoto: false,
@@ -167,12 +169,16 @@ export default {
       validateCodeInfo: {},
     };
   },
-  methods: {
-    getSelectStyle(item) {
-      if (item.id === this.currentPkg.id) {
-        return { backgroundColor: '#ffffff', color: '#4194FE' };
-      }
+
+  watch: {
+    items: {
+      handler(array) {
+        ipcRenderer.send('haspackage-list-change', array);
+      },
     },
+  },
+
+  methods: {
     getHeight() {
       this.ticketHeight += 25;
       return this.ticketHeight;
@@ -345,34 +351,12 @@ export default {
   height: 100%;
 
   .pkg-box {
-    // display: grid;
-    // width: 100%;
-    // grid-gap: 20px;
-    // grid-template-columns: auto auto auto;
-    // flex: 1;
-    // flex-basis: auto;
-    // max-height: 400px;
-    // overflow-y: auto;
-    // padding: 0 40px;
     display: flex;
     width: 100%;
     padding: 0 40px;
     box-sizing: border-box;
     justify-content: space-around;
     flex-wrap: wrap;
-    .pkg-item {
-      width: 192px;
-      border: 1px solid #4194fe;
-      height: 120px;
-      padding: 0 16px;
-      text-align: center;
-      font-weight: bold;
-      color: #ffffff;
-      background-color: #4194fe;
-      border-radius: 20px;
-      font-size: 20px;
-      margin-bottom: 20px;
-    }
   }
 }
 </style>
